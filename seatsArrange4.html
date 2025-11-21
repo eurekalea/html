@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <title>班級分組座位系統（漸層藍標題版）</title>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      display: flex;
+      gap: 20px;
+    }
+
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    button {
+      margin: 2px 0;
+      width: 160px;
+    }
+
+    .class-input {
+      margin-top: 10px;
+      border: 1px solid #ccc;
+      padding: 6px;
+      width: 160px;
+      box-sizing: border-box;
+      font-size: 14px;
+    }
+
+    .class-input label {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .class-input input {
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    /* 班級標題：漸層藍 + 大字 */
+    #classTitle {
+      text-align: center;
+      font-size: 40px;
+      font-weight: bold;
+      margin-bottom: 12px;
+      background: linear-gradient(90deg, #007bff, #00a2ff, #007bff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* 匯出範圍：班級標題 + 座位圖 */
+    #exportArea {
+      padding: 10px;
+    }
+
+    .main-area {
+      display: flex;
+      gap: 80px; /* 走道 */
+      padding: 10px;
+    }
+
+    .table-block {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    .desk-row {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    .group {
+      width: 120px;
+      border: 1px solid #aaa;
+      padding: 5px;
+      box-sizing: border-box;
+    }
+
+    .group h4 {
+      text-align: center;
+      margin: 0 0 8px 0;
+    }
+
+    .seat-column {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .seat {
+      height: 35px;
+      border: 1px dashed #777;
+    }
+
+    .desk {
+      width: 40px;
+      background: black;
+      margin-top: 0;
+    }
+
+    /* 右側：未排座號 + 輸入區（不會被截進 JPG） */
+    .right-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .unassigned {
+      width: 120px;
+      border: 1px solid #aaa;
+      min-height: 300px;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+
+    .number {
+      border: 1px solid black;
+      padding: 5px;
+      margin: 3px 0;
+      text-align: center;
+      cursor: grab;
+      background: #f0f0f0;
+    }
+
+    .input-box {
+      border: 1px solid #ccc;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+
+    .input-box textarea {
+      width: 100%;
+      box-sizing: border-box;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 左側控制區 -->
+  <div class="sidebar">
+    <button onclick="clearSeats()">清空座位</button>
+    <button onclick="autoAssign()">一鍵亂數排完</button>
+    <button onclick="exportJSON()">匯出 JSON</button>
+    <button onclick="exportCSV()">匯出 Excel(CSV)</button>
+    <button onclick="exportJPG()">匯出 JPG</button>
+
+    <div class="class-input">
+      <label for="classInput">班級：</label>
+      <input id="classInput" type="text" placeholder="例：三年2班" oninput="updateClassTitle()" />
+    </div>
+  </div>
+
+  <!-- 匯出範圍：班級標題 + 座位區 -->
+  <div id="exportArea">
+    <div id="classTitle">班級名稱</div>
+
+    <!-- 座位與桌子區域 -->
+    <div class="main-area" id="seatArea">
+      <!-- 左邊兩張桌子 -->
+      <div class="table-block">
+        <!-- 第一張桌：第1組、第3組 -->
+        <div class="desk-row">
+          <div class="group" id="g1"></div>
+          <div class="desk" id="desk1"></div>
+          <div class="group" id="g3"></div>
+        </div>
+        <!-- 第二張桌：第2組、第4組 -->
+        <div class="desk-row">
+          <div class="group" id="g2"></div>
+          <div class="desk" id="desk2"></div>
+          <div class="group" id="g4"></div>
+        </div>
+      </div>
+
+      <!-- 右邊兩張桌子 -->
+      <div class="table-block">
+        <!-- 第三張桌：第5組、第7組 -->
+        <div class="desk-row">
+          <div class="group" id="g5"></div>
+          <div class="desk" id="desk3"></div>
+          <div class="group" id="g7"></div>
+        </div>
+        <!-- 第四張桌：第6組、第8組 -->
+        <div class="desk-row">
+          <div class="group" id="g6"></div>
+          <div class="desk" id="desk4"></div>
+          <div class="group" id="g8"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 右側：未安排座位 + 輸入區 -->
+  <div class="right-panel">
+    <div class="unassigned" id="unassigned"></div>
+    <div class="input-box">
+      <h4>輸入座號</h4>
+      <textarea id="inputNumbers" rows="10" placeholder="1,2,3 或換行"></textarea>
+      <br />
+      <button onclick="generateNumbers()">產生</button>
+    </div>
+  </div>
+
+  <script>
+    // 全域座位數設定
+    const seatMap = { g1: 4, g2: 4, g3: 4, g4: 4, g5: 4, g6: 3, g7: 4, g8: 3 };
+
+    // 班級標題同步
+    function updateClassTitle() {
+      const val = document.getElementById("classInput").value.trim();
+      document.getElementById("classTitle").textContent = val || "班級名稱";
+    }
+
+    // 拖曳相關
+    function allowDrop(ev) { ev.preventDefault(); }
+    function drag(ev) { ev.dataTransfer.setData("text", ev.target.id); }
+    function drop(ev) {
+      ev.preventDefault();
+      if (ev.target.children.length === 0) {
+        const id = ev.dataTransfer.getData("text");
+        const el = document.getElementById(id);
+        if (el) ev.target.appendChild(el);
+      }
+    }
+
+    // 建立各組座位
+    function buildGroup(id, seatCount) {
+      const g = document.getElementById(id);
+      g.innerHTML = "<h4>第" + id.replace("g","") + "組</h4>";
+      const col = document.createElement("div");
+      col.className = "seat-column";
+      for (let i = 0; i < seatCount; i++) {
+        const seat = document.createElement("div");
+        seat.className = "seat";
+        seat.ondragover = allowDrop;
+        seat.ondrop = drop;
+        col.appendChild(seat);
+      }
+      g.appendChild(col);
+    }
+
+    // 調整黑桌高度，對齊座位欄頂端
+    function adjustDeskHeight() {
+      const pairs = [
+        ["g1", "desk1"],
+        ["g2", "desk2"],
+        ["g5", "desk3"],
+        ["g6", "desk4"],
+      ];
+      pairs.forEach(([gid, did]) => {
+        const col = document.querySelector("#" + gid + " .seat-column");
+        const header = document.querySelector("#" + gid + " h4");
+        const desk = document.getElementById(did);
+        if (col && desk) {
+          desk.style.height = col.offsetHeight + "px";
+          if (header) {
+            desk.style.marginTop = (header.offsetHeight + 8) + "px"; // 8px h4 margin-bottom
+          }
+        }
+      });
+    }
+
+    // 產生未安排座號
+    function generateNumbers() {
+      const raw = document.getElementById("inputNumbers").value;
+      const nums = raw
+        .split(/[\n,]+/)
+        .map(x => x.trim())
+        .filter(x => x);
+
+      const area = document.getElementById("unassigned");
+      area.innerHTML = "";
+      nums.forEach(n => {
+        const d = document.createElement("div");
+        d.className = "number";
+        d.id = "num_" + n;
+        d.textContent = n;
+        d.draggable = true;
+        d.ondragstart = drag;
+        area.appendChild(d);
+      });
+    }
+
+    // 清空座位（全部回未安排）
+    function clearSeats() {
+      const area = document.getElementById("unassigned");
+      document.querySelectorAll(".seat").forEach(s => {
+        if (s.children.length > 0) {
+          area.appendChild(s.children[0]);
+        }
+      });
+    }
+
+    // 一鍵亂數排完：
+    // 1. 只用未安排區的號碼
+    // 2. 先讓每組盡量到至少 3 人（以該組座位數為上限）
+    // 3. 再把剩餘的人塞進所有空位
+    function autoAssign() {
+      let nums = Array.from(document.querySelectorAll("#unassigned .number"));
+      if (!nums.length) return;
+      nums.sort(() => Math.random() - 0.5); // 亂數打散
+
+      const freeBy = {};
+      const occBy = {};
+      const countBy = {};
+
+      for (let i = 1; i <= 8; i++) {
+        const seats = Array.from(document.querySelectorAll("#g" + i + " .seat"));
+        const free = seats.filter(s => s.children.length === 0);
+        freeBy[i] = free;
+        occBy[i] = seats.length - free.length;
+        countBy[i] = seats.length;
+      }
+
+      let idx = 0;
+
+      // 第一步：先補到「至少 3 人」或該組座位總數
+      for (let i = 1; i <= 8; i++) {
+        const target = Math.min(3, countBy[i]);
+        let need = target - occBy[i];
+        if (need <= 0) continue;
+
+        const free = freeBy[i];
+        if (!free.length) continue;
+
+        const canFill = Math.min(need, free.length, nums.length - idx);
+        for (let j = 0; j < canFill; j++) {
+          free[j].appendChild(nums[idx++]);
+        }
+        freeBy[i] = free.slice(canFill);
+
+        if (idx >= nums.length) break;
+      }
+
+      // 第二步：剩餘的人塞入所有剩下空位
+      if (idx < nums.length) {
+        let allFree = [];
+        for (let i = 1; i <= 8; i++) {
+          allFree = allFree.concat(freeBy[i]);
+        }
+        for (let j = 0; j < allFree.length && idx < nums.length; j++) {
+          allFree[j].appendChild(nums[idx++]);
+        }
+      }
+    }
+
+    // 匯出 JSON
+    function exportJSON() {
+      const result = {};
+      for (let i = 1; i <= 8; i++) {
+        const seats = Array.from(document.querySelectorAll("#g" + i + " .seat"))
+          .map(s => s.children.length ? s.children[0].textContent : "");
+        result["group" + i] = seats;
+      }
+      const blob = new Blob([JSON.stringify(result, null, 2)], { type: "application/json" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "seating.json";
+      a.click();
+    }
+
+    // 匯出 CSV（Excel 可開啟）
+    function exportCSV() {
+      let csv = "組別,座位1,座位2,座位3,座位4\n";
+      for (let i = 1; i <= 8; i++) {
+        const seats = Array.from(document.querySelectorAll("#g" + i + " .seat"))
+          .map(s => s.children.length ? s.children[0].textContent : "");
+        csv += "第" + i + "組," + seats.join(",") + "\n";
+      }
+      const blob = new Blob([csv], { type: "text/csv" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "seating.csv";
+      a.click();
+    }
+
+    // 匯出 JPG（只截班級標題 + 座位區）
+    function exportJPG() {
+      if (typeof html2canvas === "undefined") {
+        alert("html2canvas 載入失敗，無法匯出 JPG。請確認網路連線。");
+        return;
+      }
+      const area = document.getElementById("exportArea");
+      html2canvas(area).then(canvas => {
+        const a = document.createElement("a");
+        a.href = canvas.toDataURL("image/jpeg");
+        a.download = "seating.jpg";
+        a.click();
+      });
+    }
+
+    // 初始化
+    document.addEventListener("DOMContentLoaded", () => {
+      Object.keys(seatMap).forEach(id => buildGroup(id, seatMap[id]));
+      setTimeout(adjustDeskHeight, 50);
+    });
+  </script>
+</body>
+</html>
