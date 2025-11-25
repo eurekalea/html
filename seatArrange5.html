@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>班級分組座位系統（對齊優化版）</title>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <style>
+    :root {
+      --primary-color: #4a90e2;
+      --bg-color: #f4f7f9;
+      --panel-bg: #ffffff;
+      --desk-color: #333333;
+      --border-radius: 8px;
+      --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    body {
+      font-family: "Microsoft JhengHei", "Noto Sans TC", sans-serif;
+      background-color: var(--bg-color);
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      height: 100vh;
+      box-sizing: border-box;
+      gap: 20px;
+      overflow: hidden;
+    }
+
+    /* --- 左側功能區 --- */
+    .sidebar {
+      width: 200px;
+      background: var(--panel-bg);
+      padding: 20px;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .sidebar h3 {
+      margin: 0 0 10px 0;
+      font-size: 18px;
+      color: #555;
+      text-align: center;
+    }
+
+    button {
+      padding: 10px;
+      border: none;
+      background-color: var(--primary-color);
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s;
+      font-size: 14px;
+    }
+
+    button:hover {
+      background-color: #357abd;
+    }
+
+    button.secondary {
+      background-color: #6c757d;
+    }
+
+    button.secondary:hover {
+      background-color: #5a6268;
+    }
+
+    .class-input-area {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #eee;
+    }
+    
+    .class-input-area label {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 14px;
+      color: #666;
+    }
+    
+    .class-input-area input {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    /* --- 中間主要顯示區 --- */
+    .main-container {
+      flex: 1;
+      background: #e9eff5;
+      border-radius: var(--border-radius);
+      overflow: auto;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 20px;
+      border: 2px dashed #ccc;
+    }
+
+    #exportArea {
+      background: white;
+      padding: 40px;
+      border-radius: 4px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.05);
+      min-width: 800px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #classTitle {
+      font-size: 48px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      background: linear-gradient(45deg, #005bea, #00c6fb);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      border: 2px solid #005bea;
+      padding: 10px 30px;
+      border-radius: 50px;
+      min-width: 300px;
+      text-align: center;
+    }
+
+    /* 調整後的老師桌樣式 
+       width: 100% 讓它自動填滿父容器 (也就是左邊那個 table-block)
+    */
+    .teacher-desk {
+      width: 100%; 
+      height: 50px;
+      background: #ddd;
+      border: 2px solid #999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: #555;
+      border-radius: 4px;
+      letter-spacing: 2px;
+      box-sizing: border-box; /* 確保邊框算在寬度內 */
+    }
+
+    /* 右側隱形佔位，確保左右座位高度對齊 */
+    .teacher-desk-spacer {
+      width: 100%;
+      height: 50px; /* 與老師桌同高 */
+      visibility: hidden; /* 隱藏但佔位 */
+    }
+
+    .seat-area {
+      display: flex;
+      gap: 80px; /* 增加走道寬度，讓分開感更明顯 */
+    }
+
+    .table-block {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      /* 讓 block 寬度由內容 (252px) 決定，老師桌就會跟著這個寬度 */
+      align-items: stretch; 
+    }
+
+    .desk-row {
+      display: flex;
+      align-items: stretch;
+    }
+
+    .group {
+      width: 110px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .group h4 {
+      text-align: center;
+      margin: 0 0 8px 0;
+      height: 24px;
+      color: #555;
+      font-size: 14px;
+    }
+
+    .seat-column {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .seat {
+      height: 40px;
+      background-color: #fff;
+      border: 2px dashed #ccc;
+      border-radius: 6px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: background 0.2s;
+    }
+
+    .seat:hover {
+      background-color: #f9f9f9;
+    }
+
+    .desk {
+      width: 12px;
+      background: var(--desk-color);
+      margin: 0 10px;
+      border-radius: 2px;
+      margin-top: 32px; 
+    }
+
+    /* --- 右側操作區 --- */
+    .right-panel {
+      width: 220px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      flex-shrink: 0;
+    }
+
+    .input-box {
+      background: var(--panel-bg);
+      padding: 15px;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .input-box h4 {
+      margin: 0;
+      color: #333;
+    }
+
+    textarea {
+      width: 100%;
+      box-sizing: border-box;
+      resize: vertical;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .unassigned-container {
+      flex: 1;
+      background: var(--panel-bg);
+      padding: 15px;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .unassigned-container h4 {
+      margin: 0 0 10px 0;
+      color: #333;
+    }
+
+    .unassigned-list {
+      flex: 1;
+      overflow-y: auto;
+      border: 1px solid #eee;
+      padding: 5px;
+      border-radius: 4px;
+      background: #fafafa;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      align-content: flex-start;
+    }
+
+    .number {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #fff;
+      border: 1px solid #aaa;
+      border-radius: 4px;
+      cursor: grab;
+      font-weight: bold;
+      font-size: 16px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      user-select: none;
+    }
+    
+    .number:active {
+      cursor: grabbing;
+      background: #eef;
+    }
+
+    .unassigned-list .number {
+      width: 40px;
+      height: 40px;
+      font-size: 14px;
+    }
+
+    @media (max-width: 1024px) {
+      body { flex-direction: column; overflow: auto; height: auto; }
+      .sidebar, .right-panel { width: 100%; }
+      .main-container { min-height: 500px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sidebar">
+    <h3>控制面板</h3>
+    <button onclick="autoAssign()">🪄 一鍵亂數排完</button>
+    <button class="secondary" onclick="clearSeats()">🗑️ 清空所有座位</button>
+    
+    <div style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 10px;">
+      <h3>匯出功能</h3>
+      <button onclick="exportJPG()">📷 下載圖片 (JPG)</button>
+      <button class="secondary" onclick="exportCSV()">📊 匯出 Excel (CSV)</button>
+    </div>
+
+    <div class="class-input-area">
+      <label for="classInput">更改班級名稱：</label>
+      <input id="classInput" type="text" value="三年2班" oninput="updateClassTitle()" />
+    </div>
+  </div>
+
+  <div class="main-container">
+    <div id="exportArea">
+      <div id="classTitle">三年2班</div>
+      
+      <div class="seat-area" id="seatArea">
+        
+        <div class="table-block">
+          <div class="teacher-desk">講台 / 老師桌</div>
+          
+          <div class="desk-row">
+            <div class="group" id="g1"></div>
+            <div class="desk"></div>
+            <div class="group" id="g3"></div>
+          </div>
+          <div class="desk-row">
+            <div class="group" id="g2"></div>
+            <div class="desk"></div>
+            <div class="group" id="g4"></div>
+          </div>
+        </div>
+
+        <div class="table-block">
+          <div class="teacher-desk-spacer"></div>
+
+          <div class="desk-row">
+            <div class="group" id="g5"></div>
+            <div class="desk"></div>
+            <div class="group" id="g7"></div>
+          </div>
+          <div class="desk-row">
+            <div class="group" id="g6"></div>
+            <div class="desk"></div>
+            <div class="group" id="g8"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="right-panel">
+    <div class="input-box">
+      <h4>1. 輸入座號</h4>
+      <span style="font-size:12px; color:#888;">(請用逗號或換行分隔)</span>
+      <textarea id="inputNumbers" rows="5" placeholder="例如: 1, 2, 3..."></textarea>
+      <button onclick="generateNumbers()">⬇️ 產生座號卡</button>
+    </div>
+
+    <div class="unassigned-container">
+      <h4>2. 未安排座位</h4>
+      <div class="unassigned-list" id="unassigned" ondragover="allowDrop(event)" ondrop="drop(event)"></div>
+    </div>
+  </div>
+
+  <script>
+    const seatMap = { g1: 4, g2: 4, g3: 4, g4: 4, g5: 4, g6: 3, g7: 4, g8: 3 };
+
+    document.addEventListener("DOMContentLoaded", () => {
+      Object.keys(seatMap).forEach(id => buildGroup(id, seatMap[id]));
+      document.getElementById("inputNumbers").value = Array.from({length:30}, (_, i) => i + 1).join(", ");
+      generateNumbers();
+      updateClassTitle();
+    });
+
+    function updateClassTitle() {
+      const val = document.getElementById("classInput").value.trim();
+      document.getElementById("classTitle").textContent = val || "班級名稱";
+    }
+
+    function buildGroup(id, seatCount) {
+      const g = document.getElementById(id);
+      const title = document.createElement("h4");
+      title.textContent = "第" + id.replace("g", "") + "組";
+      g.appendChild(title);
+
+      const col = document.createElement("div");
+      col.className = "seat-column";
+      
+      for (let i = 0; i < seatCount; i++) {
+        const seat = document.createElement("div");
+        seat.className = "seat";
+        seat.ondragover = allowDrop;
+        seat.ondrop = drop;
+        col.appendChild(seat);
+      }
+      g.appendChild(col);
+    }
+
+    function allowDrop(ev) { ev.preventDefault(); }
+    function drag(ev) { ev.dataTransfer.setData("text", ev.target.id); }
+    function drop(ev) {
+      ev.preventDefault();
+      const dataId = ev.dataTransfer.getData("text");
+      const el = document.getElementById(dataId);
+      let target = ev.target;
+      if (target.classList.contains("number")) { target = target.parentElement; }
+      if (target.id === "unassigned") {
+        target.appendChild(el);
+        return;
+      }
+      if (target.classList.contains("seat") && target.children.length === 0) {
+        target.appendChild(el);
+      }
+    }
+
+    function generateNumbers() {
+      const raw = document.getElementById("inputNumbers").value;
+      const nums = raw.split(/[\n,，\s]+/).map(x => x.trim()).filter(x => x);
+      clearSeats(); 
+      const area = document.getElementById("unassigned");
+      area.innerHTML = "";
+      nums.forEach(n => {
+        const d = document.createElement("div");
+        d.className = "number";
+        d.id = "num_" + n;
+        d.textContent = n;
+        d.draggable = true;
+        d.ondragstart = drag;
+        area.appendChild(d);
+      });
+    }
+
+    function clearSeats() {
+      const area = document.getElementById("unassigned");
+      document.querySelectorAll(".group .number").forEach(numDiv => {
+        area.appendChild(numDiv);
+      });
+    }
+
+    function autoAssign() {
+      let nums = Array.from(document.querySelectorAll("#unassigned .number"));
+      if (!nums.length) {
+        alert("待命區沒有學生！請先產生座號，或將座位清空。");
+        return;
+      }
+      nums.sort(() => Math.random() - 0.5);
+
+      let numIndex = 0;
+
+      function getEmptySeats(groupId) {
+        const seats = Array.from(document.querySelectorAll("#g" + groupId + " .seat"));
+        return seats.filter(s => s.children.length === 0);
+      }
+      
+      function getOccupiedCount(groupId) {
+        const seats = Array.from(document.querySelectorAll("#g" + groupId + " .seat"));
+        return seats.filter(s => s.children.length > 0).length;
+      }
+
+      // 階段一：1-7組先補滿3人
+      for (let i = 1; i <= 7; i++) {
+        let currentCount = getOccupiedCount(i);
+        let emptySeats = getEmptySeats(i);
+        while (currentCount < 3 && emptySeats.length > 0 && numIndex < nums.length) {
+          emptySeats[0].appendChild(nums[numIndex++]);
+          emptySeats.shift();
+          currentCount++;
+        }
+      }
+
+      // 階段二：第8組補滿3人
+      if (numIndex < nums.length) {
+        let i = 8;
+        let currentCount = getOccupiedCount(i);
+        let emptySeats = getEmptySeats(i);
+        while (currentCount < 3 && emptySeats.length > 0 && numIndex < nums.length) {
+          emptySeats[0].appendChild(nums[numIndex++]);
+          emptySeats.shift();
+          currentCount++;
+        }
+      }
+
+      // 階段三：填滿剩餘空位
+      if (numIndex < nums.length) {
+        let allRemainingSeats = [];
+        for (let i = 1; i <= 8; i++) {
+          allRemainingSeats = allRemainingSeats.concat(getEmptySeats(i));
+        }
+        for (let seat of allRemainingSeats) {
+          if (numIndex >= nums.length) break;
+          seat.appendChild(nums[numIndex++]);
+        }
+      }
+    }
+
+    function exportJPG() {
+      const area = document.getElementById("exportArea");
+      const originalBg = area.style.background;
+      area.style.background = "#ffffff";
+      html2canvas(area, { scale: 2 }).then(canvas => {
+        const a = document.createElement("a");
+        a.href = canvas.toDataURL("image/jpeg", 0.9);
+        a.download = document.getElementById("classTitle").textContent + "_座位表.jpg";
+        a.click();
+        area.style.background = originalBg;
+      }).catch(err => {
+        alert("截圖失敗，請確認瀏覽器支援。");
+      });
+    }
+
+    function exportCSV() {
+      let csv = "\uFEFF组別,座位1,座位2,座位3,座位4\n";
+      for (let i = 1; i <= 8; i++) {
+        const seats = Array.from(document.querySelectorAll("#g" + i + " .seat"))
+          .map(s => s.children.length ? s.children[0].textContent : "");
+        csv += "第" + i + "組," + seats.join(",") + "\n";
+      }
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = document.getElementById("classTitle").textContent + "_座位表.csv";
+      a.click();
+    }
+  </script>
+</body>
+</html>
