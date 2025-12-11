@@ -220,7 +220,7 @@
       margin-top: 20px;
     }
 
-    /* COM LIST (左側控制台) */
+    /* COM LIST */
 
     .com-panel {
       background: radial-gradient(circle at top, #020617, #020617 60%, #000 100%);
@@ -575,3 +575,742 @@
           連上各種 <span class="hero-highlight">「Dirty Coms」</span>，
           聽 Drew 說完這一代青少年黑客的故事
         </h1>
+        <p class="hero-sub">
+          Jack Rhysider 找來一位自稱「Drew」的年輕人，請他帶路參觀幾個線上的地下社群：
+          從 Roblox 廣告套利、Vanilla 禮物卡釣魚、OGUsers 帳號交易，到 SIM swapping 搶門號、偷加密貨幣。
+          這不是一件案子，而是一條條「賺快錢的 com 頻道」。
+        </p>
+        <div class="hero-meta">
+          <span>視角一：Jack · 早期網路世代、現在的說書人</span>
+          <span>視角二：Drew · 13 歲踏進 Roblox 黑灰圈的青少年</span>
+        </div>
+        <div class="hero-actions">
+          <button class="btn btn-primary" id="startStoryBtn">
+            ▶ 開始播放故事（從 Jack 開場）
+          </button>
+          <button class="btn btn-ghost"
+                  onclick="window.open('https://darknetdiaries.com/transcript/112/', '_blank')">
+            開一個分頁看原始逐字稿
+          </button>
+        </div>
+      </div>
+      <aside class="hero-side">
+        <div class="hero-side-card">
+          <div class="hero-side-title">這個互動頁面怎麼用？</div>
+          <p style="margin:0 0 6px;">
+            左邊是一台「Dirty Coms 控制台」，每個 com 是一個故事線：
+            <strong>開場、Roblox、禮物卡、OG 帳號、SIM swapping、結語</strong>。
+            右邊是對話與旁白的紀錄器。
+          </p>
+          <div class="hero-tags">
+            <span class="hero-tag">點選不同 com 切換場景</span>
+            <span class="hero-tag">按「播放下一段」逐步看到故事</span>
+            <span class="hero-tag">在關鍵節點回答小問題，檢查你會怎麼做</span>
+          </div>
+          <p style="margin:4px 0 0;font-size:0.78rem;">
+            內容依據官方 EP112 <em>Dirty Coms</em> 逐字稿改寫成中文敘事與對話，
+            聚焦在 Drew 的經歷與 Jack 的評論。
+          </p>
+        </div>
+      </aside>
+    </section>
+
+    <!-- 控制台 + 故事主面板 -->
+    <section class="layout" aria-label="Dirty Coms 故事控制台">
+      <!-- 左：Com 控制台 -->
+      <aside class="com-panel">
+        <div class="com-title">選擇一個 com · 故事頻道</div>
+        <div class="com-list" id="comList">
+          <button class="com-item active" data-panel="com-intro">
+            <div class="com-chip">📻</div>
+            <div>
+              <div class="com-label-main">開場 · 沒有網路長輩的一代</div>
+              <div class="com-label-sub">Jack 的問題：誰來教下一代避開網路陷阱？</div>
+            </div>
+            <div class="com-status-dot"></div>
+          </button>
+
+          <button class="com-item" data-panel="com-roblox">
+            <div class="com-chip">🎮</div>
+            <div>
+              <div class="com-label-main">Roblox / Robux · 13 歲的第一桶金</div>
+              <div class="com-label-sub">從玩遊戲變成壓榨玩家的廣告機器。</div>
+            </div>
+            <div class="com-status-dot"></div>
+          </button>
+
+          <button class="com-item" data-panel="com-giftcards">
+            <div class="com-chip">💳</div>
+            <div>
+              <div class="com-label-main">Vanilla 禮物卡 · Google Ads 釣魚</div>
+              <div class="com-label-sub">搜尋「查餘額」，結果先被偷光。</div>
+            </div>
+            <div class="com-status-dot"></div>
+          </button>
+
+          <button class="com-item" data-panel="com-og">
+            <div class="com-chip">📛</div>
+            <div>
+              <div class="com-label-main">OGUsers · 酷帳號與互相傷害</div>
+              <div class="com-label-sub">chargeback、doxxing、朋友之間的詐騙。</div>
+            </div>
+            <div class="com-status-dot"></div>
+          </button>
+
+          <button class="com-item" data-panel="com-sim">
+            <div class="com-chip">📶</div>
+            <div>
+              <div class="com-label-main">SIM swapping · 搶門號偷加密貨幣</div>
+              <div class="com-label-sub">從玩帳號，升級到碰真正的銀行錢。</div>
+            </div>
+            <div class="com-status-dot"></div>
+          </button>
+
+          <button class="com-item" data-panel="com-outro">
+            <div class="com-chip">🧠</div>
+            <div>
+              <div class="com-label-main">結語 · 這一代黑客到底在學什麼？</div>
+              <div class="com-label-sub">Jack 與 Drew 回頭看這整條路。</div>
+            </div>
+            <div class="com-status-dot"></div>
+          </button>
+        </div>
+
+        <div class="com-progress">
+          <div class="com-progress-bar">
+            <div class="com-progress-fill" id="comProgressFill"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;">
+            <span id="comProgressLabel">目前在：開場</span>
+            <span id="lineProgressLabel">進度：1 段</span>
+          </div>
+        </div>
+      </aside>
+
+      <!-- 右：故事主面板 -->
+      <section class="story-shell" aria-live="polite">
+        <!-- 開場：Jack -->
+        <article class="story-panel" id="com-intro" data-total-lines="6">
+          <header class="story-header-row">
+            <h2 class="story-title">開場：Jack 的疑問「誰來教我們上網？」</h2>
+            <span class="story-badge">視角：Jack</span>
+          </header>
+
+          <div class="story-log">
+            <p class="story-line visible">
+              <strong>Jack：</strong>「我們這一代的人，很多『活下去的智慧』是長輩教的──
+              怎麼過馬路、看到奇怪的人要躲開。但談到網路，大部分長輩根本不懂。」
+            </p>
+            <p class="story-line">
+              他回想自己小時候用電腦的樣子：亂裝遊戲、亂開檔案，每隔一陣子就搞到中毒，
+              把整台家用電腦弄壞，再請人重灌。沒有人懂，也沒有人能教他怎麼避免。
+            </p>
+            <p class="story-line">
+              <strong>Jack：</strong>「現在更怪的是：很多父母請小孩教他們用電腦、教他們開社群帳號。」
+              他說，這就像叫小孩教爸媽怎麼在壞街區生存。
+            </p>
+            <p class="story-line">
+              在開場獨白裡，他想像 2060 年的世界：那時候長大的孩子，父母已經看過網路的黑暗角落，
+              知道怎麼警告他們。但現在還沒到那個時候。
+            </p>
+            <p class="story-line">
+              <strong>Jack：</strong>「我們還在一個由年輕一代拿著手電筒前進的時代，
+              希望他們知道自己往哪裡走。」說完，他播下本集主題：Dirty Coms。
+            </p>
+            <p class="story-line">
+              這一集不是辦案，而是參觀一整片地下世界──
+              一群年輕黑客與詐騙者，用聊天群組和論壇交換賺錢祕密，每一條賺錢方式都是一個「com 頻道」。
+            </p>
+          </div>
+
+          <div class="story-meta-row">
+            <span class="story-meta-pill">主題：網路世代缺乏「前輩」的風險教育</span>
+            <span class="story-meta-pill">人物：Jack（主持人）</span>
+          </div>
+
+          <div class="choice-block">
+            <div class="choice-title">互動 · 你覺得，現在最缺哪一種「網路長輩」？</div>
+            <div class="choice-buttons">
+              <button class="choice-btn" data-correct="false">
+                很會用最新 APP，但不談風險的人
+              </button>
+              <button class="choice-btn" data-correct="true">
+                願意分享自己踩過哪些雷、怎麼收拾的人
+              </button>
+              <button class="choice-btn" data-correct="false">
+                只會說「手機少用」的人
+              </button>
+            </div>
+            <div class="choice-feedback"></div>
+          </div>
+
+          <footer class="story-footer-row">
+            <span>接下來，Jack 把麥克風交給一位自稱「Drew」的年輕人。</span>
+            <div class="story-controls">
+              <button class="btn-mini js-prev">◀ 前一段</button>
+              <button class="btn-mini js-next">▶ 播放下一段</button>
+            </div>
+          </footer>
+        </article>
+
+        <!-- Roblox -->
+        <article class="story-panel is-hidden" id="com-roblox" data-total-lines="6">
+          <header class="story-header-row">
+            <h2 class="story-title">Roblox / Robux：13 歲從玩家變成「壓榨玩家的人」</h2>
+            <span class="story-badge">視角：Drew（Roblox 起點）</span>
+          </header>
+
+          <div class="story-log">
+            <p class="story-line visible">
+              <strong>Drew：</strong>「這故事從我 13 歲開始玩 Roblox 說起。」
+              他解釋，Roblox 不只是遊戲，而是一個讓玩家自己做遊戲的平台，
+              遊戲內有一種貨幣叫 <strong>Robux</strong>，只能用真錢買。
+            </p>
+            <p class="story-line">
+              小孩沒有信用卡，父母也不想一直為遊戲付錢。
+              於是很多人開始逛那種「看廣告、填問卷，就送 Robux」的網站。
+              這些站靠廣告和問卷分潤賺錢，再用一小部分回饋給玩家。
+            </p>
+            <p class="story-line">
+              Drew 的朋友更進一步：自己架站、接上廣告平台，然後下 Google Ads，
+              專門投放「免費 Robux」的關鍵字。後端統計下來，一個小孩看廣告賺到的錢，
+              遠遠高於發給他的 Robux 成本。
+            </p>
+            <p class="story-line">
+              <strong>Drew：</strong>「他每天賺一兩千美金，累積到三萬多。」
+              Jack 聽了只覺得，遊戲已經不是遊戲，而是一台「用小孩時間換錢」的機器。
+            </p>
+            <p class="story-line">
+              在這些論壇上，大家討論的已經不是「怎麼做好玩的遊戲」，
+              而是「怎麼複製爆紅遊戲、怎麼 DDoS 對手、怎麼讓玩家流量全灌到自己這裡來」。
+            </p>
+            <p class="story-line">
+              <strong>Jack：</strong>「突然間，Roblox 不再只是童年回憶，而是童年的第一個黑灰產業。」
+            </p>
+          </div>
+
+          <div class="story-meta-row">
+            <span class="story-meta-pill">手法：廣告套利、複製遊戲、攻擊競品</span>
+            <span class="story-meta-pill">關鍵點：小孩對虛擬貨幣的渴望</span>
+          </div>
+
+          <div class="choice-block">
+            <div class="choice-title">互動 · 如果你是想要 Robux 的玩家，看到這種網站會？</div>
+            <div class="choice-buttons">
+              <button class="choice-btn" data-correct="false">
+                反正大家都在用，直接填一填再說
+              </button>
+              <button class="choice-btn" data-correct="true">
+                先搜尋「網站名稱 + scam / 詐騙」看看
+              </button>
+              <button class="choice-btn" data-correct="true">
+                回到 Roblox 官方文件，確認哪些方式是合法的
+              </button>
+            </div>
+            <div class="choice-feedback"></div>
+          </div>
+
+          <footer class="story-footer-row">
+            <span>Roblox 只是第一台 com。賺到第一筆錢後，他們開始找「更會翻倍」的方法。</span>
+            <div class="story-controls">
+              <button class="btn-mini js-prev">◀ 前一段</button>
+              <button class="btn-mini js-next">▶ 播放下一段</button>
+            </div>
+          </footer>
+        </article>
+
+        <!-- Gift cards -->
+        <article class="story-panel is-hidden" id="com-giftcards" data-total-lines="6">
+          <header class="story-header-row">
+            <h2 class="story-title">Vanilla 禮物卡：搜尋「查餘額」，先被偷光再說</h2>
+            <span class="story-badge">視角：Drew（禮物卡釣魚）</span>
+          </header>
+
+          <div class="story-log">
+            <p class="story-line visible">
+              有一天，他們在論壇上看到新的賺錢方式：<strong>Vanilla Visa 禮物卡釣魚網站</strong>。
+              很多人拿到禮物卡之後，會在 Google 搜尋「vanilla gift card balance」想查餘額。
+            </p>
+            <p class="story-line">
+              Drew 的朋友做了一件很「簡單粗暴」的事：
+              直接複製官方查餘額頁面的設計，做出一個假的「查餘額」頁，
+              上面有輸入卡號、有效期、安全碼的表單，看起來就像真的。
+            </p>
+            <p class="story-line">
+              後端程式拿到這些卡片資訊後，會去真正的官方網站查餘額，
+              然後把卡片餘額換成可以洗錢或轉賣的東西──例如透過平台兌換為其他資產。
+            </p>
+            <p class="story-line">
+              真正狠的地方在這裡：他們花錢買 <strong>Google Ads</strong>，
+              讓自己的假網站排在搜尋結果最上方，甚至高過官方網站。
+              很多人根本沒看清楚網址，就先點第一個結果。
+            </p>
+            <p class="story-line">
+              <strong>Drew：</strong>「多數人分不出兩個 URL 的差別，也沒受過辨識訓練。他們只看到第一個結果就按。」
+              一旦輸入卡片資料、看到餘額，實際上卡上的錢已經被轉走。
+            </p>
+            <p class="story-line">
+              這不是他們獨創的一招，而是一整個「禮物卡 com」社群：
+              各種不同品牌的禮物卡，都有人做釣魚站、搶廣告位、搶受害者。
+            </p>
+          </div>
+
+          <div class="story-meta-row">
+            <span class="story-meta-pill">技術：Clone 官方頁面 + 自動查餘額 + 倒賣</span>
+            <span class="story-meta-pill">漏洞：使用者對「搜尋結果第一個就點」的習慣</span>
+          </div>
+
+          <div class="choice-block">
+            <div class="choice-title">互動 · 你要查一張禮物卡的餘額，會怎麼開始？</div>
+            <div class="choice-buttons">
+              <button class="choice-btn" data-correct="true">
+                直接看卡片背面印的官方網址或電話
+              </button>
+              <button class="choice-btn" data-correct="false">
+                Google 搜尋，點第一個結果就好
+              </button>
+              <button class="choice-btn" data-correct="true">
+                就算是廣告結果，也仔細確認網域名稱
+              </button>
+            </div>
+            <div class="choice-feedback"></div>
+          </div>
+
+          <footer class="story-footer-row">
+            <span>接下來，故事移動到一個專門交易「酷帳號」的論壇：OGUsers。</span>
+            <div class="story-controls">
+              <button class="btn-mini js-prev">◀ 前一段</button>
+              <button class="btn-mini js-next">▶ 播放下一段</button>
+            </div>
+          </footer>
+        </article>
+
+        <!-- OG Users -->
+        <article class="story-panel is-hidden" id="com-og" data-total-lines="6">
+          <header class="story-header-row">
+            <h2 class="story-title">OGUsers：酷帳號、市場、內鬥與被朋友騙</h2>
+            <span class="story-badge">視角：Drew（帳號黑市）</span>
+          </header>
+
+          <div class="story-log">
+            <p class="story-line visible">
+              Drew 曾是 OGUsers 的早期成員之一，會員編號大約在 700 號左右。
+              那裡交易的不是實體貨，而是：<strong>短、稀有、好看的帳號名稱</strong>，
+              包含 Instagram、Snapchat、Kik、各種遊戲帳號。
+            </p>
+            <p class="story-line">
+              有人搶先註冊新帳號，再高價賣掉；也有人買來和盜來的帳號混在一起轉手，
+              或是把一個帳號裡的名稱拆出來再賣。論壇上充斥著「Turbo / Claimer」工具，
+              玩家為了搶釋出的名稱，寫程式狂轟 API。
+            </p>
+            <p class="story-line">
+              在這個市場裡，真正可怕的不是「對外」的犯罪，而是「互相」。
+              大家會用各種方式坑彼此：信用卡 <strong>chargeback</strong>、
+              向支付平台檢舉對方帳號可疑、利用年齡政策讓帳號被凍結。
+            </p>
+            <p class="story-line">
+              Drew 自己也多次被朋友坑：有時是錢沒收到、有時是帳號被收回，
+              長期累積起來被騙走的金額加起來是數千、甚至上萬美金。
+            </p>
+            <p class="story-line">
+              為了報復或勒索，大家開始 <strong>doxxing</strong>：蒐集真實姓名、住址、家人資訊；
+              還會逼人拍羞辱照片（身上寫對方帳號），拿來威脅說要寄給父母看。
+            </p>
+            <p class="story-line">
+              <strong>Drew：</strong>「犯罪者對犯罪者，是我看過最誇張的互相傷害。」
+              經過這些事，他開始問自己：我還要留在這個圈子裡多久？
+            </p>
+          </div>
+
+          <div class="story-meta-row">
+            <span class="story-meta-pill">文化：不信任、內鬥、背刺成為常態</span>
+            <span class="story-meta-pill">情緒：賺到錢的快感 VS 被自己朋友毀掉的痛</span>
+          </div>
+
+          <div class="choice-block">
+            <div class="choice-title">互動 · 如果你在這種圈子裡被朋友騙了很多次…</div>
+            <div class="choice-buttons">
+              <button class="choice-btn" data-correct="false">
+                想辦法設計更狠的騙局，把錢全部騙回來
+              </button>
+              <button class="choice-btn" data-correct="true">
+                停下來問：這個圈子的規則，是否跟我未來想過的人生完全相反
+              </button>
+              <button class="choice-btn" data-correct="true">
+                逐步把自己的錢、帳號和真實身分抽離這些場域
+              </button>
+            </div>
+            <div class="choice-feedback"></div>
+          </div>
+
+          <footer class="story-footer-row">
+            <span>在被騙、被 doxx 之後，Drew 終於開始認真面對一個詞：OPSEC。</span>
+            <div class="story-controls">
+              <button class="btn-mini js-prev">◀ 前一段</button>
+              <button class="btn-mini js-next">▶ 播放下一段</button>
+            </div>
+          </footer>
+        </article>
+
+        <!-- SIM swapping -->
+        <article class="story-panel is-hidden" id="com-sim" data-total-lines="6">
+          <header class="story-header-row">
+            <h2 class="story-title">SIM swapping：從帳號遊戲，升級到真正的銀行錢</h2>
+            <span class="story-badge">視角：Drew + Jack（SIM & 加密貨幣）</span>
+          </header>
+
+          <div class="story-log">
+            <p class="story-line visible">
+              在節目的後半段，Jack 問 Drew 對 <strong>SIM swapping</strong> 的看法：
+              這種攻擊會把你的手機門號轉到攻擊者的 SIM 卡上，
+              讓他接收你的簡訊驗證碼，進而登入你的金融或加密貨幣帳戶。
+            </p>
+            <p class="story-line">
+              早期的做法是找電信門市的「內鬼」──店員或 manager。
+              他們有權限直接幫客戶更換 SIM 卡，
+              於是只要收到攻擊者提供的假資料，就把門號轉到攻擊者那張卡上。
+            </p>
+            <p class="story-line">
+              更激烈的版本：直接到門市搶走店長的平板或登入憑證，
+              用那台裝置在後台批量操作，把高價目標的門號一次換走。
+            </p>
+            <p class="story-line">
+              目標多半是加密貨幣交易所帳戶、綁定簡訊 2FA 的銀行、或有價值的網路服務。
+              有些人專門蒐集外洩資料庫和常用密碼，找出「看起來很有錢、又習慣重複用密碼」的人。
+            </p>
+            <p class="story-line">
+              <strong>Jack：</strong>「九〇年代的駭客多半是為了好玩、好奇；
+              二〇一〇年代 Anonymous 帶起了『黑客行動主義』；
+              到二〇二〇年代，這群年輕駭客的動機變成很單純的：<strong>賺錢</strong>。」
+            </p>
+            <p class="story-line">
+              Drew 說，他有時會想把這些人全部報給 FBI，
+              但同時也知道，那會讓自己的過去一併被攤開。他自己現在更在意的是：
+              怎麼把這些經驗變成警告，而不是再多一條「Dirty com」。
+            </p>
+          </div>
+
+          <div class="story-meta-row">
+            <span class="story-meta-pill">風險：門號 = 身分 + 一次性密碼</span>
+            <span class="story-meta-pill">趨勢：黑客動機從好奇，轉向強烈的逐利性</span>
+          </div>
+
+          <div class="choice-block">
+            <div class="choice-title">互動 · 你現在可以做哪一件事，降低被 SIM swap 風險？</div>
+            <div class="choice-buttons">
+              <button class="choice-btn" data-correct="true">
+                把金融與加密貨幣帳號的簡訊 2FA 換成認證器 App 或硬體金鑰
+              </button>
+              <button class="choice-btn" data-correct="true">
+                為重要帳號建立獨立 e-mail 和專屬密碼，不與遊戲 / 社群混用
+              </button>
+              <button class="choice-btn" data-correct="false">
+                所有帳號都綁同一支門號，比較好管理
+              </button>
+            </div>
+            <div class="choice-feedback"></div>
+          </div>
+
+          <footer class="story-footer-row">
+            <span>故事最後，Jack 把焦點從地下圈拉回到我們這一代的責任。</span>
+            <div class="story-controls">
+              <button class="btn-mini js-prev">◀ 前一段</button>
+              <button class="btn-mini js-next">▶ 播放下一段</button>
+            </div>
+          </footer>
+        </article>
+
+        <!-- 結語 -->
+        <article class="story-panel is-hidden" id="com-outro" data-total-lines="5">
+          <header class="story-header-row">
+            <h2 class="story-title">結語：Dirty Coms 只是實驗室，下一代要學的是什麼？</h2>
+            <span class="story-badge">視角：Jack + Drew（回望整條路）</span>
+          </header>
+
+          <div class="story-log">
+            <p class="story-line visible">
+              在節目尾聲，Jack 說，聽 Drew 描述這些地下社群，
+              感覺像看到一個很殘酷的「實驗室」：青少年在裡面試各種手段，對象有時是公司、有時是陌生人，
+              但很多時候，是彼此。
+            </p>
+            <p class="story-line">
+              他回顧幾十年的黑客史：九〇年代、零零年代很多人是出於好奇、好玩；
+              一〇年代有 Anonymous 這種把黑客技術用在政治行動上的團體；
+              到二〇年代，愈來愈多年輕駭客的主軸變成「賺錢」。
+            </p>
+            <p class="story-line">
+              Drew 則說，自己這一路下來，學到最多的反而是「不要太相信任何人」、
+              「不要讓真實身分和灰色活動綁在一起」，以及「賺到的錢很快，但失去的東西也很快」。
+            </p>
+            <p class="story-line">
+              <span class="tag-opsec">
+                <span class="tag-opsec-dot"></span>
+                最後的 OPSEC 筆記：分身、分流、分開
+              </span>
+              他現在會用不同信箱、不同暱稱、不同密碼管理不同生活圈，
+              也更願意把自己的踩雷故事說出來，讓別人少走幾步。
+            </p>
+            <p class="story-line">
+              <strong>Jack：</strong>「也許再過幾十年，會有一代孩子是被『看過網路黑暗面的大人』養大的。
+              在那之前，我們能做的就是：把這些故事說清楚，讓還在拿著手電筒往前走的人，
+              至少知道前面地圖上有哪些坑。」
+            </p>
+          </div>
+
+          <div class="story-meta-row">
+            <span class="story-meta-pill">主題：把黑暗故事變成可傳承的風險教育</span>
+            <span class="story-meta-pill">問題：我們這一代，要當哪一種「前輩」？</span>
+          </div>
+
+          <div class="choice-block">
+            <div class="choice-title">互動 · 看完 Dirty Coms，你比較想成為哪一種角色？</div>
+            <div class="choice-buttons">
+              <button class="choice-btn" data-correct="false">
+                找下一個還沒被講出來的「Dirty com」，趕快賺一波
+              </button>
+              <button class="choice-btn" data-correct="true">
+                把這些故事整理成教材、跟晚一點進網路的人分享
+              </button>
+              <button class="choice-btn" data-correct="true">
+                至少確保自己和身邊的人，不再那麼容易被這些手法騙到
+              </button>
+            </div>
+            <div class="choice-feedback"></div>
+          </div>
+
+          <footer class="story-footer-row">
+            <span>你可以切換回任一個 com，再從不同角度回看這整條路。</span>
+            <div class="story-controls">
+              <button class="btn-mini js-prev">◀ 前一段</button>
+              <button class="btn-mini js-next">▶ 播放下一段</button>
+            </div>
+          </footer>
+        </article>
+      </section>
+    </section>
+
+    <p class="footer-note">
+      內容整理改寫自 Darknet Diaries 第 112 集
+      <a class="link" href="https://darknetdiaries.com/transcript/112/" target="_blank" rel="noopener noreferrer">
+        「Dirty Coms」逐字稿
+      </a>，僅作為互動敘事與資訊素養教學使用。
+    </p>
+  </main>
+
+  <script>
+    (function () {
+      function $(selector, root) {
+        return (root || document).querySelector(selector);
+      }
+      function $all(selector, root) {
+        return (root || document).querySelectorAll(selector);
+      }
+
+      var comItems = $all(".com-item");
+      var panels = $all(".story-panel");
+      var startStoryBtn = $("#startStoryBtn");
+      var comProgressFill = $("#comProgressFill");
+      var comProgressLabel = $("#comProgressLabel");
+      var lineProgressLabel = $("#lineProgressLabel");
+      var order = ["com-intro", "com-roblox", "com-giftcards", "com-og", "com-sim", "com-outro"];
+
+      // 初始化每個 panel 的索引
+      for (var p = 0; p < panels.length; p++) {
+        var panel = panels[p];
+        var lines = $all(".story-line", panel);
+        for (var i = 0; i < lines.length; i++) {
+          lines[i].setAttribute("data-index", i);
+        }
+        panel.setAttribute("data-currentIndex", 0);
+      }
+
+      function updateLineProgress(panelId, current, total) {
+        lineProgressLabel.textContent = "進度：" + current + " / " + total + " 段";
+      }
+
+      function updateComProgressBar(panelId) {
+        var idx = -1;
+        for (var j = 0; j < order.length; j++) {
+          if (order[j] === panelId) {
+            idx = j;
+            break;
+          }
+        }
+        if (idx === -1) return;
+        var ratio = (idx + 1) / order.length;
+        comProgressFill.style.transform = "scaleX(" + ratio + ")";
+      }
+
+      function setActiveCom(panelId) {
+        // 左側
+        for (var c = 0; c < comItems.length; c++) {
+          var item = comItems[c];
+          var isActive = item.getAttribute("data-panel") === panelId;
+          if (isActive) {
+            item.classList.add("active");
+            var label = item.querySelector(".com-label-main");
+            if (label) {
+              comProgressLabel.textContent = "目前在：" + label.textContent;
+            }
+          } else {
+            item.classList.remove("active");
+          }
+        }
+
+        // 右側 panels
+        for (var p = 0; p < panels.length; p++) {
+          var panel = panels[p];
+          var active = panel.id === panelId;
+          if (active) {
+            panel.classList.remove("is-hidden");
+            var lines = $all(".story-line", panel);
+            for (var i = 0; i < lines.length; i++) {
+              if (i === 0) {
+                lines[i].classList.add("visible");
+              } else {
+                lines[i].classList.remove("visible");
+              }
+            }
+            panel.setAttribute("data-currentIndex", 0);
+            var total = parseInt(panel.getAttribute("data-total-lines"), 10);
+            if (!total || total < 1) total = lines.length;
+            updateLineProgress(panelId, 1, total);
+          } else {
+            panel.classList.add("is-hidden");
+          }
+        }
+
+        updateComProgressBar(panelId);
+      }
+
+      function getActivePanel() {
+        for (var p = 0; p < panels.length; p++) {
+          if (!panels[p].classList.contains("is-hidden")) {
+            return panels[p];
+          }
+        }
+        return panels[0];
+      }
+
+      function step(panel, delta) {
+        var lines = $all(".story-line", panel);
+        var total = parseInt(panel.getAttribute("data-total-lines"), 10);
+        if (!total || total < 1) total = lines.length;
+
+        var idx = parseInt(panel.getAttribute("data-currentIndex"), 10);
+        if (isNaN(idx)) idx = 0;
+
+        idx = idx + delta;
+        if (idx < 0) idx = 0;
+        if (idx >= total) idx = total - 1;
+
+        for (var i = 0; i < lines.length; i++) {
+          if (i <= idx) {
+            lines[i].classList.add("visible");
+          } else {
+            lines[i].classList.remove("visible");
+          }
+        }
+
+        panel.setAttribute("data-currentIndex", idx);
+        updateLineProgress(panel.id, idx + 1, total);
+      }
+
+      // 左側 com 點選
+      for (var c = 0; c < comItems.length; c++) {
+        (function (item) {
+          item.addEventListener("click", function () {
+            var panelId = item.getAttribute("data-panel");
+            setActiveCom(panelId);
+            var shell = $(".story-shell");
+            if (shell) {
+              shell.scrollIntoView({ behavior: "smooth", block: "start" });
+            }
+          });
+        })(comItems[c]);
+      }
+
+      // 開始播放按鈕
+      if (startStoryBtn) {
+        startStoryBtn.addEventListener("click", function () {
+          setActiveCom("com-intro");
+          var layout = $(".layout");
+          if (layout) {
+            layout.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        });
+      }
+
+      // 上一段 / 下一段
+      document.addEventListener("click", function (e) {
+        var target = e.target;
+        var nextBtn = null;
+        var prevBtn = null;
+        // 手動往上找帶 js-next/js-prev 的按鈕
+        while (target && target !== document.body) {
+          if (target.classList && target.classList.contains("js-next")) {
+            nextBtn = target;
+            break;
+          }
+          if (target.classList && target.classList.contains("js-prev")) {
+            prevBtn = target;
+            break;
+          }
+          target = target.parentNode;
+        }
+
+        if (!nextBtn && !prevBtn) return;
+
+        var panel = getActivePanel();
+        if (!panel) return;
+
+        if (nextBtn) step(panel, 1);
+        if (prevBtn) step(panel, -1);
+      });
+
+      // 選項互動
+      var choiceBlocks = $all(".choice-block");
+      for (var b = 0; b < choiceBlocks.length; b++) {
+        (function (block) {
+          var buttons = $all(".choice-btn", block);
+          var feedback = $(".choice-feedback", block);
+
+          function handleClick(btn) {
+            var correct = btn.getAttribute("data-correct") === "true";
+            for (var i = 0; i < buttons.length; i++) {
+              buttons[i].classList.remove("correct");
+              buttons[i].classList.remove("wrong");
+            }
+            if (correct) {
+              btn.classList.add("correct");
+              if (feedback) {
+                feedback.textContent = "✅ 這個選項在真實世界裡，確實能降低風險或改善情況。";
+                feedback.classList.add("good");
+                feedback.classList.remove("bad");
+              }
+            } else {
+              btn.classList.add("wrong");
+              if (feedback) {
+                feedback.textContent = "⚠️ 這種做法常常被攻擊者利用，或讓你更容易被捲入麻煩。";
+                feedback.classList.add("bad");
+                feedback.classList.remove("good");
+              }
+            }
+          }
+
+          for (var i = 0; i < buttons.length; i++) {
+            (function (btn) {
+              btn.addEventListener("click", function () {
+                handleClick(btn);
+              });
+            })(buttons[i]);
+          }
+        })(choiceBlocks[b]);
+      }
+
+      // 初始化：開場
+      setActiveCom("com-intro");
+    })();
+  </script>
+</body>
+</html>
