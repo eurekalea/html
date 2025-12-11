@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Darknet Diaries Ep.112: The Roblox Trap - 互動故事</title>
+    <title>Darknet Diaries Ep.112: The Roblox Trap - 互動教學版</title>
     <style>
         body {
             background-color: #0d0d0d;
@@ -26,7 +26,7 @@
             box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
             background-color: #111;
             position: relative;
-            min-height: 450px; /* 稍微加高以容納更多文字 */
+            min-height: 480px; /* 加高以容納更多選項與文字 */
         }
 
         h1 {
@@ -54,7 +54,7 @@
         
         .roblox {
             color: #fff;
-            background-color: #cc0000; /* Roblox 紅 */
+            background-color: #cc0000;
             padding: 2px 5px;
             font-weight: bold;
         }
@@ -62,6 +62,15 @@
         .danger {
             color: #ff3333;
             text-shadow: 0 0 5px red;
+        }
+
+        .alert {
+            color: #ff9900;
+            border: 1px solid #ff9900;
+            padding: 10px;
+            display: inline-block;
+            margin: 10px 0;
+            background: rgba(255, 153, 0, 0.1);
         }
 
         .money {
@@ -139,40 +148,48 @@
         {
             id: 0,
             title: "序章：慾望的起點",
-            text: "歡迎來到地下世界。很多駭客並不是一開始就攻擊銀行的。<br><br>在故事的主角 Drew 年輕時，一切都源於一個簡單的渴望：<br>想要玩遊戲，想要 <span class='roblox'>Robux</span> (Roblox 貨幣)，但是——<b>沒有信用卡，也沒有錢</b>。<br><br>這是一個巨大的市場缺口。",
+            text: "歡迎來到地下世界。這不是電影裡的頂級駭客，這是一群青少年的故事。<br><br>故事主角 Drew 年輕時，跟你們一樣，渴望擁有遊戲貨幣 <span class='roblox'>Robux</span>。<br>但他沒有信用卡，也沒有錢。<br><br>這時，他在網路上看到了一個機會...",
             options: [
-                { text: "這跟駭客有什麼關係？", next: 10 }
+                { text: "繼續", next: 10 }
             ]
         },
         {
             id: 10,
-            title: "第一章：第一桶金",
-            text: "Drew 的朋友發現了一個「商業模式」。<br><br>成千上萬的小孩在 Google 搜尋「免費 Robux」。<br>於是，他們搭建了一個網站：<br><span class='highlight'>「填問卷 / 看廣告 = 換取 Robux」</span>。<br><br>他們利用 Google Ads 把網站推送到搜尋結果第一名。",
+            title: "測試：你會上鉤嗎？",
+            text: "你在 Google 搜尋「免費 Robux」，點進第一個網站。<br>螢幕跳出一個視窗：<br><br><div class='alert'>恭喜！填寫這份簡單問卷，只要 3 分鐘，立即領取 5000 Robux！</div><br>你會怎麼做？",
             options: [
-                { text: "這聽起來很合法啊，賺廣告費？", next: 11 },
-                { text: "那些填問卷的小孩真的拿得到錢嗎？", next: 11 }
+                { text: "當然填！反正不用錢，試試看沒損失。", next: 11 }, // 上鉤
+                { text: "關掉網頁。這一定是騙人的。", next: 12 } // 警覺
             ]
         },
         {
             id: 11,
-            title: "商業模式：割韭菜",
-            text: "這就是暴利的秘密。<br><br>成本：支付給小孩微薄的 Robux（甚至很多人<b>根本不發幣</b>，純粹詐騙）。<br>收益：廣告商支付的高額 <span class='money'>流量分潤</span>。<br><br>這個簡單的模式，讓這群青少年每個月賺進數千美元。他們的胃口變大了。",
+            title: "你成為了產品",
+            text: "<span class='danger'>[警告] 你沒有拿到 Robux。</span><br><br>你浪費了 10 分鐘，可能還洩露了 Email 或手機號碼。<br>但對於架設網站的 Drew 來說，你剛剛幫他賺了 2 美元的廣告分潤。<br><br>你不是使用者，你是<b>被收割的韭菜</b>。",
             options: [
-                { text: "賺了幾千美元後，他們收手了嗎？", next: 1 }
+                { text: "這就是他們的商業模式？", next: 13 }
             ]
         },
         {
-            id: 1,
-            title: "第二章：從 Robux 到 OG",
-            text: "當然沒有。當你嘗到了甜頭，你會想要更多。<br><br>他們不再滿足於騙小孩的零用錢。他們將目光轉向了更值錢的東西：<br><strong>OG 帳號 (Original Gangster)</strong>。<br><br>像 <span class='highlight'>@Joy</span>、<span class='highlight'>@Dark</span> 這種極短的用戶名，在黑市價值數萬美元。",
+            id: 12,
+            title: "你很聰明，但別人不是",
+            text: "你避開了陷阱，做得好。<br><br>但是，全世界每天有成千上萬渴望 Robux 的小孩點擊了那個按鈕。<br>積少成多，Drew 和他的朋友們靠著這些廣告分潤，每個月賺進數千美元。<br><br>這種「輕鬆賺錢」的快感，讓他們走向了更黑暗的路。",
+            options: [
+                { text: "接下來他們做了什麼？", next: 13 }
+            ]
+        },
+        {
+            id: 13,
+            title: "商業模式：貪婪升級",
+            text: "從 Robux 詐騙中，這群青少年學到了可怕的一課：<br><span class='highlight'>「社交工程」比「寫程式」更有用。</span><br><br>他們不再滿足於騙小孩的零用錢。他們將目光轉向了更有價值的東西：<br><strong>OG 帳號 (Original Gangster)</strong>。<br>像 <span class='highlight'>@Joy</span>、<span class='highlight'>@Dark</span> 這種 ID，價值數萬美元。",
             options: [
                 { text: "他們要怎麼搶走別人的帳號？", next: 2 }
             ]
         },
         {
             id: 2,
-            title: "虛榮的代價",
-            text: "這些帳號通常屬於早期註冊的普通人。Robux 詐騙教會了他們一件事：<br><b>攻擊「人」比攻擊「電腦」容易。</b><br><br>為了奪取這些帳號，他們使用了一種恐怖的技術：<span class='danger'>SIM 卡劫持 (SIM Swapping)</span>。",
+            title: "第二章：各種資安防線",
+            text: "這些帳號的主人通常都有設密碼，甚至有基本的保護。<br><br>但 Drew 的團隊發現了一個最大的漏洞：<br><b>不是系統漏洞，而是「人」的漏洞。</b><br><br>他們使用了一種技術：<span class='danger'>SIM 卡劫持 (SIM Swapping)</span>。",
             options: [
                 { text: "什麼是 SIM 卡劫持？", next: 3 }
             ]
@@ -182,14 +199,14 @@
             title: "第三章：社交工程",
             text: "駭客不需要破解你的密碼，他們只需要你的<b>手機號碼</b>。<br><br>想像你是駭客，你現在打電話給電信公司的客服。你會怎麼說服他們把受害者的電話號碼轉移到你的 SIM 卡上？",
             options: [
-                { text: "「你好，我是某某某，我的手機掉了，請幫我啟用這張新 SIM 卡。」", next: 4 },
+                { text: "「你好，我是某某某，手機遺失了，請幫我啟用這張新 SIM 卡。」", next: 4 },
                 { text: "直接駭入電信公司的伺服器寫程式碼。", next: 404 }
             ]
         },
         {
             id: 404,
             title: "路徑錯誤",
-            text: "這太慢了。還記得 Robux 詐騙的教訓嗎？找漏洞不如找人性弱點。<br><br>他們使用的是「社交工程」— 攻擊的是<b>人</b>，而不是電腦。",
+            text: "太慢了。還記得 Robux 問卷的教訓嗎？<br>利用人的信任（或疏忽）永遠是最快的路徑。<br><br>他們攻擊的是<b>客服人員</b>，不是電腦。",
             options: [
                 { text: "重新嘗試：打電話給客服。", next: 4 }
             ]
@@ -197,7 +214,7 @@
         {
             id: 4,
             title: "防禦崩潰",
-            text: "客服人員可能很累，或者只是想趕快結束通話。甚至，駭客會用之前賺來的錢賄賂內部員工。<br><br>一旦客服按下「確認」，受害者的手機訊號瞬間消失。<br>駭客的手機接管了訊號。",
+            text: "客服人員可能很累，或者只是想趕快結束通話。有些駭客甚至會賄賂內部員工。<br><br>一旦客服按下「確認」，受害者的手機訊號瞬間消失。<br>駭客的手機接管了訊號。",
             options: [
                 { text: "接下來會發生什麼事？", next: 5 }
             ]
@@ -205,7 +222,7 @@
         {
             id: 5,
             title: "第四章：全面接管",
-            text: "現在駭客控制了電話號碼。<br><br>他們去 Instagram 點選 <span class='highlight'>「忘記密碼」</span>。<br>系統發送簡訊驗證碼 ➔ 駭客的手機收到。<br><br>幾秒鐘內，受害者的數位生活被洗劫一空。",
+            text: "現在駭客控制了電話號碼。<br><br>他們去 Instagram 點選 <span class='highlight'>「忘記密碼」</span>。<br>系統發送簡訊驗證碼 ➔ 駭客的手機收到。<br><br>幾秒鐘內，受害者的數位生活被洗劫一空。但故事還沒結束...",
             options: [
                 { text: "如果受害者反抗怎麼辦？", next: 6 }
             ]
@@ -213,23 +230,23 @@
         {
             id: 6,
             title: "第五章：暴力升級",
-            text: "事情會變得暴力。<br><br>他們會進行 <span class='danger'>報假案 (Swatting)</span>。打電話給警察謊稱受害者家裡有炸彈。<br><br>特警隊 (SWAT) 荷槍實彈地包圍受害者的房子。從 Robux 詐騙到危及人命，這就是 Dirty Coms 的墮落之路。",
+            text: "如果受害者試圖奪回帳號，駭客會進行 <span class='danger'>報假案 (Swatting)</span>。<br><br>他們打電話給警察，謊稱受害者家裡有炸彈或槍手。<br>特警隊 (SWAT) 荷槍實彈衝進受害者家裡。<br><br>這已經不是惡作劇，這是可能致人於死的犯罪。",
             options: [
-                { text: "這太瘋狂了，我們要怎麼保護自己？", next: 7 }
+                { text: "這太瘋狂了，我們該學到什麼？", next: 7 }
             ]
         },
         {
             id: 7,
-            title: "終章：如何防禦",
-            text: "雖然我們無法控制電信公司，也無法阻止貪婪的駭客，但我們可以保護自己。<br><br>最關鍵的一課：<br><span class='highlight'>不要使用簡訊 (SMS) 作為雙重驗證 (2FA)。</span>",
+            title: "終章：修正資安習慣",
+            text: "聽完這個故事，老師常說要開雙重驗證 (2FA)。<br>但這集 Podcast 告訴我們，<b>2FA 的種類</b>決定了生死。<br><br><span class='danger'>不要使用簡訊 (SMS) 接收驗證碼！</span><br>因為手機號碼是公開的，而且可能被劫持。",
             options: [
-                { text: "那我該用什麼？", next: 8 }
+                { text: "那我該用什麼？還有什麼要注意？", next: 8 }
             ]
         },
         {
             id: 8,
-            title: "結語：安全建議",
-            text: "1. 不要相信「填問卷送 Robux」的網站。<br>2. 使用 **Authenticator App** (如 Google Authenticator)。<br>3. 使用 **硬體金鑰** (如 YubiKey)。<br><br>不依賴手機訊號，駭客就拿不到你的驗證碼。<br><br>下課。",
+            title: "結語：不只是工具",
+            text: "要保護自己，請記住這三點：<br><br>1. **工具升級**：改用 **Authenticator App** (Google/Microsoft Auth) 或 **硬體金鑰**。<br>2. **觀念修正**：天下沒有白吃的午餐。看到「免費 Robux/點數/造型」，請視為詐騙。<br>3. **資料最小化**：手機號碼不是密碼，別隨意在問卷或網站填寫真實資料。<br><br>下課。",
             options: [
                 { text: "重新開始故事", next: 0 }
             ]
@@ -279,18 +296,15 @@
         currentStep = stepId;
         
         titleEl.textContent = step.title;
-        // 根據標題內容改變樣式
-        if(step.title.includes("暴力") || step.title.includes("錯誤") || step.title.includes("代價")) {
+        // 樣式邏輯
+        titleEl.className = ""; // Reset
+        document.body.style.boxShadow = "none";
+
+        if(step.title.includes("暴力") || step.title.includes("警告") || step.title.includes("錯誤") || step.title.includes("代價")) {
             titleEl.classList.add("danger");
             document.body.style.boxShadow = "inset 0 0 50px rgba(255,0,0,0.2)";
-        } else if (step.title.includes("第一桶金") || step.title.includes("商業模式")) {
-             titleEl.classList.remove("danger");
-             titleEl.style.color = "#ffff00"; // 金錢色
-             document.body.style.boxShadow = "none";
-        } else {
-            titleEl.classList.remove("danger");
-            titleEl.style.color = "#00ff41";
-            document.body.style.boxShadow = "none";
+        } else if (step.title.includes("測試") || step.title.includes("商業模式") || step.title.includes("上鉤")) {
+             titleEl.style.color = "#ffff00"; // 警告/金錢色
         }
 
         choicesEl.innerHTML = '';
