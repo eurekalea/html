@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dirty Coms — Darknet Diaries EP112 Bento 視覺筆記</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #050712;
+      --bg-soft: #0c1020;
+      --bg-softer: #14182b;
+      --accent: #ff4b81;
+      --accent-soft: rgba(255, 75, 129, 0.14);
+      --accent-strong: #ff9f43;
+      --fg: #f5f5f7;
+      --muted: #a0a4c0;
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --radius-lg: 20px;
+      --radius-xl: 26px;
+      --shadow-soft: 0 18px 40px rgba(0, 0, 0, 0.55);
+      --shadow-subtle: 0 8px 22px rgba(0,0,0,0.4);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        "Noto Sans TC", sans-serif;
+      background: radial-gradient(circle at top, #1b2040 0, #050712 55%, #000 100%);
+      color: var(--fg);
+      padding: 24px;
+    }
+
+    .page {
+      max-width: 1200px;
+      margin: 0 auto 64px;
+    }
+
+    /* HERO 區塊 */
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 2.4fr) minmax(0, 1.6fr);
+      gap: 24px;
+      margin-bottom: 28px;
+      align-items: stretch;
+    }
+
+    .hero-main {
+      background: linear-gradient(135deg, #121528, #080a16);
+      border-radius: 28px;
+      padding: 26px 28px 24px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .hero-main::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(255, 75, 129, 0.21) 0, transparent 52%),
+        radial-gradient(circle at 80% 120%, rgba(50, 230, 175, 0.18) 0, transparent 52%);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .pill-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #4ade80;
+      box-shadow: 0 0 12px rgba(74, 222, 128, 0.9);
+    }
+
+    .hero-title {
+      font-size: clamp(2.4rem, 4vw, 2.9rem);
+      line-height: 1.02;
+      letter-spacing: 0.02em;
+      margin: 4px 0 10px;
+    }
+
+    .hero-title span.highlight {
+      background: linear-gradient(90deg, #ff9f43, #ff4b81);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .hero-sub {
+      max-width: 90%;
+      font-size: 0.92rem;
+      color: var(--muted);
+      margin-bottom: 18px;
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 18px;
+    }
+
+    .hero-meta span {
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(0, 0, 0, 0.4);
+    }
+
+    .hero-big-number {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .hero-big-number strong {
+      font-size: 2.4rem;
+      line-height: 1;
+      color: var(--accent-strong);
+    }
+
+    .hero-orbit {
+      background: radial-gradient(circle at top, #16192e, #060816);
+      border-radius: 24px;
+      padding: 18px 18px 18px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: var(--shadow-subtle);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-orbit-title {
+      font-size: 0.86rem;
+      text-transform: uppercase;
+      color: var(--muted);
+      letter-spacing: 0.12em;
+      margin-bottom: 12px;
+    }
+
+    .orbit-map {
+      position: relative;
+      height: 170px;
+      border-radius: 20px;
+      background: radial-gradient(circle at 20% 0%, #272b52 0, transparent 60%),
+                  radial-gradient(circle at 100% 100%, #101325 0, #050712 60%);
+      border: 1px dashed rgba(255, 255, 255, 0.16);
+      padding: 10px;
+      overflow: hidden;
+    }
+
+    .orbit-center {
+      position: absolute;
+      inset: 50% auto auto 50%;
+      transform: translate(-50%, -50%);
+      width: 85px;
+      height: 85px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 0%, #ffcf99, #ff4b81);
+      box-shadow:
+        0 0 0 8px rgba(255, 75, 129, 0.3),
+        0 18px 40px rgba(0, 0, 0, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.72rem;
+      text-align: center;
+      color: #1b1020;
+    }
+
+    .orbit-node {
+      position: absolute;
+      padding: 6px 9px;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      background: rgba(0, 0, 0, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      color: var(--muted);
+      backdrop-filter: blur(6px);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .orbit-node::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 10px rgba(255, 75, 129, 0.9);
+    }
+
+    .orbit-node.roblox { top: 16px; left: 26px; }
+    .orbit-node.gift { top: 22px; right: 16px; }
+    .orbit-node.og { bottom: 16px; left: 14px; }
+    .orbit-node.sim { bottom: 28px; right: 12px; }
+
+    .hero-legend {
+      margin-top: 12px;
+      font-size: 0.75rem;
+      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .hero-legend span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .hero-legend-badge {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+    }
+
+    /* Filter 區塊 */
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 6px 0 18px;
+      align-items: center;
+    }
+
+    .toolbar-label {
+      font-size: 0.78rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+
+    .chip {
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(3, 7, 18, 0.8);
+      padding: 5px 10px;
+      font-size: 0.78rem;
+      color: var(--muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all 0.18s ease-out;
+    }
+
+    .chip-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: rgba(148, 163, 252, 0.7);
+    }
+
+    .chip:hover {
+      border-color: var(--accent);
+      color: var(--fg);
+      transform: translateY(-1px);
+    }
+
+    .chip.active {
+      background: linear-gradient(135deg, rgba(255, 75, 129, 0.16), rgba(64, 224, 163, 0.18));
+      border-color: var(--accent);
+      color: var(--fg);
+    }
+
+    .chip[data-filter="safety"] .chip-dot { background: #22c55e; }
+    .chip[data-filter="money"] .chip-dot { background: #fbbf24; }
+    .chip[data-filter="youth"] .chip-dot { background: #60a5fa; }
+    .chip[data-filter="sim"] .chip-dot { background: #a855f7; }
+
+    /* Bento Grid */
+
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      grid-auto-rows: minmax(120px, auto);
+      gap: 18px;
+    }
+
+    .bento-item {
+      border-radius: var(--radius-lg);
+      background: linear-gradient(145deg, var(--bg-soft), var(--bg-softer));
+      border: 1px solid var(--border-subtle);
+      padding: 16px 16px 14px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow-subtle);
+      transition: transform 0.18s ease-out, box-shadow 0.18s ease-out,
+        border-color 0.18s ease-out, background 0.18s ease-out, opacity 0.18s ease-out,
+        filter 0.18s ease-out;
+    }
+
+    .bento-item::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background: radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.04), transparent 55%);
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    .bento-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .bento-item:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 46px rgba(0, 0, 0, 0.7);
+      border-color: rgba(255, 255, 255, 0.28);
+      background: radial-gradient(circle at top, #181c3a, #080b17);
+    }
+
+    .bento-item.dimmed {
+      opacity: 0.35;
+      filter: grayscale(0.85);
+      transform: none !important;
+      box-shadow: var(--shadow-subtle);
+      border-color: var(--border-subtle);
+    }
+
+    /* Grid span */
+
+    .span-8 { grid-column: span 8; }
+    .span-4 { grid-column: span 4; }
+    .span-6 { grid-column: span 6; }
+    .span-3 { grid-column: span 3; }
+    .span-12 { grid-column: span 12; }
+
+    @media (max-width: 960px) {
+      body {
+        padding: 18px 16px 40px;
+      }
+      .hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .hero-sub {
+        max-width: 100%;
+      }
+      .bento-grid {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+      }
+      .span-8,
+      .span-12 {
+        grid-column: span 6;
+      }
+      .span-6 {
+        grid-column: span 6;
+      }
+      .span-4 {
+        grid-column: span 6;
+      }
+      .span-3 {
+        grid-column: span 3;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .bento-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .span-8,
+      .span-6,
+      .span-4,
+      .span-3,
+      .span-12 {
+        grid-column: span 2;
+      }
+    }
+
+    /* Card 內容樣式 */
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 8px;
+      font-size: 0.72rem;
+    }
+
+    .badge {
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(15, 23, 42, 0.8);
+      color: var(--muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .badge-icon {
+      font-size: 0.85rem;
+    }
+
+    .card-title {
+      font-size: 1.02rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      letter-spacing: 0.02em;
+    }
+
+    .card-lede {
+      font-size: 0.86rem;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .card-kv {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 6px 14px;
+      font-size: 0.8rem;
+      margin-top: 2px;
+    }
+
+    .kv-label {
+      color: var(--muted);
+      font-size: 0.76rem;
+    }
+
+    .kv-value {
+      font-weight: 500;
+    }
+
+    .icon-badge {
+      width: 32px;
+      height: 32px;
+      border-radius: 13px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      background: radial-gradient(circle at 0 0, rgba(255, 255, 255, 0.18), transparent 70%);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      margin-bottom: 5px;
+    }
+
+    .list-compact {
+      list-style: none;
+      padding: 0;
+      margin: 4px 0 2px;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .list-compact li {
+      position: relative;
+      padding-left: 14px;
+      margin-bottom: 4px;
+    }
+
+    .list-compact li::before {
+      content: "•";
+      position: absolute;
+      left: 3px;
+      color: var(--accent);
+    }
+
+    .timeline {
+      display: grid;
+      grid-template-columns: 1.4fr 2fr;
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    .timeline-labels {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .timeline-bar {
+      position: relative;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(148, 163, 252, 0.15);
+      overflow: hidden;
+      margin-top: 6px;
+    }
+
+    .timeline-bar-fill {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      background: linear-gradient(90deg, #22c55e, #eab308, #ef4444);
+      transform-origin: left;
+    }
+
+    .pill-mini-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
+      font-size: 0.72rem;
+    }
+
+    .pill-mini {
+      padding: 2px 6px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 252, 0.55);
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--muted);
+    }
+
+    .risk-rows {
+      margin-top: 6px;
+      font-size: 0.8rem;
+    }
+
+    .risk-row {
+      display: grid;
+      grid-template-columns: 1.5fr 2.5fr;
+      gap: 6px;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    .risk-label {
+      color: var(--muted);
+    }
+
+    .risk-meter {
+      position: relative;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      overflow: hidden;
+    }
+
+    .risk-meter-fill {
+      position: absolute;
+      inset: 0;
+      transform-origin: left;
+      background: linear-gradient(90deg, #22c55e, #facc15, #ef4444);
+    }
+
+    .risk-meter-fill[data-level="low"] { transform: scaleX(0.35); }
+    .risk-meter-fill[data-level="mid"] { transform: scaleX(0.6); }
+    .risk-meter-fill[data-level="high"] { transform: scaleX(0.9); }
+
+    .quote {
+      font-size: 0.8rem;
+      color: var(--muted);
+      border-left: 2px solid rgba(148, 163, 252, 0.6);
+      padding-left: 10px;
+      margin-top: 6px;
+    }
+
+    .quote strong {
+      color: var(--fg);
+    }
+
+    .footer-note {
+      margin-top: 26px;
+      font-size: 0.76rem;
+      color: var(--muted);
+      text-align: right;
+    }
+
+    .link {
+      color: #a5b4fc;
+      text-decoration: none;
+      border-bottom: 1px dotted rgba(165, 180, 252, 0.6);
+    }
+
+    .link:hover {
+      color: #c4b5fd;
+      border-bottom-style: solid;
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <!-- HERO 區：大標 + 簡介 -->
+    <section class="hero">
+      <div class="hero-main">
+        <div class="hero-inner">
+          <div class="pill">
+            <span class="pill-dot"></span>
+            EP 112 · DARKNET DIARIES · DIRTY COMS
+          </div>
+          <h1 class="hero-title">
+            青少年黑灰產的<span class="highlight">「通訊戰場」</span>
+          </h1>
+          <p class="hero-sub">
+            從 Roblox 廣告詐騙、Vanilla 禮物卡釣魚網站，到 OGUsers 帳號市場與 SIM swapping，
+            <strong>Drew</strong> 帶 Jack Rhysider 走進一個由青少年組成的地下經濟：有人賺到數萬美金，
+            有人被自己朋友騙走上萬美元，更有人在匿名與暴力文化中被 doxx、被威脅、被勒索。:contentReference[oaicite:1]{index=1}
+          </p>
+
+          <div class="hero-meta">
+            <span>主題：青少年黑客社群、帳號交易、SIM 置換</span>
+            <span>人物：Jack（主持人）、Drew（受訪者）</span>
+            <span>核心：<strong>缺乏「網路前輩」的一代</strong></span>
+          </div>
+
+          <div class="hero-big-number">
+            <strong>4</strong>
+            <span>大賺錢手法 · 1 個毒性社群 · 無數受害者</span>
+          </div>
+        </div>
+      </div>
+
+      <aside class="hero-orbit">
+        <div class="hero-orbit-title">Dirty Coms 詐騙宇宙縮圖</div>
+        <div class="orbit-map">
+          <div class="orbit-center">
+            Dirty<br />Coms<br />青少年地下圈
+          </div>
+          <div class="orbit-node roblox">
+            Roblox / Robux 廣告牟利
+          </div>
+          <div class="orbit-node gift">
+            禮物卡釣魚網站 &amp; Google Ads
+          </div>
+          <div class="orbit-node og">
+            OGUsers 帳號市場 &amp; 內鬥
+          </div>
+          <div class="orbit-node sim">
+            SIM swapping &amp; 加密貨幣
+          </div>
+        </div>
+        <div class="hero-legend">
+          <span><span class="hero-legend-badge"></span> 前台：遊戲、禮物卡、社群帳號</span>
+          <span><span class="hero-legend-badge"></span> 後台：廣告投放、釣魚、內線、社工</span>
+        </div>
+      </aside>
+    </section>
+
+    <!-- Filter 工具列 -->
+    <section class="toolbar" aria-label="焦點篩選">
+      <span class="toolbar-label">Filter 焦點</span>
+      <button class="chip active" data-filter="all">
+        <span class="chip-dot"></span>
+        全部
+      </button>
+      <button class="chip" data-filter="money">
+        <span class="chip-dot"></span>
+        賺錢手法
+      </button>
+      <button class="chip" data-filter="youth">
+        <span class="chip-dot"></span>
+        青少年社群文化
+      </button>
+      <button class="chip" data-filter="safety">
+        <span class="chip-dot"></span>
+        資安 & 數位素養
+      </button>
+      <button class="chip" data-filter="sim">
+        <span class="chip-dot"></span>
+        SIM swapping 線
+      </button>
+    </section>
+
+    <!-- Bento Grid 內容 -->
+    <section class="bento-grid">
+      <!-- 1. 一頁看懂 -->
+      <article class="bento-item span-8"
+        data-tags="summary safety money youth">
+        <div class="bento-inner">
+          <div class="badge-row">
+            <span class="badge">
+              <span class="badge-icon">🧭</span> 一頁看懂本集
+            </span>
+            <span class="badge">
+              <span class="badge-icon">🎧</span> 聽前速讀
+            </span>
+          </div>
+          <h2 class="card-title">Dirty Coms：地下通訊與青少年黑灰產導覽</h2>
+          <p class="card-lede">
+            這一集不像傳統「單一事件」敘事，而是 Drew 帶著聽眾逛完一整個未成年、剛成年
+            黑客與詐騙圈：大家在 Discord、論壇、私密群組裡，一邊聊天、一邊動手賺錢、互相背刺。:contentReference[oaicite:2]{index=2}
+          </p>
+
+          <div class="timeline">
+            <div class="timeline-labels">
+              <div><strong>起點：</strong>13 歲玩 Roblox，接觸 Robux 廣告分潤</div>
+              <div><strong>中段：</strong>Vanilla 禮物卡釣魚、OGUsers 帳號交易、PayPal 內鬥</div>
+              <div><strong>後段：</strong>SIM swapping、加密貨幣、extortion、doxxing</div>
+            </div>
+            <div>
+              <div class="timeline-bar">
+                <div class="timeline-bar-fill"></div>
+              </div>
+              <ul class="list-compact">
+                <li>主題從「賺快錢」一路滑向「互相傷害」與身分安全崩壞。</li>
+                <li>最後回到教育與世代：網路還沒有能傳遞智慧的「長輩」。:contentReference[oaicite:3]{index=3}</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="pill-mini-row">
+            <span class="pill-mini">關鍵字：Robux 廣告、禮物卡釣魚、OGUsers、SIM swapping、doxxing、chargeback</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- 2. 核心人物 -->
+      <article class="bento-item span-4"
+        data-tags="youth">
+        <div class="bento-inner">
+          <div class="icon-badge">🧑‍💻</div>
+          <h2 class="card-title">兩個視角：Jack 與 Drew</h2>
+          <p class="card-lede">
+            一個是「早期網路世代」的播客主持人，一個是出生在 Roblox 世代的青少年黑客。
+          </p>
+          <div class="card-kv">
+            <div>
+              <div class="kv-label">Jack Rhysider</div>
+              <div class="kv-value">Darknet Diaries 主持人、老派網路人，經歷過 AOL / Warez / Napster 時代。</div>
+            </div>
+            <div>
+              <div class="kv-label">Drew</div>
+              <div class="kv-value">
+                自稱 13 歲起混 Roblox、禮物卡詐騙、OGUsers、SIM swapping，曾賺也曾被騙上萬美金。:contentReference[oaicite:4]{index=4}
+              </div>
+            </div>
+          </div>
+          <p class="quote">
+            <strong>Jack：</strong>「網路還沒有『年長的一代』可以教我們怎麼在網路上活下來。」
+          </p>
+        </div>
+      </article>
+
+      <!-- 3. Roblox / Robux -->
+      <article class="bento-item span-6"
+        data-tags="money youth">
+        <div class="bento-inner">
+          <div class="icon-badge">🎮</div>
+          <h2 class="card-title">Roblox &amp; Robux：從玩家到壓榨玩家</h2>
+          <p class="card-lede">
+            小孩沒有信用卡，卻渴望遊戲貨幣 Robux —— 這個心理落差，變成 Drew 朋友的第一個「商業模式」。:contentReference[oaicite:5]{index=5}
+          </p>
+          <ul class="list-compact">
+            <li>搭建「看廣告 / 填問卷換 Robux」的網站，實際上賺的是廣告分潤。</li>
+            <li>投放 Google Ads，把網站推給迫切想要 Robux 的孩童。</li>
+            <li>成本：付給孩子的 Robux / 現金；收益：廣告收入，利潤極高。</li>
+            <li>有些網站甚至根本不發 Robux —— 純割韭菜。</li>
+          </ul>
+          <div class="risk-rows">
+            <div class="risk-row">
+              <span class="risk-label">對玩家</span>
+              <div class="risk-meter">
+                <div class="risk-meter-fill" data-level="mid"></div>
+              </div>
+            </div>
+            <div class="risk-row">
+              <span class="risk-label">對營運者</span>
+              <div class="risk-meter">
+                <div class="risk-meter-fill" data-level="high"></div>
+              </div>
+            </div>
+          </div>
+          <p class="quote">
+            <strong>教學角度：</strong>這是「免費 Robux」廣告的典型案例：誘因看似小，
+            但會慢慢把孩子推向更灰的行為（灌軟體、亂輸入資料）。
+          </p>
+        </div>
+      </article>
+
+      <!-- 4. Vanilla Gift Card 釣魚 -->
+      <article class="bento-item span-6"
+        data-tags="money safety">
+        <div class="bento-inner">
+          <div class="icon-badge">💳</div>
+          <h2 class="card-title">Vanilla 禮物卡釣魚：買關鍵字、搶第一名</h2>
+          <p class="card-lede">
+            Drew 的朋友複製 Visa Vanilla 禮物卡查詢頁面，買 Google Ads 關鍵字，
+            讓受害者在搜尋「gift card balance」時，優先點進釣魚站。:contentReference[oaicite:6]{index=6}
+          </p>
+          <ul class="list-compact">
+            <li>使用者只想查餘額，卻在假網站輸入完整卡號與安全碼。</li>
+            <li>後端腳本自動到真正官方網站查餘額，再把卡片倒賣、洗錢或在其他平台消費。:contentReference[oaicite:7]{index=7}</li>
+            <li>受害者在察覺之前，卡就被刷光了。</li>
+          </ul>
+          <div class="risk-rows">
+            <div class="risk-row">
+              <span class="risk-label">使用者識別網址能力</span>
+              <div class="risk-meter">
+                <div class="risk-meter-fill" data-level="low"></div>
+              </div>
+            </div>
+            <div class="risk-row">
+              <span class="risk-label">金錢損失嚴重度</span>
+              <div class="risk-meter">
+                <div class="risk-meter-fill" data-level="high"></div>
+              </div>
+            </div>
+          </div>
+          <p class="quote">
+            <strong>教材提示：</strong>這是「搜尋結果第一名 ≠ 官方網站」的教科書範例，
+            很適合拿來示範「如何檢查網址、辨識廣告標記」。
+          </p>
+        </div>
+      </article>
+
+      <!-- 5. OGUsers 帳號市場 -->
+      <article class="bento-item span-4"
+        data-tags="money youth">
+        <div class="bento-inner">
+          <div class="icon-badge">📛</div>
+          <h2 class="card-title">OGUsers：帳號市場、Turbo 工具與內鬥</h2>
+          <p class="card-lede">
+            在 OGUsers 上，短又「潮」的使用者名稱本身就是一種資產。
+          </p>
+          <ul class="list-compact">
+            <li>交易對象：Instagram、Snapchat、Kik、Roblox、各種遊戲帳號。:contentReference[oaicite:8]{index=8}</li>
+            <li>玩法一：搶注好看的新帳號再轉賣。</li>
+            <li>玩法二：買來的帳號，多半是盜來的，再改名、再轉賣。</li>
+            <li>為了搶「釋出中的名稱」，大家寫 Turbo / Claimer 工具瘋狂打 API。</li>
+          </ul>
+          <p class="quote">
+            <strong>Drew：</strong>「犯罪者對犯罪者，是我看過最誇張的互相傷害。」:contentReference[oaicite:9]{index=9}
+          </p>
+        </div>
+      </article>
+
+      <!-- 6. 犯罪者 vs 犯罪者 -->
+      <article class="bento-item span-4"
+        data-tags="youth safety">
+        <div class="bento-inner">
+          <div class="icon-badge">⚔️</div>
+          <h2 class="card-title">犯罪者之間的戰爭：doxxing、extortion、chargeback</h2>
+          <p class="card-lede">
+            Drew 自己也被朋友騙走數千、甚至上萬美金，還多次被 doxx、被威脅。:contentReference[oaicite:10]{index=10}
+          </p>
+          <ul class="list-compact">
+            <li>doxxing：蒐集真實姓名、住址、家人資訊，拿來威脅或出貨「pizza bomb」。</li>
+            <li>extortion：逼對方拍下寫有帳號名稱的羞辱照片、威脅要告訴父母其犯罪行為。:contentReference[oaicite:11]{index=11}</li>
+            <li>chargeback：先付款、拿到帳號，再向信用卡公司申請刷退，讓賣家血本無歸。:contentReference[oaicite:12]{index=12}</li>
+          </ul>
+          <p class="quote">
+            <strong>觀察：</strong>這個圈子本身也是一個高壓「實驗室」，
+            很多青少年在裡面第一次體驗到真正的惡意與後果。
+          </p>
+        </div>
+      </article>
+
+      <!-- 7. SIM swapping -->
+      <article class="bento-item span-4"
+        data-tags="sim money safety">
+        <div class="bento-inner">
+          <div class="icon-badge">📶</div>
+          <h2 class="card-title">SIM swapping：從門市內線到「全遠端」</h2>
+          <p class="card-lede">
+            SIM swapping 讓攻擊者把你的手機門號轉到他們手上，接收你的簡訊驗證碼，進而登入你的帳號。:contentReference[oaicite:13]{index=13}
+          </p>
+          <ul class="list-compact">
+            <li>方式一：拉攏門市「manny（manager）」做內線，一次 swap 就能賺上千甚至上萬美元。</li>
+            <li>方式二：透過社工、客服話術、系統漏洞，在遠端完成門號轉移。</li>
+            <li>常見目標：加密貨幣交易所（如 Coinbase）、高價帳號、金融服務。:contentReference[oaicite:14]{index=14}</li>
+          </ul>
+          <div class="risk-rows">
+            <div class="risk-row">
+              <span class="risk-label">對一般使用者風險</span>
+              <div class="risk-meter">
+                <div class="risk-meter-fill" data-level="high"></div>
+              </div>
+            </div>
+          </div>
+          <p class="quote">
+            <strong>安全啟示：</strong>「門號 = 身分證 + 一次性密碼」，別把它當成理所當然。
+          </p>
+        </div>
+      </article>
+
+      <!-- 8. 教案向：可教的數位素養點 -->
+      <article class="bento-item span-6"
+        data-tags="safety youth">
+        <div class="bento-inner">
+          <div class="icon-badge">🧠</div>
+          <h2 class="card-title">從 Dirty Coms 延伸出的數位素養教學點</h2>
+          <p class="card-lede">
+            這集其實是超長的「反面教材」集合，可拆成多個課堂活動。
+          </p>
+          <ul class="list-compact">
+            <li><strong>網址與搜尋結果素養：</strong>禮物卡釣魚站案例，可設計「我會點哪一個結果？」模擬。:contentReference[oaicite:15]{index=15}</li>
+            <li><strong>虛擬貨幣 / 遊戲貨幣的價值鏈：</strong>Robux & 廣告分潤讓學生畫出金流圖。</li>
+            <li><strong>身分管理與 OPSEC：</strong>Drew 的 doxx / extortion 經驗，
+              可延伸討論「分身」、「不同用途信箱」、「不重複密碼」。:contentReference[oaicite:16]{index=16}</li>
+            <li><strong>「犯罪圈文化」與心理：</strong>金錢、賭博成癮、群體壓力、匿名感降低道德感。</li>
+          </ul>
+          <p class="quote">
+            <strong>Drew 後期的反思：</strong>「我開始問自己：為什麼要跟這群人混？我在這裡既沒賺到錢，也在消耗自己。」:contentReference[oaicite:17]{index=17}
+          </p>
+        </div>
+      </article>
+
+      <!-- 9. Jack 的世代感想 -->
+      <article class="bento-item span-6"
+        data-tags="safety youth">
+        <div class="bento-inner">
+          <div class="icon-badge">📻</div>
+          <h2 class="card-title">Jack 的世代對比：沒有「網路長輩」的一代</h2>
+          <p class="card-lede">
+            Jack 回顧自己在 AOL、Warez、Napster 時代長大，發現現在的青少年同樣在「網路叢林」裡摸索，
+            但攻擊面與賭注都放大了。:contentReference[oaicite:18]{index=18}
+          </p>
+          <ul class="list-compact">
+            <li>當年：WareZ、MUD、聊天室、電話詐騙，技術門檻高、人較少。</li>
+            <li>現在：任何人都能買廣告、買工具，犯罪變成「即插即用」。</li>
+            <li>缺口：家庭與學校仍未系統化地教「網路風險與防禦」。</li>
+            <li>預測：可能還要幾十年，才能出現真正受過「網路前輩」教育的一代。:contentReference[oaicite:19]{index=19}</li>
+          </ul>
+          <p class="quote">
+            <strong>結語：</strong>「我們終於看清──你以為『跟自己無關的黑客故事』，
+            其實就是這些青少年在練習怎麼對付『你』。」:contentReference[oaicite:20]{index=20}
+          </p>
+        </div>
+      </article>
+
+      <!-- 10. 實用自我防護 Checklist -->
+      <article class="bento-item span-12"
+        data-tags="safety">
+        <div class="bento-inner">
+          <div class="icon-badge">🛡️</div>
+          <h2 class="card-title">實用防護 Checklist：從 Dirty Coms 學到的最低限度自保</h2>
+          <p class="card-lede">
+            Drew 在節目尾聲總結了自己從 OpSec 失敗、被騙、被 doxx 裡學到的一些基本原則。下面把它整理成可以給學生、家長的快速檢查表。:contentReference[oaicite:21]{index=21}
+          </p>
+          <div class="card-kv">
+            <div>
+              <div class="kv-label">帳號 &amp; 密碼</div>
+              <ul class="list-compact">
+                <li>不同服務用不同密碼，能用密碼管理器就用。</li>
+                <li>重要服務一律關閉「簡訊 2FA」，改用 App（例如 TOTP）。</li>
+              </ul>
+            </div>
+            <div>
+              <div class="kv-label">身分 &amp; 分身</div>
+              <ul class="list-compact">
+                <li>遊戲 / 黑客社群 / 工作，用不同信箱與暱稱。</li>
+                <li>不要把真實姓名、地址、學校跟「灰色圈子」綁在一起。</li>
+              </ul>
+            </div>
+            <div>
+              <div class="kv-label">連結與廣告</div>
+              <ul class="list-compact">
+                <li>搜尋結果第一個通常是廣告，不是官方。</li>
+                <li>看重網址、憑證、拼字，而不是「長得像」。</li>
+              </ul>
+            </div>
+            <div>
+              <div class="kv-label">關係與信任</div>
+              <ul class="list-compact">
+                <li>「網友」兩年後會變成什麼樣的人，你完全無法預測。</li>
+                <li>任何會讓你尷尬、羞辱的照片或影片，都不要拍來傳給任何人。</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <p class="footer-note">
+      內容整理自 Darknet Diaries 第 112 集
+      <a class="link" href="https://darknetdiaries.com/transcript/112/" target="_blank" rel="noopener noreferrer">
+        「Dirty Coms」逐字稿
+      </a>
+      ，僅作為教育與資訊素養教學之視覺摘要。
+    </p>
+  </main>
+
+  <script>
+    // 簡單 Filter 互動：依照 tag 高亮相關卡片
+    (function () {
+      const chips = document.querySelectorAll(".chip");
+      const cards = document.querySelectorAll(".bento-item");
+
+      function setFilter(tag) {
+        chips.forEach(chip => {
+          chip.classList.toggle("active", chip.dataset.filter === tag);
+        });
+
+        if (tag === "all") {
+          cards.forEach(card => card.classList.remove("dimmed"));
+          return;
+        }
+
+        cards.forEach(card => {
+          const tags = (card.dataset.tags || "").split(/\s+/);
+          if (tags.includes(tag)) {
+            card.classList.remove("dimmed");
+          } else {
+            card.classList.add("dimmed");
+          }
+        });
+      }
+
+      chips.forEach(chip => {
+        chip.addEventListener("click", () => {
+          const tag = chip.dataset.filter;
+          setFilter(tag);
+        });
+      });
+
+      // 初始狀態：全部
+      setFilter("all");
+    })();
+  </script>
+</body>
+</html>
