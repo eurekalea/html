@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Darknet Diaries Ep.112: Dirty Coms - 互動故事</title>
+    <title>Darknet Diaries Ep.112: The Roblox Trap - 互動故事</title>
     <style>
         body {
             background-color: #0d0d0d;
@@ -26,7 +26,7 @@
             box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
             background-color: #111;
             position: relative;
-            min-height: 400px;
+            min-height: 450px; /* 稍微加高以容納更多文字 */
         }
 
         h1 {
@@ -42,7 +42,7 @@
             font-size: 1.2rem;
             line-height: 1.6;
             margin-bottom: 30px;
-            min-height: 150px;
+            min-height: 180px;
         }
 
         .highlight {
@@ -51,10 +51,22 @@
             background-color: #003300;
             padding: 2px 5px;
         }
+        
+        .roblox {
+            color: #fff;
+            background-color: #cc0000; /* Roblox 紅 */
+            padding: 2px 5px;
+            font-weight: bold;
+        }
 
         .danger {
             color: #ff3333;
             text-shadow: 0 0 5px red;
+        }
+
+        .money {
+            color: #ffff00;
+            text-shadow: 0 0 5px yellow;
         }
 
         .options {
@@ -80,12 +92,6 @@
             color: #000;
         }
 
-        button:disabled {
-            border-color: #555;
-            color: #555;
-            cursor: not-allowed;
-        }
-
         .progress-bar {
             position: absolute;
             bottom: 0;
@@ -94,20 +100,6 @@
             background-color: #00ff41;
             width: 0%;
             transition: width 0.5s;
-        }
-
-        /* Glitch effect for scary moments */
-        .glitch {
-            animation: glitch 0.5s infinite;
-        }
-
-        @keyframes glitch {
-            0% { transform: translate(0) }
-            20% { transform: translate(-2px, 2px) }
-            40% { transform: translate(-2px, -2px) }
-            60% { transform: translate(2px, 2px) }
-            80% { transform: translate(2px, -2px) }
-            100% { transform: translate(0) }
         }
 
         .typing-cursor::after {
@@ -136,53 +128,68 @@
 
 <div id="scanlines"></div>
 <div id="game-container">
-    <h1 id="chapter-title">連線中...</h1>
+    <h1 id="chapter-title">系統啟動中...</h1>
     <div id="story-content" class="story-text"></div>
     <div id="choices" class="options"></div>
     <div id="progress" class="progress-bar"></div>
 </div>
 
 <script>
-    // 故事數據結構
     const story = [
         {
             id: 0,
-            title: "序章：Dirty Coms",
-            text: "歡迎來到網路的地下世界。這裡被稱為 <span class='highlight'>The Comm</span>（社群）。<br><br>這不是國家級駭客的故事，而是一群青少年的故事。他們在 Discord 和 Telegram 上遊蕩，尋找獵物。你準備好了解他們的運作模式了嗎？",
+            title: "序章：慾望的起點",
+            text: "歡迎來到地下世界。很多駭客並不是一開始就攻擊銀行的。<br><br>在故事的主角 Drew 年輕時，一切都源於一個簡單的渴望：<br>想要玩遊戲，想要 <span class='roblox'>Robux</span> (Roblox 貨幣)，但是——<b>沒有信用卡，也沒有錢</b>。<br><br>這是一個巨大的市場缺口。",
             options: [
-                { text: "開始連線 (Start Session)", next: 1 }
+                { text: "這跟駭客有什麼關係？", next: 10 }
+            ]
+        },
+        {
+            id: 10,
+            title: "第一章：第一桶金",
+            text: "Drew 的朋友發現了一個「商業模式」。<br><br>成千上萬的小孩在 Google 搜尋「免費 Robux」。<br>於是，他們搭建了一個網站：<br><span class='highlight'>「填問卷 / 看廣告 = 換取 Robux」</span>。<br><br>他們利用 Google Ads 把網站推送到搜尋結果第一名。",
+            options: [
+                { text: "這聽起來很合法啊，賺廣告費？", next: 11 },
+                { text: "那些填問卷的小孩真的拿得到錢嗎？", next: 11 }
+            ]
+        },
+        {
+            id: 11,
+            title: "商業模式：割韭菜",
+            text: "這就是暴利的秘密。<br><br>成本：支付給小孩微薄的 Robux（甚至很多人<b>根本不發幣</b>，純粹詐騙）。<br>收益：廣告商支付的高額 <span class='money'>流量分潤</span>。<br><br>這個簡單的模式，讓這群青少年每個月賺進數千美元。他們的胃口變大了。",
+            options: [
+                { text: "賺了幾千美元後，他們收手了嗎？", next: 1 }
             ]
         },
         {
             id: 1,
-            title: "第一章：OG 的誘惑",
-            text: "這一切都始於「名字」。<br><br>在 Instagram 或 Twitter 上，像 <span class='highlight'>@Joy</span>、<span class='highlight'>@Dark</span> 或 <span class='highlight'>@K</span> 這種極短的用戶名被稱為 <strong>OG 帳號 (Original Gangster)</strong>。<br><br>這些帳號在黑市可以賣到數千甚至數萬美元。為了得到這些帳號，這群青少年願意做任何事。",
+            title: "第二章：從 Robux 到 OG",
+            text: "當然沒有。當你嘗到了甜頭，你會想要更多。<br><br>他們不再滿足於騙小孩的零用錢。他們將目光轉向了更值錢的東西：<br><strong>OG 帳號 (Original Gangster)</strong>。<br><br>像 <span class='highlight'>@Joy</span>、<span class='highlight'>@Dark</span> 這種極短的用戶名，在黑市價值數萬美元。",
             options: [
-                { text: "為什麼這些名字這麼值錢？", next: 2 },
-                { text: "他們要怎麼搶走別人的帳號？", next: 3 }
+                { text: "他們要怎麼搶走別人的帳號？", next: 2 }
             ]
         },
         {
             id: 2,
             title: "虛榮的代價",
-            text: "因為稀有。擁有 @God 這樣的帳號是網路地位的象徵。就像現實生活中的限量跑車。<br><br>但這些帳號通常屬於早期註冊的普通人。為了奪取這些帳號，駭客們發展出了一種技術：<span class='danger'>SIM 卡劫持 (SIM Swapping)</span>。",
+            text: "這些帳號通常屬於早期註冊的普通人。Robux 詐騙教會了他們一件事：<br><b>攻擊「人」比攻擊「電腦」容易。</b><br><br>為了奪取這些帳號，他們使用了一種恐怖的技術：<span class='danger'>SIM 卡劫持 (SIM Swapping)</span>。",
             options: [
                 { text: "什麼是 SIM 卡劫持？", next: 3 }
             ]
         },
         {
             id: 3,
-            title: "第二章：社交工程",
+            title: "第三章：社交工程",
             text: "駭客不需要破解你的密碼，他們只需要你的<b>手機號碼</b>。<br><br>想像你是駭客，你現在打電話給電信公司的客服。你會怎麼說服他們把受害者的電話號碼轉移到你的 SIM 卡上？",
             options: [
                 { text: "「你好，我是某某某，我的手機掉了，請幫我啟用這張新 SIM 卡。」", next: 4 },
-                { text: "直接駭入電信公司的伺服器寫程式碼。", next: 404 } // 錯誤選項
+                { text: "直接駭入電信公司的伺服器寫程式碼。", next: 404 }
             ]
         },
         {
             id: 404,
             title: "路徑錯誤",
-            text: "這太慢了，而且技術門檻太高。這些青少年通常不寫複雜的程式碼。<br><br>他們使用的是「社交工程」— 攻擊的是<b>人</b>，而不是電腦。",
+            text: "這太慢了。還記得 Robux 詐騙的教訓嗎？找漏洞不如找人性弱點。<br><br>他們使用的是「社交工程」— 攻擊的是<b>人</b>，而不是電腦。",
             options: [
                 { text: "重新嘗試：打電話給客服。", next: 4 }
             ]
@@ -190,31 +197,31 @@
         {
             id: 4,
             title: "防禦崩潰",
-            text: "客服人員可能很累，或者只是想趕快結束通話。或者，駭客甚至會賄賂電信公司的內部員工（只要幾百美元）。<br><br>一旦客服按下「確認」，受害者的手機訊號瞬間消失。<br>駭客的手機接管了訊號。",
+            text: "客服人員可能很累，或者只是想趕快結束通話。甚至，駭客會用之前賺來的錢賄賂內部員工。<br><br>一旦客服按下「確認」，受害者的手機訊號瞬間消失。<br>駭客的手機接管了訊號。",
             options: [
                 { text: "接下來會發生什麼事？", next: 5 }
             ]
         },
         {
             id: 5,
-            title: "第三章：全面接管",
-            text: "現在駭客控制了受害者的電話號碼。<br><br>他們去 Instagram 點選 <span class='highlight'>「忘記密碼」</span>。<br>系統發送簡訊驗證碼。<br>駭客的手機收到了驗證碼。<br><br>幾秒鐘內，受害者的數位生活被洗劫一空。但對於 Dirty Coms 來說，這還不夠...",
+            title: "第四章：全面接管",
+            text: "現在駭客控制了電話號碼。<br><br>他們去 Instagram 點選 <span class='highlight'>「忘記密碼」</span>。<br>系統發送簡訊驗證碼 ➔ 駭客的手機收到。<br><br>幾秒鐘內，受害者的數位生活被洗劫一空。",
             options: [
-                { text: "他們還想要什麼？", next: 6 }
+                { text: "如果受害者反抗怎麼辦？", next: 6 }
             ]
         },
         {
             id: 6,
-            title: "第四章：暴力升級",
-            text: "如果受害者抵抗，或者駭客只是覺得好玩，事情會變得暴力。<br><br>他們會進行 <span class='danger'>報假案 (Swatting)</span>。他們打電話給警察，謊稱受害者家裡發生了槍擊案或炸彈威脅。<br><br>幾分鐘後，特警隊 (SWAT) 荷槍實彈地包圍了受害者的房子。這不僅是騷擾，這是致命的。",
+            title: "第五章：暴力升級",
+            text: "事情會變得暴力。<br><br>他們會進行 <span class='danger'>報假案 (Swatting)</span>。打電話給警察謊稱受害者家裡有炸彈。<br><br>特警隊 (SWAT) 荷槍實彈地包圍受害者的房子。從 Robux 詐騙到危及人命，這就是 Dirty Coms 的墮落之路。",
             options: [
-                { text: "這太瘋狂了，沒有人能阻止嗎？", next: 7 }
+                { text: "這太瘋狂了，我們要怎麼保護自己？", next: 7 }
             ]
         },
         {
             id: 7,
             title: "終章：如何防禦",
-            text: "Darknet Diaries 第 112 集告訴我們，雖然我們無法控制電信公司的安全，但我們可以保護自己。<br><br>最關鍵的一課：<br><span class='highlight'>不要使用簡訊 (SMS) 作為雙重驗證 (2FA)。</span>",
+            text: "雖然我們無法控制電信公司，也無法阻止貪婪的駭客，但我們可以保護自己。<br><br>最關鍵的一課：<br><span class='highlight'>不要使用簡訊 (SMS) 作為雙重驗證 (2FA)。</span>",
             options: [
                 { text: "那我該用什麼？", next: 8 }
             ]
@@ -222,7 +229,7 @@
         {
             id: 8,
             title: "結語：安全建議",
-            text: "1. 使用 **Authenticator App** (如 Google Authenticator, Authy)。<br>2. 甚至使用 **硬體金鑰** (如 YubiKey)。<br><br>這些方式不依賴手機訊號，即使 SIM 卡被劫持，駭客也拿不到你的驗證碼。<br><br>下課。",
+            text: "1. 不要相信「填問卷送 Robux」的網站。<br>2. 使用 **Authenticator App** (如 Google Authenticator)。<br>3. 使用 **硬體金鑰** (如 YubiKey)。<br><br>不依賴手機訊號，駭客就拿不到你的驗證碼。<br><br>下課。",
             options: [
                 { text: "重新開始故事", next: 0 }
             ]
@@ -235,12 +242,11 @@
     const choicesEl = document.getElementById('choices');
     const progressEl = document.getElementById('progress');
 
-    function typeWriter(text, element, speed = 30) {
+    function typeWriter(text, element, speed = 25) {
         element.innerHTML = "";
         element.classList.add('typing-cursor');
         
         let i = 0;
-        // 處理 HTML 標籤的簡單邏輯
         let isTag = false;
         
         function type() {
@@ -254,7 +260,7 @@
                 i++;
                 
                 if (isTag) {
-                    type(); // 如果是標籤內部，快速跳過不延遲
+                    type();
                 } else {
                     setTimeout(type, speed);
                 }
@@ -272,30 +278,31 @@
 
         currentStep = stepId;
         
-        // Update Title
         titleEl.textContent = step.title;
-        if(step.title.includes("暴力") || step.title.includes("錯誤")) {
+        // 根據標題內容改變樣式
+        if(step.title.includes("暴力") || step.title.includes("錯誤") || step.title.includes("代價")) {
             titleEl.classList.add("danger");
             document.body.style.boxShadow = "inset 0 0 50px rgba(255,0,0,0.2)";
+        } else if (step.title.includes("第一桶金") || step.title.includes("商業模式")) {
+             titleEl.classList.remove("danger");
+             titleEl.style.color = "#ffff00"; // 金錢色
+             document.body.style.boxShadow = "none";
         } else {
             titleEl.classList.remove("danger");
+            titleEl.style.color = "#00ff41";
             document.body.style.boxShadow = "none";
         }
 
-        // Clear previous options
         choicesEl.innerHTML = '';
-        
-        // Typing effect for content
         typeWriter(step.text, contentEl);
 
-        // Update progress bar
         let progress = ((story.indexOf(step) + 1) / story.length) * 100;
         progressEl.style.width = `${progress}%`;
     }
 
     function showOptions() {
         const step = story.find(s => s.id === currentStep);
-        choicesEl.innerHTML = ''; // Ensure clear
+        choicesEl.innerHTML = '';
         
         step.options.forEach(opt => {
             const btn = document.createElement('button');
@@ -305,9 +312,7 @@
         });
     }
 
-    // Start game
     renderStory(0);
-
 </script>
 
 </body>
