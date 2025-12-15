@@ -1,713 +1,504 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8">
-  <title>Dirty Coms：暗網聊天室互動故事（國中版）</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dirty Coms（國中安全版）互動故事</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+    :root{
+      --bg1:#0b1220;
+      --bg2:#020617;
+      --card:#0f172a;
+      --border:rgba(148,163,184,.35);
+      --text:#e5e7eb;
+      --muted:#9ca3af;
+      --accent:#22c55e;
     }
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top, #1f2937 0, #020617 55%);
-      color: #e5e7eb;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .app {
-      width: 100%;
-      max-width: 900px;
-      height: 100vh;
-      max-height: 640px;
-      background: rgba(15, 23, 42, 0.95);
-      border-radius: 18px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.6);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      border: 1px solid rgba(148, 163, 184, 0.35);
-    }
-    header {
-      padding: 12px 18px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: linear-gradient(to right, #020617, #0f172a);
-      border-bottom: 1px solid rgba(148, 163, 184, 0.3);
-    }
-    header .title-block {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 999px;
-      background: #22c55e;
-      box-shadow: 0 0 8px #22c55e;
-    }
-    header h1 {
-      font-size: 16px;
-      font-weight: 600;
-      color: #e5e7eb;
-    }
-    header span {
-      font-size: 12px;
-      color: #9ca3af;
-    }
-    main {
-      flex: 1;
-      padding: 16px 16px 8px;
-      overflow-y: auto;
-      scroll-behavior: smooth;
-    }
-    /* 自訂卷軸 */
-    main::-webkit-scrollbar {
-      width: 6px;
-    }
-    main::-webkit-scrollbar-thumb {
-      background: rgba(148, 163, 184, 0.6);
-      border-radius: 999px;
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:
+        radial-gradient(1100px 600px at 20% 0%, #1f2937 0%, transparent 55%),
+        radial-gradient(900px 520px at 80% 10%, #0b3b5a 0%, transparent 55%),
+        radial-gradient(800px 520px at 60% 110%, #1a2a5a 0%, transparent 55%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      color:var(--text);
+      padding:16px;
     }
 
-    .msg-row {
-      display: flex;
-      margin-bottom: 10px;
+    /* 手機外觀 */
+    .phone{
+      width:min(430px, 100%);
+      height:min(860px, 100vh);
+      background:#050a14;
+      border-radius:34px;
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow: 0 25px 60px rgba(0,0,0,.65);
+      position:relative;
+      overflow:hidden;
     }
-    .msg-row.system,
-    .msg-row.narrator,
-    .msg-row.drew,
-    .msg-row.jack {
-      justify-content: flex-start;
+    .phone::before{
+      content:"";
+      position:absolute;
+      inset:10px;
+      border-radius:28px;
+      border:1px solid rgba(148,163,184,.18);
+      pointer-events:none;
     }
-    .msg-row.player {
-      justify-content: flex-end;
+    .notch{
+      position:absolute;
+      top:10px;
+      left:50%;
+      transform:translateX(-50%);
+      width:155px;
+      height:28px;
+      background:#020617;
+      border-radius:0 0 18px 18px;
+      border:1px solid rgba(148,163,184,.22);
+      z-index:5;
     }
-    .avatar {
-      width: 30px;
-      height: 30px;
-      border-radius: 999px;
-      margin-right: 8px;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 13px;
-      font-weight: 600;
+    .screen{
+      position:absolute;
+      inset:12px;
+      border-radius:28px;
+      overflow:hidden;
+      background:
+        radial-gradient(700px 350px at 50% 0%, rgba(59,130,246,.18), transparent 60%),
+        linear-gradient(180deg, rgba(2,6,23,.96), rgba(15,23,42,.96));
+      display:flex;
+      flex-direction:column;
     }
-    .avatar.system { background: #0ea5e9; }
-    .avatar.narrator { background: #6366f1; }
-    .avatar.drew { background: #22c55e; }
-    .avatar.jack { background: #f97316; }
-    .avatar.player {
-      background: #e5e7eb;
-      color: #020617;
-      margin-right: 0;
-      margin-left: 8px;
+
+    /* 頂欄 */
+    header{
+      padding:14px 16px 12px;
+      padding-top:44px; /* 避開 notch */
+      border-bottom:1px solid rgba(148,163,184,.22);
+      background:linear-gradient(90deg, rgba(2,6,23,.92), rgba(15,23,42,.92));
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+      gap:10px;
     }
-    .bubble {
-      max-width: 70%;
-      padding: 9px 11px;
-      border-radius: 14px;
-      font-size: 14px;
-      line-height: 1.5;
-      position: relative;
-      word-wrap: break-word;
-      white-space: pre-line;
+    header .title{
+      display:flex;
+      flex-direction:column;
+      gap:4px;
     }
-    .system .bubble,
-    .narrator .bubble,
-    .jack .bubble,
-    .drew .bubble {
-      background: rgba(31, 41, 55, 0.95);
-      border: 1px solid rgba(148, 163, 184, 0.5);
+    header h1{
+      font-size:18px; /* 放大 */
+      font-weight:700;
+      letter-spacing:.2px;
     }
-    .player .bubble {
-      background: #22c55e;
-      color: #022c22;
-      border-radius: 16px 16px 2px 16px;
-      font-weight: 500;
+    header .sub{
+      font-size:14px; /* 放大 */
+      color:var(--muted);
     }
-    .label {
-      font-size: 11px;
-      color: #9ca3af;
-      margin-bottom: 4px;
+    .pill{
+      font-size:12.5px; /* 放大 */
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(148,163,184,.35);
+      color:var(--muted);
+      background:rgba(2,6,23,.65);
+      white-space:nowrap;
     }
-    footer {
-      border-top: 1px solid rgba(148, 163, 184, 0.4);
-      padding: 10px 14px;
-      background: rgba(15, 23, 42, 0.98);
+
+    /* 單頁訊息 */
+    main{
+      flex:1;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:18px 16px;
     }
-    #choices {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
+    .card{
+      width:100%;
+      background:rgba(15,23,42,.92);
+      border:1px solid rgba(148,163,184,.28);
+      border-radius:22px;
+      padding:18px 16px;
+      box-shadow:0 10px 25px rgba(0,0,0,.35);
     }
-    #choices button {
-      border-radius: 999px;
-      padding: 7px 12px;
-      background: #0f172a;
-      border: 1px solid rgba(148, 163, 184, 0.8);
-      color: #e5e7eb;
-      font-size: 13px;
-      cursor: pointer;
-      transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.12s ease;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
+
+    .who{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      margin-bottom:12px;
     }
-    #choices button:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-      background: #020617;
+    .avatar{
+      width:40px;height:40px;border-radius:999px;
+      display:flex;align-items:center;justify-content:center;
+      font-weight:800;
+      letter-spacing:.6px;
+      font-size:14px; /* 放大 */
+      border:1px solid rgba(255,255,255,.08);
     }
-    #choices button:active {
-      transform: translateY(0);
-      box-shadow: none;
+    .avatar.system{ background:#0ea5e9; color:#001b2b;}
+    .avatar.narrator{ background:#6366f1; }
+    .avatar.drew{ background:#22c55e; color:#022c22;}
+    .avatar.jack{ background:#f97316; color:#2a0c00;}
+    .avatar.player{ background:#e5e7eb; color:#020617;}
+
+    .name{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
     }
-    #choices button.small {
-      font-size: 12px;
-      padding: 4px 8px;
+    .name .role{
+      font-size:15px; /* 放大 */
+      font-weight:700;
     }
-    .pill-hint {
-      font-size: 11px;
-      color: #6b7280;
-      margin-top: 4px;
+    .name .hint{
+      font-size:13.5px; /* 放大 */
+      color:var(--muted);
     }
-    .tag {
-      display: inline-block;
-      font-size: 11px;
-      padding: 2px 8px;
-      border-radius: 999px;
-      background: rgba(15,23,42,0.9);
-      border: 1px solid rgba(148,163,184,0.4);
-      margin-left: 6px;
-      color: #9ca3af;
+
+    .text{
+      font-size:18px; /* 放大至少兩級 */
+      line-height:1.7;
+      white-space:pre-line;
     }
-    @media (max-width: 640px) {
-      .app {
-        height: 100vh;
-        max-height: none;
-        border-radius: 0;
-      }
-      .bubble {
-        max-width: 82%;
-      }
+
+    /* 底部控制 */
+    footer{
+      padding:12px 14px 16px;
+      border-top:1px solid rgba(148,163,184,.22);
+      background:rgba(2,6,23,.78);
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .controls{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .progress{
+      font-size:13.5px; /* 放大 */
+      color:var(--muted);
+    }
+    .btn{
+      border:none;
+      cursor:pointer;
+      border-radius:14px;
+      padding:10px 14px;
+      font-size:15px; /* 放大 */
+      font-weight:700;
+      color:var(--text);
+      background:rgba(15,23,42,.9);
+      border:1px solid rgba(148,163,184,.35);
+      transition:transform .08s ease, box-shadow .12s ease, background .12s ease;
+      user-select:none;
+    }
+    .btn:hover{ transform:translateY(-1px); box-shadow:0 8px 20px rgba(0,0,0,.35); background:rgba(2,6,23,.85);}
+    .btn.primary{
+      background:var(--accent);
+      color:#022c22;
+      border:1px solid rgba(34,197,94,.7);
+    }
+    .btn.primary:hover{ background:#16a34a; }
+
+    .choices{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    .choice{
+      width:100%;
+      text-align:left;
+      padding:12px 14px;
+      border-radius:16px;
+      font-size:16px; /* 放大 */
+      background:rgba(15,23,42,.92);
+      border:1px solid rgba(148,163,184,.35);
+      color:var(--text);
+      cursor:pointer;
+      transition:transform .08s ease, box-shadow .12s ease, background .12s ease;
+    }
+    .choice:hover{
+      transform:translateY(-1px);
+      box-shadow:0 10px 22px rgba(0,0,0,.35);
+      background:rgba(2,6,23,.85);
+    }
+
+    .tiny{
+      font-size:12.5px;
+      color:var(--muted);
+      text-align:center;
+      margin-top:2px;
     }
   </style>
 </head>
 <body>
-<div class="app">
-  <header>
-    <div class="title-block">
-      <div class="dot"></div>
-      <div>
-        <h1>Dirty Coms：暗網聊天室導覽</h1>
-        <span>改編自 Darknet Diaries Ep.112，國中安全版</span>
-      </div>
+  <div class="phone" aria-label="手機外觀">
+    <div class="notch"></div>
+    <div class="screen">
+      <header>
+        <div class="title">
+          <h1>Dirty Coms：互動故事</h1>
+          <div class="sub">國中安全版（一次一句話）</div>
+        </div>
+        <div class="pill">沉浸式 · 角色扮演</div>
+      </header>
+
+      <main>
+        <div class="card" id="card">
+          <div class="who">
+            <div class="avatar" id="avatar">SYS</div>
+            <div class="name">
+              <div class="role" id="role">系統</div>
+              <div class="hint" id="hint">點按「下一頁」開始</div>
+            </div>
+          </div>
+          <div class="text" id="text"></div>
+        </div>
+      </main>
+
+      <footer>
+        <div class="choices" id="choices"></div>
+        <div class="controls">
+          <div class="progress" id="progress">0 / 0</div>
+          <button class="btn primary" id="nextBtn">下一頁</button>
+        </div>
+        <div class="tiny">提示：只有在「分支」時，下面會出現選項按鈕。</div>
+      </footer>
     </div>
-    <span class="tag">沉浸式 · 角色扮演</span>
-  </header>
-
-  <main id="chat"></main>
-
-  <footer>
-    <div id="choices"></div>
-    <div class="pill-hint">點按下面的「指令」繼續故事，你扮演：<b>13 歲的你</b>。</div>
-  </footer>
-</div>
+  </div>
 
 <script>
-/**
- * 角色說話的聊天框工具
- * from: "system" | "narrator" | "drew" | "jack" | "player"
- */
-const chatEl = document.getElementById('chat');
-const choicesEl = document.getElementById('choices');
+  // --- 單則訊息資料（一次只出現一個人的發言） ---
+  // 你可持續擴充 messages；每條都是「單一發言」。
+  const story = {
+    start: {
+      messages: [
+        { from:'system', text:'歡迎進入「Dirty Coms：暗網聊天室導覽」。\n\n這是真實事件改編（已篩選、改寫成國中安全版）。' },
+        { from:'narrator', text:'你扮演 13 歲的你，超愛線上遊戲。\n你最在意的東西：Robux（遊戲虛擬貨幣）。' },
+        { from:'jack', text:'我是 Jack（主持人）。今天我們用「錯誤示範」帶你看：一個人怎麼被一步步帶偏。' },
+        { from:'drew', text:'我是 Drew（當事人）。我們不教你做壞事，只訓練你：看出哪裡怪。' }
+      ],
+      choices: [
+        { text:'啟動模擬：登入 Roblox，從 Robux 開始', next:'robux_intro' }
+      ]
+    },
 
-function roleLabel(from) {
-  switch (from) {
-    case 'system': return '系統';
-    case 'narrator': return '旁白';
-    case 'drew': return 'Drew（受訪者）';
-    case 'jack': return 'Jack（主持人）';
-    case 'player': return '你';
-    default: return '';
+    robux_intro: {
+      messages: [
+        { from:'narrator', text:'你在群組看到連結：\n「免費 Robux！不用錢，只要做幾個任務。」' },
+        { from:'drew', text:'當年我看到這句，腦袋只剩一句話：\n「我要。」' }
+      ],
+      choices: [
+        { text:'👉 點進去看看「免費 Robux」網站', next:'robux_site' },
+        { text:'🤨 不點，先想一下為什麼會免費', next:'robux_safe' }
+      ]
+    },
+
+    robux_safe: {
+      messages: [
+        { from:'jack', text:'現實中的你若選擇不點：恭喜，你已經比很多大人更像大人。' },
+        { from:'narrator', text:'但故事裡的 Drew 當年沒這麼冷靜。\n我們改用他的路線示範。' }
+      ],
+      choices: [
+        { text:'（模擬 Drew）好吧…我還是點進去', next:'robux_site' }
+      ]
+    },
+
+    robux_site: {
+      messages: [
+        { from:'narrator', text:'網站很炫，有 Roblox 圖片，看起來「很像官方」。' },
+        { from:'narrator', text:'它說：填問卷、裝小程式，就會送你 Robux。' },
+        { from:'drew', text:'這類網站常見套路：\n你付出的不是錢，是「個資」和「裝置安全」。' },
+        { from:'jack', text:'如果它真的能無限送 Robux，那 Roblox 早就倒了。\n想想就知道怪。' }
+      ],
+      choices: [
+        { text:'我願意給資料、裝東西（只想要 Robux）', next:'robux_risk' },
+        { text:'停！這像是用隱私換虛寶', next:'robux_reflect' }
+      ]
+    },
+
+    robux_risk: {
+      messages: [
+        { from:'narrator', text:'你輸入 Email，甚至被要求下載「小工具」。' },
+        { from:'drew', text:'結果常見：垃圾信暴增、電腦變慢、帳號被盜。\n你以為在賺，其實在送。' }
+      ],
+      choices: [
+        { text:'回頭檢討：這到底哪裡怪？', next:'robux_reflect' }
+      ]
+    },
+
+    robux_reflect: {
+      messages: [
+        { from:'jack', text:'第一條生存守則：\n「看起來好到不像真的」＝高風險。' },
+        { from:'narrator', text:'Drew 當年看到有人靠這種網站賺錢，就開始想：\n「我也要賺。」' }
+      ],
+      choices: [
+        { text:'繼續：接著他們盯上「禮物卡」', next:'giftcard_intro' }
+      ]
+    },
+
+    giftcard_intro: {
+      messages: [
+        { from:'narrator', text:'他們把目標換成禮物卡（Gift Card）。\n因為很多人會上網查：卡裡還剩多少錢。' },
+        { from:'drew', text:'關鍵點：\n「查餘額」這個動作，會讓人願意輸入卡號。' }
+      ],
+      choices: [
+        { text:'繼續：他們怎麼利用「查餘額」？', next:'giftcard_scam' }
+      ]
+    },
+
+    giftcard_scam: {
+      messages: [
+        { from:'narrator', text:'他們做了一個「長得像官方」的查餘額網站。' },
+        { from:'narrator', text:'你輸入卡號、日期、安全碼，以為在查。\n其實資料被偷偷記下來。' },
+        { from:'jack', text:'這就是釣魚網站：\n不是駭進你家，而是哄你自己交出鑰匙。' }
+      ],
+      choices: [
+        { text:'收尾：為什麼混在這種社群最後會反噬？', next:'ending_lessons' }
+      ]
+    },
+
+    ending_lessons: {
+      messages: [
+        { from:'drew', text:'待久了我才懂：\n在「互相利用」的社群，遲早輪到你被利用。' },
+        { from:'system', text:'模擬結束。\n你已解鎖：釣魚辨識 +1、免費點數免疫力 +1。' }
+      ],
+      choices: [
+        { text:'重玩一次（用不同選擇走）', next:'start' }
+      ]
+    }
+  };
+
+  const ui = {
+    avatar: document.getElementById('avatar'),
+    role: document.getElementById('role'),
+    hint: document.getElementById('hint'),
+    text: document.getElementById('text'),
+    choices: document.getElementById('choices'),
+    nextBtn: document.getElementById('nextBtn'),
+    progress: document.getElementById('progress')
+  };
+
+  function roleLabel(from){
+    return ({
+      system:'系統',
+      narrator:'旁白',
+      drew:'Drew（受訪者）',
+      jack:'Jack（主持人）',
+      player:'你'
+    })[from] || from;
   }
-}
-
-function avatarText(from) {
-  switch (from) {
-    case 'system': return 'SYS';
-    case 'narrator': return 'NP';
-    case 'drew': return 'DR';
-    case 'jack': return 'JK';
-    case 'player': return 'YOU';
-    default: return '?';
+  function avatarText(from){
+    return ({
+      system:'SYS',
+      narrator:'NP',
+      drew:'DR',
+      jack:'JK',
+      player:'YOU'
+    })[from] || '??';
   }
-}
-
-function addMessage(from, text) {
-  const row = document.createElement('div');
-  row.className = `msg-row ${from}`;
-
-  const bubble = document.createElement('div');
-  bubble.className = 'bubble';
-
-  if (from === 'player') {
-    // 玩家訊息在右邊，avatar 放右
-    const label = document.createElement('div');
-    label.className = 'label';
-    label.textContent = roleLabel(from);
-    bubble.appendChild(label);
-
-    const content = document.createElement('div');
-    content.textContent = text;
-    bubble.appendChild(content);
-
-    const avatar = document.createElement('div');
-    avatar.className = `avatar ${from}`;
-    avatar.textContent = avatarText(from);
-
-    row.appendChild(bubble);
-    row.appendChild(avatar);
-  } else {
-    const avatar = document.createElement('div');
-    avatar.className = `avatar ${from}`;
-    avatar.textContent = avatarText(from);
-
-    const label = document.createElement('div');
-    label.className = 'label';
-    label.textContent = roleLabel(from);
-
-    const content = document.createElement('div');
-    content.textContent = text;
-
-    bubble.appendChild(label);
-    bubble.appendChild(content);
-
-    row.appendChild(avatar);
-    row.appendChild(bubble);
+  function avatarClass(from){
+    return `avatar ${from}`;
   }
 
-  chatEl.appendChild(row);
-  chatEl.scrollTop = chatEl.scrollHeight;
-}
+  let nodeId = 'start';
+  let idx = 0;              // 目前 node.messages 的索引
+  let total = 0;
 
-/**
- * 故事節點設計：
- * 每個節點包含：
- * - messages: [{from, text}]
- * - choices: [{text, next, note?}]
- */
-const story = {
-  start: {
-    messages: [
-      {
-        from: 'system',
-        text: '歡迎進入「Dirty Coms：暗網聊天室導覽」。\n\n這是真實事件改編的互動故事，原始內容來自英文 Podcast Darknet Diaries 第 112 集，經過篩選與改寫，適合國中生的版本。'
-      },
-      {
-        from: 'narrator',
-        text: '你扮演一個 13 歲、超愛線上遊戲的國中生。\n你最喜歡的遊戲之一是 Roblox，裡面有一種虛擬貨幣叫 Robux，可以拿來買裝備、解鎖遊戲。'
-      },
-      {
-        from: 'jack',
-        text: '今天的導遊是我 Jack，還有曾經待在黑暗線上社群很多年的 Drew。\n我們會帶你看看，他當年是怎麼一步一步掉進去的。'
-      },
-      {
-        from: 'drew',
-        text: '放心，這次我們是來「反省」跟「示範錯誤」，而不是教你怎麼犯罪。你要做的，就是判斷哪裡怪怪的。'
-      }
-    ],
-    choices: [
-      { text: '啟動模擬：登入 Roblox，一切從 Robux 開始', next: 'robux_intro' }
-    ]
-  },
+  function renderMessage(msg){
+    ui.avatar.className = avatarClass(msg.from);
+    ui.avatar.textContent = avatarText(msg.from);
+    ui.role.textContent = roleLabel(msg.from);
 
-  robux_intro: {
-    messages: [
-      {
-        from: 'narrator',
-        text: '某天，你在聊天群看到一個連結：\n「免費 Robux！不用錢，只要做幾個小任務！」'
-      },
-      {
-        from: 'drew',
-        text: '當年 13 歲的我看到這種連結，眼睛直接發光，完全沒想那麼多。'
-      }
-    ],
-    choices: [
-      {
-        text: '👉 點進去看「免費 Robux」網站',
-        next: 'robux_site'
-      },
-      {
-        text: '🤨 覺得怪怪的，先不要點',
-        next: 'robux_safe'
-      }
-    ]
-  },
+    // 小提示：只有在最後一則且有選項時才提示分支
+    ui.hint.textContent = '點「下一頁」繼續';
 
-  robux_safe: {
-    messages: [
-      {
-        from: 'jack',
-        text: '如果現實中的你，選擇不點，這超棒。任何標榜「免費虛寶」「免費點數」都要非常小心。'
-      },
-      {
-        from: 'narrator',
-        text: '不過，故事裡的 Drew 當年沒有這麼冷靜。\n我們先看看：如果你像他一樣點進去，會發生什麼事。'
-      }
-    ],
-    choices: [
-      {
-        text: '（模擬 Drew）好啦，我還是點進去看看…',
-        next: 'robux_site'
-      }
-    ]
-  },
-
-  robux_site: {
-    messages: [
-      {
-        from: 'narrator',
-        text: '網站畫面很炫，有 Roblox 圖片，看起來「好像」很正常。\n頁面說：完成問卷、安裝小程式，就送你 Robux。'
-      },
-      {
-        from: 'drew',
-        text: '這類網站背後，是廣告商因為有人點、有人填資料，就付錢給網站主。\n很多時候，玩家資料被賣掉，甚至被安裝亂七八糟的程式。'
-      },
-      {
-        from: 'jack',
-        text: '更糟的是，有些真的不會給你 Robux，只是利用你點擊賺錢而已。'
-      }
-    ],
-    choices: [
-      {
-        text: '我願意給資料、裝東西，只要有 Robux 就好',
-        next: 'robux_risk'
-      },
-      {
-        text: '停一下，這樣好像在拿隱私換虛寶',
-        next: 'robux_reflect'
-      }
-    ]
-  },
-
-  robux_risk: {
-    messages: [
-      {
-        from: 'narrator',
-        text: '你輸入了 Email、手機號碼，甚至被要求下載一些奇怪的小工具。'
-      },
-      {
-        from: 'drew',
-        text: '很多小朋友真的這樣做，結果電腦變超慢、收到一堆垃圾簡訊，甚至帳號被盜。'
-      }
-    ],
-    choices: [
-      {
-        text: '…好像有點糟，重新思考一下',
-        next: 'robux_reflect'
-      }
-    ]
-  },
-
-  robux_reflect: {
-    messages: [
-      {
-        from: 'jack',
-        text: '這裡第一個重點：\n如果一件事看起來「好得不像真的」，例如免費點數、免費虛寶，很可能就是陷阱。'
-      },
-      {
-        from: 'drew',
-        text: '我當年沒有停下來，反而看到朋友用這種模式賺了很多錢，就覺得：「哇，我也想賺。」'
-      },
-      {
-        from: 'narrator',
-        text: 'Drew 的朋友開了一個專門賺廣告費的網站，\n用各種方式吸引一堆小孩來點「免費 Robux」連結，\n每天可以賺到上千美金。'
-      }
-    ],
-    choices: [
-      {
-        text: '原來不只是小孩被利用，小孩也可能變成利用別人的人',
-        next: 'giftcard_intro'
-      }
-    ]
-  },
-
-  giftcard_intro: {
-    messages: [
-      {
-        from: 'narrator',
-        text: '賺到第一桶金之後，Drew 的朋友開始想：「怎麼把錢變更多？」\n他們看上了另一個目標：禮物卡（Gift Card）。'
-      },
-      {
-        from: 'jack',
-        text: '在國外，很多人會收到「Visa 禮物卡」，像一張預付信用卡，可以在網路上刷。'
-      },
-      {
-        from: 'drew',
-        text: '要用之前，人們通常會先上網查「卡裡到底剩多少錢？」\n這就是重點了。'
-      }
-    ],
-    choices: [
-      {
-        text: '繼續：他們是怎麼利用「查餘額」這件事？',
-        next: 'giftcard_scam'
-      }
-    ]
-  },
-
-  giftcard_scam: {
-    messages: [
-      {
-        from: 'narrator',
-        text: 'Drew 的朋友做了一個長得很像「官方查餘額」的網站。\n畫面、Logo、顏色都模仿得很像。'
-      },
-      {
-        from: 'drew',
-        text: '使用者在上面輸入卡號、到期日、安全碼，以為只是在查餘額。\n實際上，這些資料全部被記錄下來。'
-      },
-      {
-        from: 'jack',
-        text: '然後他們會再去真正的官方網站查一次，確認卡裡有多少錢，接著把這張禮物卡的錢全刷走。'
-      },
-      {
-        from: 'narrator',
-        text: '為了讓更多人上鉤，他們甚至買搜尋廣告，讓假的網站出現在搜尋結果最上面，看起來超像真的。'
-      }
-    ],
-    choices: [
-      {
-        text: '這不就是釣魚網站（phishing）嗎？',
-        next: 'giftcard_reflect'
-      }
-    ]
-  },
-
-  giftcard_reflect: {
-    messages: [
-      {
-        from: 'jack',
-        text: '沒錯，這就是典型的釣魚：\n做一個長得很像真的網站，讓你自己把敏感資料乖乖交出去。'
-      },
-      {
-        from: 'drew',
-        text: '老實說，我後來也學會怎麼「複製網站」跟「下廣告」，自己開了一個釣魚網站。\n當時只覺得：哇，錢變多了。'
-      },
-      {
-        from: 'narrator',
-        text: '但代價是：每一筆收入，都是從別人口袋裡偷來的錢。有人打開禮物卡，發現裡面只剩零，完全不知道發生什麼事。'
-      }
-    ],
-    choices: [
-      {
-        text: '為了賺錢，開始合理化傷害別人：這就是滑坡的開始',
-        next: 'ogusers_intro'
-      }
-    ]
-  },
-
-  ogusers_intro: {
-    messages: [
-      {
-        from: 'narrator',
-        text: '過了一段時間，Drew 接觸到另一個看似「比較沒那麼黑」的世界：\n帳號買賣論壇 OGUsers。'
-      },
-      {
-        from: 'drew',
-        text: '在那裡，大家買賣各種帳號：好聽的 IG 暱稱、遊戲帳號、通訊軟體帳號。\n一開始，我只是註冊一些還沒人用的名字，再轉賣賺差價，看起來沒那麼可怕。'
-      },
-      {
-        from: 'jack',
-        text: '但這種地方的規則，是「誰聰明誰賺錢」，而不是「誰善良誰受歡迎」。'
-      }
-    ],
-    choices: [
-      {
-        text: '繼續深入看看這個帳號世界發生什麼事',
-        next: 'ogusers_deeper'
-      }
-    ]
-  },
-
-  ogusers_deeper: {
-    messages: [
-      {
-        from: 'drew',
-        text: '很快地，我就看到有人用各種方式「搶帳號」。\n有的是盜別人的帳號再拿去賣，有的是利用系統漏洞搶短暱稱。'
-      },
-      {
-        from: 'narrator',
-        text: '論壇裡的人互相較勁、互相懷疑、互相利用，\n有些人會故意買東西後「刷退」（chargeback），\n拿到貨又把錢要回來，讓賣家血本無歸。'
-      },
-      {
-        from: 'jack',
-        text: '這裡有一個很重要的觀察：\n當一個社群裡，大部分人都在想「怎麼利用別人」，\n那裡就會變成一個誰也不信誰的地方。'
-      }
-    ],
-    choices: [
-      {
-        text: '留在這種社群，遲早會被別人當獵物',
-        next: 'toxic_community'
-      }
-    ]
-  },
-
-  toxic_community: {
-    messages: [
-      {
-        from: 'narrator',
-        text: '久而久之，Drew 也成為別人的目標。\n這些人開始想辦法查出他的真實資料（doxxing），\n然後用「我知道你是誰」來威脅他交錢、交帳號。'
-      },
-      {
-        from: 'drew',
-        text: '有人說要聯絡我父母、在我現實生活中鬧事，\n雖然有些只是恐嚇，但當下我超怕。那時，我才意識到自己其實早就站在很危險的地方。'
-      },
-      {
-        from: 'jack',
-        text: '這就是「犯罪社群」常見的結局：\n一開始你以為大家是隊友，後來發現大家都在想怎麼從你身上撈好處。'
-      }
-    ],
-    choices: [
-      {
-        text: '越了解，越發現這些「技巧」其實都很不酷',
-        next: 'turning_point'
-      }
-    ]
-  },
-
-  turning_point: {
-    messages: [
-      {
-        from: 'drew',
-        text: '我後來真的受夠了。\n我發現自己一直活在焦慮裡：怕被抓、怕被報復、怕家人知道。'
-      },
-      {
-        from: 'narrator',
-        text: 'Drew 開始慢慢退出這些社群，\n也開始提醒別人這些地方有多危險，\n試著把自己當年的經歷變成警告別人的故事。'
-      },
-      {
-        from: 'jack',
-        text: '這也是為什麼他願意上節目分享——\n不是炫耀，而是直接示範：\n「一個國中生亂闖黑暗角落，會一步步走到哪裡」。'
-      }
-    ],
-    choices: [
-      {
-        text: '整理一下這趟旅程學到的生存守則',
-        next: 'lessons'
-      }
-    ]
-  },
-
-  lessons: {
-    messages: [
-      {
-        from: 'system',
-        text: '恭喜，模擬結束。現在來總結幾條「網路黑暗角落生存守則」。'
-      },
-      {
-        from: 'narrator',
-        text: '1️⃣ 免費虛寶／免費點數 = 高風險警訊\n   只要跟「輸入個資、裝軟體」綁在一起，就要特別小心。'
-      },
-      {
-        from: 'narrator',
-        text: '2️⃣ 查餘額、登入頁、抽獎頁，都可能是假的\n   一定要看清楚網址是不是官方的，不要只點搜尋結果第一個。'
-      },
-      {
-        from: 'narrator',
-        text: '3️⃣ 只要一個社群裡充滿「詐騙技巧分享」「怎麼賺別人便宜」，\n   那裡早晚也會有人用同樣的方式對付你。'
-      },
-      {
-        from: 'narrator',
-        text: '4️⃣ 線上的「匿名」不是無敵盾\n   做過的事、留過的紀錄，有可能被查回來，甚至傷害到現實生活中的你和家人。'
-      },
-      {
-        from: 'narrator',
-        text: '5️⃣ 真正厲害的「黑客精神」，是了解系統、保護自己和別人，\n   而不是利用洞來賺快錢。'
-      },
-      {
-        from: 'jack',
-        text: '你剛剛走過的是 Drew 幾年的人生路線濃縮版。\n真正的人生，不用真的去犯錯，也可以從別人的故事學會判斷。'
-      }
-    ],
-    choices: [
-      {
-        text: '重玩一次，試試看用不同選擇閱讀這個故事',
-        next: 'restart'
-      },
-      {
-        text: '結束模擬：我已取得網路生存 +1 經驗值',
-        next: 'end'
-      }
-    ]
-  },
-
-  restart: {
-    messages: [
-      {
-        from: 'system',
-        text: '系統重置情境中……\n你再次變成 13 歲的你，Robux 又在向你招手。'
-      }
-    ],
-    choices: [
-      {
-        text: '回到一開始',
-        next: 'robux_intro'
-      }
-    ]
-  },
-
-  end: {
-    messages: [
-      {
-        from: 'system',
-        text: '模擬結束。你可以關閉頁面，\n也可以把這個故事當成之後討論「網路安全」「媒體識讀」的素材。'
-      }
-    ],
-    choices: []
+    ui.text.textContent = msg.text;
   }
-};
 
-let currentNodeId = 'start';
+  function clearChoices(){
+    ui.choices.innerHTML = '';
+  }
 
-/**
- * 顯示某一個節點
- */
-function showNode(nodeId) {
-  currentNodeId = nodeId;
-  const node = story[nodeId];
-  if (!node) return;
+  function renderChoices(node){
+    clearChoices();
+    if (!node.choices || node.choices.length === 0) return;
 
-  // 先清空選項
-  choicesEl.innerHTML = '';
-
-  // 逐筆輸出訊息
-  node.messages.forEach(msg => addMessage(msg.from, msg.text));
-
-  // 建立選項按鈕
-  node.choices.forEach(choice => {
-    const btn = document.createElement('button');
-    btn.textContent = choice.text;
-    btn.addEventListener('click', () => {
-      // 按下選項 → 先以「你」的身分顯示這句話，再跳到下一節點
-      addMessage('player', choice.text);
-      choicesEl.innerHTML = '';
-      setTimeout(() => showNode(choice.next), 260);
+    node.choices.forEach(ch => {
+      const b = document.createElement('button');
+      b.className = 'choice';
+      b.textContent = ch.text;
+      b.addEventListener('click', () => {
+        // 玩家選擇也算一個「單發言」頁面：先跳到一個 player 暫時節點
+        // 然後再進入 next node
+        pendingNextNode = ch.next;
+        showPlayerChoice(ch.text);
+      });
+      ui.choices.appendChild(b);
     });
-    choicesEl.appendChild(btn);
-  });
-}
+    ui.hint.textContent = '選一個選項，進入不同路線';
+  }
 
-// 初始化
-showNode('start');
+  let pendingNextNode = null;
+  let inPlayerChoice = false;
+
+  function showPlayerChoice(text){
+    inPlayerChoice = true;
+    clearChoices();
+    ui.avatar.className = avatarClass('player');
+    ui.avatar.textContent = avatarText('player');
+    ui.role.textContent = roleLabel('player');
+    ui.hint.textContent = '點「下一頁」送出';
+    ui.text.textContent = text;
+
+    // 進度顯示改成選擇模式
+    ui.progress.textContent = '選擇 / 回覆';
+  }
+
+  function loadNode(nextId){
+    nodeId = nextId;
+    idx = 0;
+    const node = story[nodeId];
+    total = node.messages.length;
+    clearChoices();
+    renderMessage(node.messages[idx]);
+    ui.progress.textContent = `${idx+1} / ${total}`;
+  }
+
+  function next(){
+    // 若目前在玩家選擇頁，下一步進入 pendingNextNode
+    if (inPlayerChoice){
+      inPlayerChoice = false;
+      loadNode(pendingNextNode);
+      pendingNextNode = null;
+      return;
+    }
+
+    const node = story[nodeId];
+    if (!node) return;
+
+    // 若不是最後一則訊息，往下一則
+    if (idx < node.messages.length - 1){
+      idx++;
+      renderMessage(node.messages[idx]);
+      ui.progress.textContent = `${idx+1} / ${total}`;
+      clearChoices();
+      return;
+    }
+
+    // 最後一則：顯示選項（若有）
+    renderChoices(node);
+  }
+
+  ui.nextBtn.addEventListener('click', next);
+
+  // 初始化
+  loadNode('start');
 </script>
 </body>
 </html>
