@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>數位分身術實驗</title>
+<style>
+  body { font-family: "微軟正黑體", sans-serif; background: #222; color: #0f0; padding: 50px; text-align: center;}
+  h1 { border-bottom: 2px solid #0f0; display: inline-block; padding-bottom: 10px; }
+  textarea { width: 80%; height: 200px; font-size: 20px; padding: 20px; border-radius: 10px; border: 3px solid #0f0; background: #000; color: #fff; }
+  .instruction { margin-top: 20px; color: #aaa; font-size: 14px; }
+</style>
+</head>
+<body>
+  <h1>🕵️‍♂️ 秘密日記本 (Session 模擬器)</h1>
+  <h3>在這裡輸入你的秘密，我會用 Cookie/Local Storage 幫你記住...</h3>
+  <textarea id="mySecret" placeholder="在此輸入你的秘密..."></textarea>
+  <p class="instruction">教學用途：此頁面模擬網站如何將資料儲存在使用者的瀏覽器中。</p>
+
+  <script>
+    // 這是模擬網站讀取 Cookie/Local Storage 的過程
+    const box = document.getElementById('mySecret');
+    
+    // 1. 一打開網頁，先檢查瀏覽器背包(Local Storage)有沒有資料
+    const savedData = localStorage.getItem('user_session_id');
+    if (savedData) {
+      box.value = savedData; // 有資料就顯示出來（模擬自動登入）
+    }
+
+    // 2. 當使用者打字時，立刻把資料存回背包
+    box.addEventListener('input', function() {
+      localStorage.setItem('user_session_id', box.value);
+    });
+  </script>
+</body>
+</html>
