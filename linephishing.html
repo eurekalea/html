@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>防詐騙情境模擬教學</title>
+    <style>
+        /* 全局設定：深色背景更適合觀看截圖 */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #222; 
+            font-family: "Microsoft JhengHei", Arial, sans-serif;
+            overflow: hidden; /* 隱藏外層捲軸，只讓內部容器滾動 */
+        }
+
+        /* 滾動容器：實現「一次滑一張」的核心 */
+        .scroll-container {
+            width: 100%;
+            height: 100vh;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory; /* 強制捕捉 */
+            scroll-behavior: smooth;
+        }
+
+        /* 單張投影片區塊 */
+        .slide {
+            width: 100%;
+            height: 100vh;
+            scroll-snap-align: start; /* 對齊頂部 */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        /* 圖片樣式：自動適應螢幕大小 */
+        .slide img {
+            max-height: 90vh; /* 高度留一點空間給提示字 */
+            max-width: 100%;
+            width: auto;
+            object-fit: contain;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6); /* 立體陰影 */
+            border-radius: 8px;
+        }
+
+        /* 頁碼提示 */
+        .page-indicator {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 14px;
+        }
+
+        /* 第一頁的向下提示動畫 */
+        .scroll-hint {
+            position: absolute;
+            bottom: 30px;
+            color: #fff;
+            background: rgba(0,0,0,0.5);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            animation: bounce 2s infinite;
+            pointer-events: none;
+        }
+
+        /* 最後一頁的警示樣式 */
+        .warning-text {
+            position: absolute;
+            bottom: 15vh;
+            color: #ff4d4d; 
+            background: rgba(0,0,0,0.85); 
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold; 
+            font-size: 1.2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-10px);}
+            60% {transform: translateY(-5px);}
+        }
+    </style>
+</head>
+<body>
+
+    <div class="scroll-container">
+        
+        <div class="slide">
+            <img src="img/Line_Chat (0).png" alt="開始接觸">
+            <div class="scroll-hint">▼ 向下滾動開始模擬</div>
+            <div class="page-indicator">1 / 15</div>
+        </div>
+
+        <div class="slide">
+            <img src="img/Line_Chat (1).png" alt="對話過程">
+            <div class="page-indicator">2 / 15</div>
+        </div>
+
+        <div class="slide">
+            <img src="img/Line_Chat (2).png" alt="對話過程">
+            <div class="page-indicator">3 / 15</div>
+        </div>
+
+        <div class="slide">
+            <img src="img/Line_Chat (3).png" alt="對話過程">
+            <div class="page-indicator">4 / 15</div>
+        </div>
+
+        <div class="slide">
+            <img src="img/Line_Chat (4).png" alt="對話過程">
+            <div class="page-indicator">5 / 15</div>
+        </div>
+
+        <div class="slide">
+            <img src="img/Line_Chat (5).png" alt="對話過程">
+            <div class="page-indicator">6 / 15</div>
+        </div>
+
+        <div class="slide">
+            <img src="img/Line_Chat (6).png" alt="對話過程">
+            <div class="page-indicator">7 / 15</div>
+        </div>
+
+        <div class="slide">
+            <img src="img/Line_Chat (7).png" alt="對話過程">
+            <div class="page-indicator">8 / 15</div>
+        </div>
+
+        <div class="slide">
+            <img src="img/Line_Chat (8).png" alt="對話過程">
+            <div class="page-indicator">9 / 15</div>
+        </div>
+
+        <div class="slide">
+            <img src="img/Line_Chat (9).png" alt="對話過程">
+            <div class="page-indicator">10 / 15</div>
+        </div>
+
+        <div class="slide">
+            <img src="img/Line_Chat (10).png" alt="對話過程">
+            <div class="page-indicator">11 / 15</div>
+        </div>
+
+        <div class="slide">
+            <img src="img/Line_Chat (11).png" alt="對話過程">
+            <div class="page-indicator">12 / 15</div>
+        </div>
+
+        <div class="slide">
+            <img src="img/Line_Chat (12).png" alt="對話過程">
+            <div class="page-indicator">13 / 15</div>
+        </div>
+
+        <div class="slide">
+            <img src="img/Line_Chat (13).png" alt="對話過程">
+            <div class="page-indicator">14 / 15</div>
+        </div>
+
+        <div class="slide">
+            <img src="img/Line_Chat (14).png" alt="詐騙結束">
+            <div class="warning-text">
+                🚫 詐騙發生！帳號已遭盜用
+            </div>
+            <div class="page-indicator">15 / 15</div>
+        </div>
+
+    </div>
+
+</body>
+</html>
