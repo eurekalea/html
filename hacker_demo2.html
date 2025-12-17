@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>登入示範：Session 重放</title>
+  <style>
+    body{font-family:"微軟正黑體",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#0b1220;color:#e8eefc;margin:0;padding:20px}
+    h1{margin:0 0 10px;font-size:18px}
+    .wrap{display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:980px;margin:0 auto}
+    .card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:16px;box-shadow:0 12px 40px rgba(0,0,0,.35)}
+    label{display:block;font-size:13px;margin:10px 0 6px;color:rgba(232,238,252,.8)}
+    input,textarea{width:100%;box-sizing:border-box;border-radius:12px;border:1px solid rgba(255,255,255,.14);background:rgba(0,0,0,.25);color:#e8eefc;padding:12px;font-size:14px;outline:none}
+    input:focus,textarea:focus{border-color:rgba(120,170,255,.8);box-shadow:0 0 0 4px rgba(120,170,255,.18)}
+    .row{position:relative}
+    .eye{position:absolute;right:10px;top:50%;transform:translateY(-50%);border:0;background:transparent;color:rgba(232,238,252,.85);cursor:pointer;padding:6px 8px;border-radius:10px}
+    .eye:hover{background:rgba(255,255,255,.08)}
+    .btn{border:0;border-radius:12px;padding:11px 14px;font-weight:800;cursor:pointer;background:linear-gradient(90deg,#6aa6ff,#8b7bff);color:#0b1220}
+    .btn.full{width:100%}
+    .btn.ghost{background:rgba(255,255,255,.08);color:rgba(232,238,252,.9);border:1px solid rgba(255,255,255,.14)}
+    .msg{min-height:18px;margin-top:10px;font-size:13px;color:#ffb3b3}
+    .ok{margin-top:10px;padding:12px;border-radius:12px;background:rgba(0,255,140,.08);border:1px solid rgba(0,255,140,.25);color:rgba(232,238,252,.92)}
+    code{background:rgba(0,0,0,.35);padding:2px 6px;border-radius:8px;border:1px solid rgba(255,255,255,.12)}
+    .hint{margin-top:10px;font-size:12px;color:rgba(232,238,252,.65);line-height:1.45}
+    .warn{margin-top:10px;padding:10px;border-radius:12px;background:rgba(255,180,0,.08);border:1px solid rgba(255,180,0,.25);color:rgba(232,238,252,.9);font-size:12px;line-height:1.45}
+    @media (max-width: 860px){.wrap{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div style="max-width:980px;margin:0 auto 12px;">
+    <h1>教學示範：拿到 <code>session token</code> 就可能「重放登入」（不示範竊取手法）</h1>
+    <div class="hint">
+      若你是直接雙擊開檔（<code>file://</code>），很多瀏覽器會讓 Cookie 失效；本版本會自動改用 localStorage 讓示範仍可進行。
+    </div>
+  </div>
+
+  <div class="wrap">
+    <!-- 使用者端 -->
+    <div class="card">
+      <h2 style="margin:0 0 6px;font-size:16px;">🧑‍💻 使用者：正常登入</h2>
+      <div class="hint">帳號預設：<code>student</code>｜密碼預設：<code>thisistest</code></div>
+
+      <div class="warn" id="envWarn" style="display:none;"></div>
+
+      <label for="u">帳號</label>
+      <input id="u" autocomplete="username" value="student"/>
+
+      <label for="p">密碼</label>
+      <div class="row">
+        <input id="p" type="password" autocomplete="current-password" value="thisistest"/>
+        <button class="eye" id="toggle" type="button" aria-label="切換顯示密碼">👁️</button>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;">
+        <button class="btn full" id="login" type="button">Log in</button>
+        <button class="btn full ghost" id="logout" type="button">登出</button>
+      </div>
+
+      <div class="msg" id="userMsg"></div>
+
+      <div class="ok" id="userOK" style="display:none;">
+        ✅ 成功登入系統（使用者端）
+        <div class="hint" style="margin-top:6px;">
+          session token：<code id="tokenShow">（尚未登入）</code><br/>
+          按下按鈕複製 token，貼到右邊做「重放登入」示範。
+        </div>
+        <button class="btn ghost" id="copyToken" type="button" style="margin-top:10px;">複製 token（模擬外流）</button>
+      </div>
+    </div>
+
+    <!-- 攻擊者端 -->
+    <div class="card">
+      <h2 style="margin:0 0 6px;font-size:16px;">🕵️ 攻擊者：重放通行證</h2>
+      <div class="hint">
+        這裡只示範「如果 token 外流會怎樣」，不示範「怎麼偷」。
+      </div>
+
+      <label for="stolen">拿到的 token（貼上）</label>
+      <textarea id="stolen" rows="4" placeholder="把左邊複製的 token 貼在這裡..."></textarea>
+
+      <button class="btn full" id="replay" type="button" style="margin-top:12px;">使用 token 登入（重放）</button>
+      <div class="msg" id="attMsg"></div>
+
+      <div class="ok" id="attOK" style="display:none;">
+        ✅ 成功登入系統（攻擊者端）<br/>
+        <span class="hint">密碼沒被破解，但通行證被重放了。</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const VALID_USER = "student";
+    const VALID_PASS = "thisistest";
+
+    const u = document.getElementById("u");
+    const p = document.getElementById("p");
+    const userMsg = document.getElementById("userMsg");
+    const userOK = document.getElementById("userOK");
+    const tokenShow = document.getElementById("tokenShow");
+    const envWarn = document.getElementById("envWarn");
+
+    const stolen = document.getElementById("stolen");
+    const attMsg = document.getElementById("attMsg");
+    const attOK = document.getElementById("attOK");
+
+    document.getElementById("toggle").addEventListener("click", () => {
+      p.type = (p.type === "password") ? "text" : "password";
+    });
+
+    // ===== Cookie 工具（可能在 file:// 失效）=====
+    function setCookie(name, value, days) {
+      const maxAge = days * 24 * 60 * 60;
+      // Secure 只在 https 才能用；這裡不加，避免教室 localhost/http 失效
+      document.cookie = `${encodeURIComponent(name)}=${encodeURIComponent(value)}; Max-Age=${maxAge}; Path=/; SameSite=Lax`;
+    }
+    function getCookie(name) {
+      if (!document.cookie) return null;
+      const parts = document.cookie.split(";").map(s => s.trim());
+      for (const c of parts) {
+        const eq = c.indexOf("=");
+        const k = eq >= 0 ? c.slice(0, eq) : c;
+        const v = eq >= 0 ? c.slice(eq + 1) : "";
+        if (decodeURIComponent(k) === name) return decodeURIComponent(v);
+      }
+      return null;
+    }
+    function delCookie(name) {
+      document.cookie = `${encodeURIComponent(name)}=; Max-Age=0; Path=/; SameSite=Lax`;
+    }
+
+    // ===== 儲存層：Cookie 優先，失敗就 localStorage =====
+    const KEY = "demo_session_token";
+    function cookieWorks() {
+      try {
+        const probe = "cookie_probe_" + Math.random().toString(16).slice(2);
+        setCookie(probe, "1", 1);
+        const ok = getCookie(probe) === "1";
+        delCookie(probe);
+        return ok;
+      } catch {
+        return false;
+      }
+    }
+    const CAN_COOKIE = cookieWorks();
+
+    if (!CAN_COOKIE) {
+      envWarn.style.display = "block";
+      envWarn.innerHTML =
+        `偵測到此環境 Cookie 可能不可用（常見於 <code>file://</code> 直接開檔）。<br/>
+         本示範會改用 <code>localStorage</code> 保存 token，效果一樣：token 外流 → 可被重放。<br/>
+         若要真的用 Cookie 示範，建議用 VS Code Live Server / localhost 開啟。`;
+    }
+
+    function setToken(token) {
+      // 兩者都寫：能用 Cookie 就用 Cookie；localStorage 讓 file:// 也能跑
+      localStorage.setItem(KEY, token);
+      if (CAN_COOKIE) setCookie(KEY, token, 1);
+    }
+    function getToken() {
+      // 先讀 Cookie（若可用），否則讀 localStorage
+      if (CAN_COOKIE) {
+        const t = getCookie(KEY);
+        if (t) return t;
+      }
+      return localStorage.getItem(KEY);
+    }
+    function clearToken() {
+      localStorage.removeItem(KEY);
+      if (CAN_COOKIE) delCookie(KEY);
+    }
+
+    function randomToken() {
+      const bytes = new Uint8Array(16);
+      crypto.getRandomValues(bytes);
+      return Array.from(bytes).map(b => b.toString(16).padStart(2, "0")).join("");
+    }
+
+    document.getElementById("login").addEventListener("click", () => {
+      userMsg.textContent = "";
+      attMsg.textContent = "";
+      attOK.style.display = "none";
+
+      if (u.value.trim() === VALID_USER && p.value === VALID_PASS) {
+        const t = randomToken();
+        setToken(t);
+        userOK.style.display = "block";
+        tokenShow.textContent = t;
+      } else {
+        userOK.style.display = "none";
+        tokenShow.textContent = "（尚未登入）";
+        userMsg.textContent = "帳號或密碼錯誤，無法登入";
+      }
+    });
+
+    document.getElementById("logout").addEventListener("click", () => {
+      clearToken();
+      userOK.style.display = "none";
+      tokenShow.textContent = "（尚未登入）";
+      userMsg.textContent = "";
+      attMsg.textContent = "";
+      attOK.style.display = "none";
+      stolen.value = "";
+      p.type = "password";
+    });
+
+    document.getElementById("copyToken").addEventListener("click", async () => {
+      const t = getToken();
+      if (!t) return;
+      try {
+        await navigator.clipboard.writeText(t);
+        userMsg.style.color = "rgba(232,238,252,.75)";
+        userMsg.textContent = "已複製 token（模擬外流）—把它貼到右邊。";
+        setTimeout(() => { userMsg.textContent = ""; }, 1500);
+      } catch {
+        userMsg.textContent = "瀏覽器不允許剪貼簿存取，請手動選取上方 token 複製。";
+      }
+    });
+
+    document.getElementById("replay").addEventListener("click", () => {
+      attMsg.textContent = "";
+      attOK.style.display = "none";
+
+      const real = getToken();
+      const given = stolen.value.trim();
+
+      if (!given) {
+        attMsg.textContent = "請先貼上拿到的 token。";
+        return;
+      }
+      if (real && given === real) {
+        attOK.style.display = "block";
+      } else {
+        attMsg.textContent = "token 無效或已失效（示範：通行證會過期/可撤銷/不匹配）。";
+      }
+    });
+
+    // 重新整理後：若 token 還在，就顯示已登入狀態
+    const existing = getToken();
+    if (existing) {
+      userOK.style.display = "block";
+      tokenShow.textContent = existing;
+    }
+  </script>
+</body>
+</html>
