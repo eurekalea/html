@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>機密資料庫入口 | Secure Login</title>
     <style>
-        /* --- CSS 樣式：打造暗網/駭客風格 --- */
+        /* --- CSS 樣式：暗黑駭客風格 --- */
         body {
-            background-color: #0d1117; /* 深色背景 */
+            background-color: #0d1117;
             color: #c9d1d9;
-            font-family: 'Courier New', Courier, monospace; /* 像程式碼的字體 */
+            font-family: 'Courier New', Courier, monospace;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -115,7 +115,7 @@
             font-size: 0.9em;
             margin-top: 15px;
             min-height: 1.2em;
-            display: none; /* 預設隱藏 */
+            display: none;
         }
 
         /* 成功登入後的畫面 */
@@ -155,9 +155,7 @@
 
     <div class="container">
         <div id="login-view">
-            <h2>SYSTEM LOGIN</h2>
-            
-            <div class="input-group">
+            <h2>系統登入</h2> <div class="input-group">
                 <label for="username">USERNAME</label>
                 <input type="text" id="username" placeholder="Enter username">
             </div>
@@ -165,7 +163,7 @@
             <div class="input-group">
                 <label for="password">PASSWORD</label>
                 <input type="password" id="password" placeholder="Enter password">
-                <span class="eye-icon" onclick="togglePassword()">👁️</span>
+                <span class="eye-icon" onclick="togglePassword()">🙈</span>
             </div>
 
             <button onclick="attemptLogin()">LOG IN</button>
@@ -192,22 +190,18 @@
         // --- 設定正確的帳號密碼 ---
         const CORRECT_USER = "student";
         const CORRECT_PASS = "thisistest";
-        // 這是駭客要偷的「金鑰」名稱
+        // 駭客要偷的 Token
         const SESSION_KEY = "auth_token"; 
         const SESSION_VALUE = "valid_access_granted_12345";
 
-        // 1. 頁面載入時，檢查是否有「通行證 (Cookie)」
         window.onload = function() {
             checkCookie();
         };
 
-        // 檢查 Cookie 的函數
         function checkCookie() {
-            // 讀取瀏覽器所有的 cookie
             let cookies = document.cookie;
-            console.log("Current Cookies:", cookies); // 讓學生在 F12 Console 看到
+            console.log("Current Cookies:", cookies); 
 
-            // 如果 cookie 裡面包含我們設定的通行證
             if (cookies.includes(`${SESSION_KEY}=${SESSION_VALUE}`)) {
                 showSuccessPage();
             } else {
@@ -215,50 +209,46 @@
             }
         }
 
-        // 2. 切換密碼顯示/隱藏 (眼睛功能)
+        // 修改點 2: 修正眼睛切換邏輯
         function togglePassword() {
             const pwdInput = document.getElementById("password");
             const icon = document.querySelector(".eye-icon");
+            
             if (pwdInput.type === "password") {
+                // 變成明碼 -> 眼睛睜開
                 pwdInput.type = "text";
-                icon.textContent = "🙈"; // 閉眼圖示
+                icon.textContent = "👁️"; 
             } else {
+                // 變成密碼 -> 眼睛閉上
                 pwdInput.type = "password";
-                icon.textContent = "👁️"; // 開眼圖示
+                icon.textContent = "🙈"; 
             }
         }
 
-        // 3. 執行登入
         function attemptLogin() {
             const userIn = document.getElementById("username").value;
             const passIn = document.getElementById("password").value;
             const errorDiv = document.getElementById("error-msg");
 
             if (userIn === CORRECT_USER && passIn === CORRECT_PASS) {
-                // 登入成功：寫入 Cookie
-                // 設定一個有效期為 1 天的 cookie
+                // 登入成功：寫入 Cookie (有效期 1 天)
                 document.cookie = `${SESSION_KEY}=${SESSION_VALUE}; path=/; max-age=86400`;
                 
                 errorDiv.style.display = "none";
                 alert("驗證通過！正在寫入 Cookie...");
                 showSuccessPage();
             } else {
-                // 登入失敗
                 errorDiv.style.display = "block";
-                
-                // 為了增加真實感，搖晃一下視窗 (CSS animation logic could be added here)
                 console.warn("Login Failed");
             }
         }
 
-        // 4. 登出 (清除 Cookie)
         function logout() {
-            // 將 cookie 過期時間設為過去，即為刪除
+            // 刪除 Cookie
             document.cookie = `${SESSION_KEY}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
-            location.reload(); // 重新整理頁面
+            location.reload(); 
         }
 
-        // 切換介面顯示
         function showSuccessPage() {
             document.getElementById("login-view").style.display = "none";
             document.getElementById("success-view").style.display = "block";
