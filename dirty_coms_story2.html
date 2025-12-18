@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Darknet Diaries Ep.112: The Roblox Trap (TW Edition) - 互動故事</title>
+    <style>
+        body {
+            background-color: #0d0d0d;
+            color: #00ff41;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        #game-container {
+            width: 800px;
+            max-width: 100%;
+            border: 2px solid #00ff41;
+            padding: 30px;
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+            background-color: #111;
+            position: relative;
+            min-height: 520px;
+        }
+
+        h1 {
+            text-align: center;
+            text-transform: uppercase;
+            border-bottom: 1px dashed #00ff41;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            text-shadow: 0 0 5px #00ff41;
+        }
+
+        .story-text {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            min-height: 180px;
+        }
+
+        .highlight {
+            color: #fff;
+            font-weight: bold;
+            background-color: #003300;
+            padding: 2px 5px;
+        }
+        
+        .roblox {
+            color: #fff;
+            background-color: #cc0000;
+            padding: 2px 5px;
+            font-weight: bold;
+        }
+
+        .danger {
+            color: #ff3333;
+            text-shadow: 0 0 5px red;
+        }
+
+        /* 數位防身術提示框 */
+        .defense-tip {
+            border: 1px solid #00ffff;
+            color: #00ffff;
+            background: rgba(0, 255, 255, 0.05);
+            padding: 10px 15px;
+            margin-top: 15px;
+            font-size: 1rem;
+            display: block;
+        }
+
+        .alert {
+            color: #ff9900;
+            border: 1px solid #ff9900;
+            padding: 10px;
+            display: inline-block;
+            margin: 10px 0;
+            background: rgba(255, 153, 0, 0.1);
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        button {
+            background-color: transparent;
+            border: 1px solid #00ff41;
+            color: #00ff41;
+            padding: 15px;
+            font-family: inherit;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+        }
+
+        button:hover {
+            background-color: #00ff41;
+            color: #000;
+        }
+
+        .progress-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 5px;
+            background-color: #00ff41;
+            width: 0%;
+            transition: width 0.5s;
+        }
+
+        .typing-cursor::after {
+            content: '█';
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+        
+        #scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2));
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+
+<div id="scanlines"></div>
+<div id="game-container">
+    <h1 id="chapter-title">系統啟動中...</h1>
+    <div id="story-content" class="story-text"></div>
+    <div id="choices" class="options"></div>
+    <div id="progress" class="progress-bar"></div>
+</div>
+
+<script>
+    const story = [
+        // --- 第一章：Robux 誘餌 ---
+        {
+            id: 0,
+            title: "序章：慾望的起點",
+            text: "歡迎來到地下世界。<br><br>故事主角 Drew 年輕時跟你們一樣，渴望擁有遊戲貨幣 <span class='roblox'>Robux</span>，但他沒有信用卡，爸媽也不答應一直幫他課金。<br>這時，他在網路上看到了一個機會...",
+            options: [
+                { text: "繼續", next: 10 }
+            ]
+        },
+        {
+            id: 10,
+            title: "測試：你會上鉤嗎？",
+            text: "你在 Google 搜尋「免費 Robux」，點進第一個網站。<br>螢幕跳出：<br><br><div class='alert'>恭喜！填問卷，立即領取 5000 Robux！</div><br>你會怎麼做？",
+            options: [
+                { text: "填！反正不用錢，試試看。", next: 11 },
+                { text: "關掉網頁，這是騙人的。", next: 12 }
+            ]
+        },
+        {
+            id: 11,
+            title: "你成為了產品",
+            text: "<span class='danger'>[警告] 你沒拿到 Robux。</span><br><br>你浪費了時間，還可能洩露了個資。<br>但 Drew 靠著你去填問卷，賺到了廣告分潤。<br>你不是使用者，你是<b>被收割的韭菜</b>。",
+            options: [
+                { text: "這就是他們的商業模式？", next: 13 }
+            ]
+        },
+        {
+            id: 12,
+            title: "你很聰明，但別人不是",
+            text: "你避開了陷阱。但全世界有成千上萬的小孩點了那個按鈕。<br>積少成多，Drew 靠著廣告分潤，每個月賺進數千美元。<br><br>這種「輕鬆賺錢」的快感，讓他們走向了更黑暗的路。",
+            options: [
+                { text: "接下來他們做了什麼？", next: 13 }
+            ]
+        },
+        {
+            id: 13,
+            title: "第一章：貪婪升級",
+            text: "從 Robux 詐騙中，這群青少年學會了操控人心。<br>他們不再滿足於小錢，而是轉向更有價值的東西：<br><strong>OG 帳號 (Original Gangster)</strong>。<br><br>像 <span class='highlight'>@God</span>、<span class='highlight'>@Joy</span> 這種 IG 帳號，價值數萬美元。",
+            options: [
+                { text: "他們要怎麼搶走別人的帳號？", next: 20 }
+            ]
+        },
+
+        // --- 第二章：獵殺名單與撞庫 ---
+        {
+            id: 20,
+            title: "第二章：獵殺名單",
+            text: "這群屁孩並不需要真的很會寫程式。<br>他們只要去黑市買一份 <span class='highlight'>Combolist (外洩名單)</span>。<br><br>這份名單包含了過去幾年，各種倒閉小網站洩漏出來的帳號密碼。",
+            options: [
+                { text: "拿到這份名單能做什麼？", next: 21 }
+            ]
+        },
+        {
+            id: 21,
+            title: "靈魂拷問：你的習慣",
+            text: "駭客拿到名單後，會用程式進行 <span class='danger'>撞庫攻擊 (Credential Stuffing)</span>。<br>簡單說，就是拿你 3 年前在 A 網站用的鑰匙，去試你現在 B 網站的門。<br><br><b>[互動檢測] 老實說，你的 IG 和其他遊戲帳號，是用同一組密碼嗎？</b>",
+            options: [
+                { text: "A. 是同一組 (或只改一點點)，這樣才好記。", next: 22 }, // 危險
+                { text: "B. 不一樣，我有分開設定。", next: 23 } // 安全
+            ]
+        },
+        {
+            id: 22,
+            title: "警報：防禦破裂",
+            text: "<span class='danger'>[系統入侵成功]</span><br>因為你所有網站都用同一把鑰匙。駭客只要撿到你以前掉的舊鑰匙，就能直接打開你現在的 IG。<br><div class='defense-tip'>🛡️ <b>數位防身術</b>：<br>千萬不要「一組密碼走天下」。至少把重要帳號（Google/IG）跟遊戲帳號的密碼分開！</div>",
+            options: [
+                { text: "但如果我有開雙重驗證 (2FA) 呢？", next: 24 }
+            ]
+        },
+        {
+            id: 23,
+            title: "防禦成功...暫時的",
+            text: "做得好！駭客用舊密碼進不去你的 IG。<br><br>但是，他們在名單裡發現了其他東西：你的<b>真實姓名</b>和<b>電話號碼</b>。<br>既然沒有鑰匙，他們決定直接要把「鎖」換掉。",
+            options: [
+                { text: "他們要怎麼做？", next: 24 }
+            ]
+        },
+
+        // --- 第三章：社交工程 ---
+        {
+            id: 24,
+            title: "第三章：社交工程",
+            text: "無論有沒有密碼，駭客現在的目標是你的<b>手機號碼</b> (因為那是接收 2FA 驗證碼的地方)。<br><br>想像你是駭客，你會怎麼說服電信客服把受害者的號碼轉移給你？",
+            options: [
+                { text: "「你好，我是本人，手機掉了，請幫我啟用新 SIM 卡。」", next: 30 },
+                { text: "直接駭入電信公司的伺服器。", next: 404 }
+            ]
+        },
+        {
+            id: 404,
+            title: "路徑錯誤",
+            text: "太慢了。還記得 Robux 詐騙的教訓嗎？<br>利用人的信任（或疏忽）永遠是最快的路徑。<br><br>他們攻擊的是<b>客服人員</b>，不是電腦。",
+            options: [
+                { text: "重新嘗試：打電話給客服。", next: 30 }
+            ]
+        },
+        {
+            id: 30,
+            title: "防線崩潰",
+            text: "客服人員可能很累，或者駭客甚至賄賂了內部員工。<br>一旦客服按下「確認」，受害者的手機訊號瞬間消失。<br>訊號轉移到了駭客的手機上。<br><br>這就是 <span class='danger'>SIM 卡劫持 (SIM Swapping)</span>。",
+            options: [
+                { text: "接下來會發生什麼事？", next: 31 }
+            ]
+        },
+        {
+            id: 31,
+            title: "第四章：全面接管",
+            text: "駭客立刻去 IG 點選「忘記密碼」。<br>系統發送簡訊驗證碼 ➔ <span class='danger'>發到了駭客的手機</span>。<br><br>即使你開了雙重驗證，只要是透過簡訊 (SMS) 傳送，在這一刻都失效了。",
+            options: [
+                { text: "如果受害者試圖反抗？", next: 32 }
+            ]
+        },
+        {
+            id: 32,
+            title: "第五章：暴力升級",
+            text: "駭客會進行 <span class='danger'>報假案 (Swatting)</span>。<br>打電話給警察謊稱受害者家裡有炸彈。<br>特警隊 (SWAT) 荷槍實彈衝進受害者家裡。<br><br>這一切，可能只是源於你在問卷上留下的那支電話號碼。",
+            options: [
+                { text: "這太瘋狂了，我們要怎麼保護自己？", next: 40 }
+            ]
+        },
+
+        // --- 終章：修正後的結語 ---
+        {
+            id: 40,
+            title: "終章：如何防禦",
+            text: "雖然我們無法控制電信公司，也無法阻止貪婪的駭客，但我們可以保護自己。<br><br>最關鍵的一課：<br><span class='highlight'>雙重驗證 (2FA) 的種類，決定了生死。</span>",
+            options: [
+                { text: "那我該用什麼？", next: 41 }
+            ]
+        },
+        {
+            id: 41,
+            title: "結語：安全建議",
+            text: "1. 不要相信「填問卷送 Robux」的網站。<br><br>2. <b>工具升級</b>：<br>簡訊是認「門號」(容易被盜)，Authenticator App 是認「手機硬體」(駭客偷不到)。所以如果有 App 選項，請優先選 App。<br><br>3. <b>拒絕撞庫</b>：<br>重要帳號密碼不要跟遊戲帳號一樣。<br><br>下課。",
+            options: [
+                { text: "重新開始故事", next: 0 }
+            ]
+        }
+    ];
+
+    let currentStep = 0;
+    const titleEl = document.getElementById('chapter-title');
+    const contentEl = document.getElementById('story-content');
+    const choicesEl = document.getElementById('choices');
+    const progressEl = document.getElementById('progress');
+
+    function typeWriter(text, element, speed = 25) {
+        element.innerHTML = "";
+        element.classList.add('typing-cursor');
+        
+        let i = 0;
+        let isTag = false;
+        
+        function type() {
+            if (i < text.length) {
+                let char = text.charAt(i);
+                
+                if (char === '<') isTag = true;
+                if (char === '>') isTag = false;
+                
+                element.innerHTML = text.substring(0, i + 1);
+                i++;
+                
+                if (isTag) {
+                    type();
+                } else {
+                    setTimeout(type, speed);
+                }
+            } else {
+                element.classList.remove('typing-cursor');
+                showOptions();
+            }
+        }
+        type();
+    }
+
+    function renderStory(stepId) {
+        const step = story.find(s => s.id === stepId);
+        if (!step) return;
+
+        currentStep = stepId;
+        
+        titleEl.textContent = step.title;
+        titleEl.className = ""; 
+        document.body.style.boxShadow = "none";
+
+        // 視覺特效邏輯
+        if(step.title.includes("暴力") || step.title.includes("警告") || step.title.includes("崩潰") || step.title.includes("入侵")) {
+            titleEl.classList.add("danger");
+            document.body.style.boxShadow = "inset 0 0 50px rgba(255,0,0,0.2)";
+        } else if (step.title.includes("測試") || step.title.includes("上鉤") || step.title.includes("拷問")) {
+             titleEl.style.color = "#ffff00"; 
+        }
+
+        choicesEl.innerHTML = '';
+        typeWriter(step.text, contentEl);
+
+        let progress = ((story.indexOf(step) + 1) / story.length) * 100;
+        progressEl.style.width = `${progress}%`;
+    }
+
+    function showOptions() {
+        const step = story.find(s => s.id === currentStep);
+        choicesEl.innerHTML = '';
+        
+        step.options.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.textContent = `> ${opt.text}`;
+            btn.onclick = () => renderStory(opt.next);
+            choicesEl.appendChild(btn);
+        });
+    }
+
+    renderStory(0);
+</script>
+
+</body>
+</html>
