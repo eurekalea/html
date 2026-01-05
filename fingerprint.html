@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>數位指紋偵探 | Digital Fingerprint Detective</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --text-color: #c9d1d9;
+            --accent-color: #58a6ff;
+            --alert-color: #ff7b72;
+            --success-color: #3fb950;
+            --panel-bg: #161b22;
+            --border-color: #30363d;
+        }
+
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
+        }
+
+        h1 {
+            color: var(--accent-color);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .warning {
+            color: var(--alert-color);
+            font-weight: bold;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .card {
+            background-color: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        .card h2 {
+            margin-top: 0;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            color: var(--success-color);
+            font-size: 1.2em;
+        }
+
+        .data-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 5px;
+        }
+
+        .data-label {
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+
+        .data-value {
+            text-align: right;
+            word-break: break-all;
+            max-width: 60%;
+        }
+
+        .canvas-box {
+            text-align: center;
+            margin-top: 20px;
+            background-color: #fff;
+            padding: 10px;
+            display: inline-block;
+        }
+
+        #fingerprint-hash {
+            font-size: 1.5em;
+            color: var(--alert-color);
+            font-weight: bold;
+            text-align: center;
+            margin-top: 10px;
+            word-break: break-all;
+        }
+
+        .concept-note {
+            font-size: 0.9em;
+            color: #8b949e;
+            margin-top: 10px;
+            background-color: rgba(255,255,255,0.05);
+            padding: 10px;
+            border-left: 3px solid var(--accent-color);
+        }
+
+        button {
+            background-color: var(--success-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 1em;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>🕵️‍♂️ 數位指紋偵探</h1>
+        <p>你以為你是隱形的？瀏覽器早就出賣了你。</p>
+        <p class="warning">⚠️ 系統偵測中...</p>
+    </header>
+
+    <!-- 基礎資訊區 -->
+    <div class="card">
+        <h2>📂 檔案 A：基本特徵 (User Agent)</h2>
+        <div class="concept-note">
+            這是你的瀏覽器在每一次請求網頁時，主動遞出的「名片」。
+        </div>
+        <div class="data-row">
+            <span class="data-label">瀏覽器與系統資訊:</span>
+            <span class="data-value" id="ua-string">分析中...</span>
+        </div>
+        <div class="data-row">
+            <span class="data-label">系統平台:</span>
+            <span class="data-value" id="platform">分析中...</span>
+        </div>
+        <div class="data-row">
+            <span class="data-label">瀏覽器語言:</span>
+            <span class="data-value" id="language">分析中...</span>
+        </div>
+    </div>
+
+    <!-- 硬體特徵區 -->
+    <div class="card">
+        <h2>🖥️ 檔案 B：硬體環境 (Hardware)</h2>
+        <div class="concept-note">
+            網站可以讀取你的螢幕大小、硬體核心數，這些組合讓你變得更獨特。
+        </div>
+        <div class="data-row">
+            <span class="data-label">螢幕解析度:</span>
+            <span class="data-value" id="screen-res">分析中...</span>
+        </div>
+        <div class="data-row">
+            <span class="data-label">色彩深度:</span>
+            <span class="data-value" id="color-depth">分析中...</span>
+        </div>
+        <div class="data-row">
+            <span class="data-label">CPU 核心數:</span>
+            <span class="data-value" id="hardware-concurrency">分析中...</span>
+        </div>
+        <div class="data-row">
+            <span class="data-label">時區:</span>
+            <span class="data-value" id="timezone">分析中...</span>
+        </div>
+    </div>
+
+    <!-- Canvas 指紋區 -->
+    <div class="card">
+        <h2>🎨 檔案 C：Canvas 繪圖指紋 (高階追蹤)</h2>
+        <div class="concept-note">
+            <p><strong>原理揭密：</strong>網站命令你的瀏覽器在背景畫一張圖。因為每台電腦的顯示卡、驅動程式、字型渲染方式微小的不同，畫出來的圖會有肉眼看不見的差異。</p>
+            <p>即使你刪除 Cookie，這張圖畫出來的結果永遠一樣，這就是你的<strong>「數位刺青」</strong>。</p>
+        </div>
+        
+        <button onclick="generateCanvasFingerprint()">🔍 執行 Canvas 指紋採樣</button>
+        
+        <div id="canvas-result" class="hidden">
+            <p>瀏覽器在背景偷偷畫了這張圖（包含文字與表情符號）：</p>
+            <div class="canvas-box">
+                <canvas id="fingerprint-canvas" width="200" height="50"></canvas>
+            </div>
+            <p>將這張圖轉換成唯一的識別碼 (Hash)：</p>
+            <div id="fingerprint-hash"></div>
+            <p style="text-align: center; color: #8b949e; font-size: 0.8em;">(只要你用這台電腦、這個瀏覽器，這個代碼永遠不變)</p>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // 取得基本資訊
+    document.getElementById('ua-string').textContent = navigator.userAgent;
+    document.getElementById('platform').textContent = navigator.platform;
+    document.getElementById('language').textContent = navigator.language;
+    document.getElementById('screen-res').textContent = `${screen.width} x ${screen.height}`;
+    document.getElementById('color-depth').textContent = `${screen.colorDepth}-bit`;
+    document.getElementById('hardware-concurrency').textContent = navigator.hardwareConcurrency || '未知';
+    document.getElementById('timezone').textContent = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+    // Canvas 指紋生成邏輯
+    function generateCanvasFingerprint() {
+        const canvas = document.getElementById('fingerprint-canvas');
+        const ctx = canvas.getContext('2d');
+        const txt = 'Browser Leak! 🕵️‍♂️ <canvas>';
+        
+        // 繪製背景與文字，利用不同瀏覽器的渲染差異
+        ctx.textBaseline = "top";
+        ctx.font = "14px 'Arial'";
+        ctx.textBaseline = "alphabetic";
+        ctx.fillStyle = "#f60";
+        ctx.fillRect(125, 1, 62, 20);
+        ctx.fillStyle = "#069";
+        ctx.fillText(txt, 2, 15);
+        ctx.fillStyle = "rgba(102, 204, 0, 0.7)";
+        ctx.fillText(txt, 4, 17);
+
+        // 取得 Data URL (這就是指紋的原始數據)
+        const dataURL = canvas.toDataURL();
+        
+        // 簡單的 Hash 函數 (將長字串轉為短代碼)
+        let hash = 0;
+        if (dataURL.length === 0) return hash;
+        for (let i = 0; i < dataURL.length; i++) {
+            const char = dataURL.charCodeAt(i);
+            hash = ((hash << 5) - hash) + char;
+            hash = hash & hash; // Convert to 32bit integer
+        }
+
+        // 顯示結果
+        document.getElementById('canvas-result').classList.remove('hidden');
+        document.getElementById('fingerprint-hash').textContent = "ID: " + Math.abs(hash).toString(16).toUpperCase();
+        
+        // 禁用按鈕防止重複點擊
+        document.querySelector('button').disabled = true;
+        document.querySelector('button').textContent = "指紋已鎖定";
+    }
+</script>
+
+</body>
+</html>
