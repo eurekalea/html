@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>數位指紋測試 | Fingerprint Lab</title>
+
+  <style>
+    :root{
+      --bg: #0b0f14;
+      --panel: #0f1620;
+      --panel-2: #0c121a;
+      --border: #1f2a37;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --muted-2: #6b7280;
+
+      --accent: #60a5fa;   /* blue */
+      --accent-2: #22c55e; /* green */
+      --danger: #f43f5e;   /* rose */
+      --warn: #fbbf24;     /* amber */
+
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans TC", Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body{
+      margin: 0;
+      background: radial-gradient(1200px 700px at 15% 10%, rgba(96,165,250,.10), transparent 55%),
+                  radial-gradient(900px 500px at 85% 20%, rgba(34,197,94,.08), transparent 55%),
+                  linear-gradient(180deg, #070a0f, var(--bg));
+      color: var(--text);
+      font-family: var(--sans);
+      line-height: 1.55;
+      padding: 28px 16px 40px;
+    }
+
+    .container{
+      max-width: 980px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+      padding: 14px 16px;
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
+      border-radius: 12px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .brand .dot{
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 0 4px rgba(96,165,250,.15);
+    }
+
+    .brand .meta{
+      display:flex;
+      flex-direction:column;
+      min-width: 0;
+    }
+
+    h1{
+      font-size: 20px;
+      margin: 0;
+      letter-spacing: .4px;
+      font-weight: 750;
+    }
+
+    .subtitle{
+      margin: 2px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .version{
+      font-family: var(--mono);
+      color: var(--muted);
+      font-size: 12px;
+      padding: 6px 10px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(255,255,255,.02);
+      white-space: nowrap;
+    }
+
+    /* Sections */
+    .section{
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      background: rgba(255,255,255,.02);
+      margin-top: 16px;
+    }
+
+    .section-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.01));
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-title{
+      font-weight: 700;
+      letter-spacing: .2px;
+      font-size: 14px;
+    }
+
+    .section-body{
+      padding: 14px 16px 16px;
+      background: linear-gradient(180deg, rgba(0,0,0,.10), transparent);
+    }
+
+    .hint{
+      color: var(--muted);
+      font-size: 13px;
+      margin: 0 0 12px;
+    }
+
+    /* Button */
+    .btn{
+      width: 100%;
+      appearance: none;
+      border: 1px solid rgba(96,165,250,.35);
+      background: linear-gradient(180deg, rgba(96,165,250,.22), rgba(96,165,250,.10));
+      color: var(--text);
+      font-weight: 750;
+      letter-spacing: .3px;
+      border-radius: 10px;
+      padding: 12px 14px;
+      cursor: pointer;
+      transition: transform .05s ease, background .2s ease, border-color .2s ease;
+    }
+    .btn:hover{ border-color: rgba(96,165,250,.55); background: linear-gradient(180deg, rgba(96,165,250,.30), rgba(96,165,250,.12)); }
+    .btn:active{ transform: translateY(1px); }
+    .btn:disabled{
+      cursor: not-allowed;
+      opacity: .55;
+      border-color: rgba(31,41,55,.8);
+      background: rgba(255,255,255,.03);
+    }
+
+    /* Result grid */
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+    @media (min-width: 860px){
+      .grid{ grid-template-columns: 1fr 1fr; }
+    }
+
+    .panel{
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
+      overflow: hidden;
+    }
+
+    .panel-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap: 10px;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(0,0,0,.18);
+    }
+
+    .panel-title{
+      font-weight: 800;
+      font-size: 13px;
+      letter-spacing: .25px;
+      display:flex;
+      align-items:center;
+      gap: 8px;
+    }
+
+    .tag{
+      font-family: var(--mono);
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.02);
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    .tag.danger{ border-color: rgba(244,63,94,.35); color: #fecdd3; background: rgba(244,63,94,.10); }
+    .tag.safe{ border-color: rgba(34,197,94,.35); color: #bbf7d0; background: rgba(34,197,94,.10); }
+
+    /* Table-like rows */
+    .rows{
+      padding: 10px 14px 14px;
+    }
+
+    .row{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px dashed rgba(31,41,55,.85);
+      font-family: var(--mono);
+      font-size: 12.5px;
+    }
+    .row:last-child{ border-bottom: 0; }
+
+    .k{ color: var(--muted); }
+    .v{
+      text-align:right;
+      max-width: 64%;
+      word-break: break-word;
+      color: var(--text);
+      font-weight: 650;
+    }
+
+    .pill{
+      display:inline-block;
+      font-family: var(--mono);
+      padding: 3px 8px;
+      border-radius: 8px;
+      border: 1px solid rgba(96,165,250,.35);
+      color: #dbeafe;
+      background: rgba(96,165,250,.10);
+    }
+
+    .note{
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 12.5px;
+    }
+
+    /* Teacher box */
+    .teacher{
+      margin-top: 14px;
+      border: 1px solid rgba(251,191,36,.30);
+      background: rgba(251,191,36,.08);
+      border-radius: 12px;
+      padding: 12px 14px;
+      color: #fde68a;
+      font-size: 13px;
+    }
+    .teacher strong{ color: #fbbf24; }
+    .teacher ul{ margin: 8px 0 0 18px; padding: 0; color: #fde68a; }
+    .teacher li{ margin: 6px 0; }
+
+    .hidden { display: none; }
+
+    /* Small footer */
+    .footer{
+      margin-top: 14px;
+      color: var(--muted-2);
+      font-size: 12px;
+      font-family: var(--mono);
+      text-align: right;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <div class="topbar">
+      <div class="brand">
+        <div class="dot" aria-hidden="true"></div>
+        <div class="meta">
+          <h1>數位指紋測試</h1>
+          <div class="subtitle">瞭解並比較比較「硬體指紋」與「Cookie 追蹤」</div>
+        </div>
+      </div>
+      <div class="version">Fingerprint Lab • v4.1</div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
+        <div class="section-title">Step 1 — 採集特徵（模擬追蹤器）</div>
+        <div class="tag">F12 可對照：Application / Storage</div>
+      </div>
+
+      <div class="section-body">
+        <p class="hint">
+          點擊開始後，頁面會讀取可由瀏覽器提供的特徵（User Agent、螢幕參數、Canvas 特徵），
+          同時用 LocalStorage 模擬「Cookie 追蹤 ID」的保存行為。
+        </p>
+        <button id="scanBtn" class="btn" onclick="startTracking()">開始測試（Start Scan）</button>
+      </div>
+    </div>
+
+    <div id="resultArea" class="section hidden">
+      <div class="section-header">
+        <div class="section-title">Step 2 — 結果（Result)</div>
+        <div class="tag">重整 / 無痕模式可做對照</div>
+      </div>
+
+      <div class="section-body">
+        <div class="grid">
+
+          <!-- Hardware Fingerprint -->
+          <div class="panel">
+            <div class="panel-head">
+              <div class="panel-title">硬體指紋（Device Fingerprint）</div>
+              <div class="tag danger">無痕模式無法消除</div>
+            </div>
+
+            <div class="rows">
+              <div class="row">
+                <div class="k">Fingerprint ID (Hash)</div>
+                <div class="v"><span class="pill" id="fp-id">計算中…</span></div>
+              </div>
+
+              <div class="row">
+                <div class="k">User Agent</div>
+                <div class="v" id="fp-ua">…</div>
+              </div>
+
+              <div class="row">
+                <div class="k">Screen</div>
+                <div class="v" id="fp-screen">…</div>
+              </div>
+
+              <div class="row">
+                <div class="k">Canvas</div>
+                <div class="v" id="fp-canvas">…</div>
+              </div>
+
+              <div class="note">
+                這個 ID 是由多個「裝置/瀏覽器特徵」組合後計算而來。只要環境特徵變化不大，指紋就可能長期穩定。
+              </div>
+            </div>
+          </div>
+
+          <!-- Cookie Tracking -->
+          <div class="panel">
+            <div class="panel-head">
+              <div class="panel-title">Cookie 追蹤（Tracking Cookie / ID）</div>
+              <div class="tag safe">無痕模式可防禦</div>
+            </div>
+
+            <div class="rows">
+              <div class="row">
+                <div class="k">Tracking ID</div>
+                <div class="v"><span class="pill" id="cookie-id">讀取中…</span></div>
+              </div>
+
+              <div class="note">
+                這裡用 LocalStorage 模擬「追蹤 ID 被留在本機」。一般模式下重整通常不變；
+                無痕模式或清除站點資料後，ID 會重新生成。
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="teacher">
+          <strong>課堂觀察建議：</strong>
+          <ul>
+            <li><strong>一般模式重整：</strong>觀察兩個 ID 是否維持一致（系統可延續辨識）。</li>
+            <li><strong>無痕模式開啟：</strong>觀察「追蹤 ID」是否重置，而「硬體指紋」多半仍相近或不變。</li>
+            <li><strong>延伸：</strong>關掉某個擴充功能或換瀏覽器設定檔，再測一次，比較指紋是否改變。</li>
+          </ul>
+        </div>
+
+        <div class="footer">※ 教學用模擬頁：不連線、不上傳資料</div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  // 簡單的雜湊函數
+  function cyrb53(str, seed = 0) {
+    let h1 = 0xdeadbeef ^ seed, h2 = 0x41c6ce57 ^ seed;
+    for (let i = 0, ch; i < str.length; i++) {
+      ch = str.charCodeAt(i);
+      h1 = Math.imul(h1 ^ ch, 2654435761);
+      h2 = Math.imul(h2 ^ ch, 1597334677);
+    }
+    h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+    h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+    return 4294967296 * (2097151 & h2) + (h1 >>> 0);
+  }
+
+  // 1. 真實 Canvas 指紋 (不使用隨機數)
+  function getRealCanvasFingerprint() {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const txt = 'BrowserLeaking<canvas>1.0';
+    ctx.textBaseline = "top";
+    ctx.font = "14px 'Arial'";
+    ctx.textBaseline = "alphabetic";
+    ctx.fillStyle = "#f60";
+    ctx.fillRect(125, 1, 62, 20);
+    ctx.fillStyle = "#069";
+    ctx.fillText(txt, 2, 15);
+    ctx.fillStyle = "rgba(102, 204, 0, 0.7)";
+    ctx.fillText(txt, 4, 17);
+    return cyrb53(canvas.toDataURL());
+  }
+
+  // 2. 模擬 Cookie (使用 LocalStorage)
+  function getCookieId() {
+    let id = localStorage.getItem('sim_cookie_id');
+    if (!id) {
+      id = 'USER-' + Math.floor(Math.random() * 1000000);
+      localStorage.setItem('sim_cookie_id', id);
+      return id + " (新訪客)";
+    }
+    return id + " (舊訪客)";
+  }
+
+  function startTracking() {
+    document.getElementById('scanBtn').disabled = true;
+    document.getElementById('resultArea').classList.remove('hidden');
+
+    // 計算硬體特徵 (這些是恆定的)
+    const ua = navigator.userAgent;
+    const screenRes = `${screen.width}x${screen.height}x${screen.colorDepth}`;
+    const canvasFp = getRealCanvasFingerprint();
+
+    // 組合硬體指紋
+    const hardwareString = `${ua}-${screenRes}-${canvasFp}`;
+    const hardwareID = cyrb53(hardwareString).toString(16).toUpperCase();
+
+    // 顯示硬體數據
+    document.getElementById('fp-id').textContent = "HW-" + hardwareID;
+    document.getElementById('fp-ua').textContent = ua.length > 70 ? (ua.substring(0, 70) + "…") : ua;
+    document.getElementById('fp-screen').textContent = screenRes;
+    document.getElementById('fp-canvas').textContent = "Hash: " + canvasFp;
+
+    // 顯示 Cookie 數據
+    document.getElementById('cookie-id').textContent = getCookieId();
+  }
+</script>
+</body>
+</html>
