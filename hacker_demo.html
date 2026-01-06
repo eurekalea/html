@@ -3,194 +3,265 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>機密資料庫入口 | Secure Login</title>
+    <title>ROBOX Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
     <style>
-        /* --- CSS 樣式：暗黑駭客風格 --- */
+        /* --- CSS 樣式：Roblox 深色風格 --- */
         body {
-            background-color: #0d1117;
-            color: #c9d1d9;
-            font-family: 'Courier New', Courier, monospace;
+            background-color: #232527; 
+            color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
             overflow: hidden;
-        }
-
-        /* 背景特效 */
-        .bg-effect {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: repeating-linear-gradient(
-                0deg,
-                rgba(0, 0, 0, 0.15),
-                rgba(0, 0, 0, 0.15) 1px,
-                transparent 1px,
-                transparent 2px
-            );
-            pointer-events: none;
-            z-index: 0;
+            user-select: none; /* 防止選取文字破壞體驗 */
         }
 
         .container {
-            background: #161b22;
-            border: 1px solid #30363d;
-            border-radius: 10px;
+            background: #2b2d31; 
+            border-radius: 12px;
             padding: 40px;
-            width: 350px;
-            box-shadow: 0 0 20px rgba(0, 255, 0, 0.1);
-            position: relative;
-            z-index: 1;
+            width: 360px;
             text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
+            position: relative;
+        }
+
+        /* 模擬 Roblox Logo -> 改為 ROBOX */
+        .logo-area {
+            margin-bottom: 30px;
+        }
+        .logo-text {
+            font-size: 32px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: white;
+            display: inline-block;
+            border: 4px solid white;
+            padding: 5px 10px;
+            transform: rotate(-3deg); /* 保留原本的旋轉角度 */
+            box-shadow: 2px 2px 0px rgba(0,0,0,0.3);
         }
 
         h2 {
-            color: #58a6ff;
-            margin-bottom: 20px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: #ffffff;
         }
 
         .input-group {
             position: relative;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             text-align: left;
         }
 
         label {
-            display: block;
-            margin-bottom: 5px;
-            font-size: 0.8em;
-            color: #8b949e;
+            display: none; 
         }
 
         input {
             width: 100%;
-            padding: 10px;
-            background: #0d1117;
-            border: 1px solid #30363d;
+            padding: 12px 15px;
+            padding-right: 45px; /* 預留空間給眼睛圖示 */
+            background: #393b3d; 
+            border: 2px solid transparent;
             color: #fff;
-            border-radius: 5px;
+            border-radius: 8px; 
             box-sizing: border-box;
-            font-size: 1em;
+            font-size: 16px;
+            font-family: inherit;
             outline: none;
-            transition: border-color 0.3s;
+            transition: all 0.2s;
+        }
+
+        input::placeholder {
+            color: #8d8d8d;
         }
 
         input:focus {
-            border-color: #58a6ff;
-            box-shadow: 0 0 5px rgba(88, 166, 255, 0.5);
+            background: #111216;
+            border-color: #ffffff; 
         }
 
-        /* 眼睛圖示 */
-        .eye-icon {
+        /* Google Material Icons 眼睛樣式 */
+        .material-icons.eye-icon {
             position: absolute;
-            right: 10px;
-            top: 32px;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
             cursor: pointer;
-            font-size: 1.2em;
+            font-size: 24px; /* 圖示大小 */
+            color: #8d8d8d;
             user-select: none;
+        }
+        .material-icons.eye-icon:hover {
+            color: white;
         }
 
         button {
             width: 100%;
             padding: 12px;
-            background: #238636;
-            color: white;
+            background: white; 
+            color: #232527;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 1em;
-            font-weight: bold;
-            transition: background 0.3s;
+            font-size: 18px;
+            font-weight: 700;
+            margin-top: 10px;
+            transition: transform 0.1s, background 0.2s;
         }
 
         button:hover {
-            background: #2ea043;
+            background: #e6e6e6;
+        }
+        
+        button:active {
+            transform: scale(0.98);
         }
 
         .error-msg {
-            color: #ff7b72;
-            font-size: 0.9em;
+            color: #ff6e6e;
+            font-size: 14px;
             margin-top: 15px;
             min-height: 1.2em;
             display: none;
+            font-weight: 500;
         }
 
-        /* 成功登入後的畫面 */
+        .footer-links {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #8d8d8d;
+        }
+        .footer-links span {
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        .footer-links span:hover {
+            color: white;
+        }
+
+        /* --- 成功登入後的畫面 --- */
         #success-view {
             display: none;
         }
         
-        .success-icon {
-            font-size: 3em;
-            color: #2ea043;
-            margin-bottom: 10px;
+        .avatar-circle {
+            width: 80px;
+            height: 80px;
+            background: #393b3d;
+            border-radius: 50%;
+            margin: 0 auto 15px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            border: 3px solid #00b06f; 
+        }
+
+        .user-name-display {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .status-badge {
+            background: #00b06f;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 20px;
         }
 
         .secret-data {
             margin-top: 20px;
             padding: 15px;
-            background: rgba(46, 160, 67, 0.1);
-            border: 1px dashed #2ea043;
-            color: #7ee787;
+            background: #111216;
+            border-radius: 8px;
+            color: #aaaaaa;
             text-align: left;
-            font-size: 0.9em;
+            font-size: 14px;
+            border: 1px solid #393b3d;
+        }
+        
+        .secret-data strong {
+            color: white;
         }
 
         .logout-btn {
-            background: #da3633;
+            background: transparent;
+            border: 1px solid #5a5a5a;
+            color: white;
             margin-top: 20px;
+            font-weight: 500;
         }
         .logout-btn:hover {
-            background: #f85149;
+            background: rgba(255,255,255,0.1);
+            color: white;
         }
 
     </style>
 </head>
 <body>
 
-    <div class="bg-effect"></div>
-
     <div class="container">
         <div id="login-view">
-            <h2>系統登入</h2> <div class="input-group">
-                <label for="username">USERNAME</label>
-                <input type="text" id="username" placeholder="Enter username">
+            <div class="logo-area">
+                <div class="logo-text">ROBOX</div>
+            </div>
+            
+            <h2>Login</h2> 
+
+            <div class="input-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" placeholder="Username / Email / Phone">
             </div>
 
             <div class="input-group">
-                <label for="password">PASSWORD</label>
-                <input type="password" id="password" placeholder="Enter password">
-                <span class="eye-icon" onclick="togglePassword()">🙈</span>
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Password">
+                <span class="material-icons eye-icon" onclick="togglePassword()">visibility_off</span>
             </div>
 
-            <button onclick="attemptLogin()">LOG IN</button>
-            <div id="error-msg" class="error-msg">帳號或密碼錯誤，無法登入</div>
+            <button onclick="attemptLogin()">Log In</button>
+            <div id="error-msg" class="error-msg">Incorrect username or password.</div>
+
+            <div class="footer-links">
+                <span>Forgot Password or Username?</span>
+            </div>
         </div>
 
         <div id="success-view">
-            <div class="success-icon">✔</div>
-            <h2>ACCESS GRANTED</h2>
-            <p>歡迎回來，管理員。</p>
+            <div class="avatar-circle">😎</div>
+            <div class="user-name-display">Student_Admin</div>
+            <div class="status-badge">ONLINE</div>
             
             <div class="secret-data">
-                [機密資料]<br>
-                > 信任邊界：已崩壞<br>
-                > Cookie 狀態：已暴露<br>
-                > 控制權：轉移中...
+                <strong>System Message:</strong><br>
+                Welcome to ROBOX System.<br>
+                <br>
+                <strong>Debug Info:</strong><br>
+                Cookie Status: <span style="color:#00b06f">Active</span><br>
+                Access Level: <span style="color:#00b06f">Developer</span>
             </div>
 
-            <button class="logout-btn" onclick="logout()">LOG OUT</button>
+            <button class="logout-btn" onclick="logout()">Log Out</button>
         </div>
     </div>
 
     <script>
-        // --- 設定正確的帳號密碼 ---
         const CORRECT_USER = "student";
         const CORRECT_PASS = "thisistest";
-        // 駭客要偷的 Token
         const SESSION_KEY = "auth_token"; 
         const SESSION_VALUE = "valid_access_granted_12345";
 
@@ -200,8 +271,6 @@
 
         function checkCookie() {
             let cookies = document.cookie;
-            console.log("Current Cookies:", cookies); 
-
             if (cookies.includes(`${SESSION_KEY}=${SESSION_VALUE}`)) {
                 showSuccessPage();
             } else {
@@ -209,19 +278,19 @@
             }
         }
 
-        // 修改點 2: 修正眼睛切換邏輯
+        // 修改點：切換 Google Material Icons
         function togglePassword() {
             const pwdInput = document.getElementById("password");
             const icon = document.querySelector(".eye-icon");
             
             if (pwdInput.type === "password") {
-                // 變成明碼 -> 眼睛睜開
+                // 變成明碼 -> 眼睛打開 (visibility)
                 pwdInput.type = "text";
-                icon.textContent = "👁️"; 
+                icon.textContent = "visibility"; 
             } else {
-                // 變成密碼 -> 眼睛閉上
+                // 變成密碼 -> 眼睛閉上 (visibility_off)
                 pwdInput.type = "password";
-                icon.textContent = "🙈"; 
+                icon.textContent = "visibility_off"; 
             }
         }
 
@@ -229,22 +298,23 @@
             const userIn = document.getElementById("username").value;
             const passIn = document.getElementById("password").value;
             const errorDiv = document.getElementById("error-msg");
+            const container = document.querySelector('.container');
 
             if (userIn === CORRECT_USER && passIn === CORRECT_PASS) {
-                // 登入成功：寫入 Cookie (有效期 1 天)
                 document.cookie = `${SESSION_KEY}=${SESSION_VALUE}; path=/; max-age=86400`;
-                
                 errorDiv.style.display = "none";
-                alert("驗證通過！正在寫入 Cookie...");
                 showSuccessPage();
             } else {
                 errorDiv.style.display = "block";
-                console.warn("Login Failed");
+                // 震動特效
+                container.style.transform = 'translateX(5px)';
+                setTimeout(() => { container.style.transform = 'translateX(-5px)'; }, 50);
+                setTimeout(() => { container.style.transform = 'translateX(5px)'; }, 100);
+                setTimeout(() => { container.style.transform = 'translateX(0)'; }, 150);
             }
         }
 
         function logout() {
-            // 刪除 Cookie
             document.cookie = `${SESSION_KEY}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
             location.reload(); 
         }
