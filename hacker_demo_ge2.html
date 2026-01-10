@@ -1,333 +1,365 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ROBOX Login</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<html lang="zh-TW"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>ROBOX Login</title> <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet"> <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<style>
+    /* --- CSS 樣式：Roblox 深色風格 (完全未修改) --- */
+    body {
+        background-color: #232527; 
+        color: #ffffff;
+        font-family: 'Montserrat', sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        overflow: hidden;
+        user-select: none;
+    }
+
+    .container {
+        background: #2b2d31; 
+        border-radius: 12px;
+        padding: 40px;
+        width: 360px;
+        text-align: center;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
+        position: relative;
+    }
+
+    .logo-area {
+        margin-bottom: 30px;
+    }
+    .logo-text {
+        font-size: 32px;
+        font-weight: 900;
+        letter-spacing: 2px;
+        color: white;
+        display: inline-block;
+        border: 4px solid white;
+        padding: 5px 10px;
+        transform: rotate(-3deg);
+        box-shadow: 2px 2px 0px rgba(0,0,0,0.3);
+    }
+
+    h2 {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 30px;
+        color: #ffffff;
+    }
+
+    .input-group {
+        position: relative;
+        margin-bottom: 15px;
+        text-align: left;
+    }
+
+    label {
+        display: none; 
+    }
+
+    input {
+        width: 100%;
+        padding: 12px 15px;
+        padding-right: 45px;
+        background: #393b3d; 
+        border: 2px solid transparent;
+        color: #fff;
+        border-radius: 8px; 
+        box-sizing: border-box;
+        font-size: 16px;
+        font-family: inherit;
+        outline: none;
+        transition: all 0.2s;
+    }
+
+    input::placeholder {
+        color: #8d8d8d;
+    }
+
+    input:focus {
+        background: #111216;
+        border-color: #ffffff; 
+    }
+
+    .material-icons.eye-icon {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        font-size: 24px;
+        color: #8d8d8d;
+        user-select: none;
+    }
+    .material-icons.eye-icon:hover {
+        color: white;
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        background: white; 
+        color: #232527;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 18px;
+        font-weight: 700;
+        margin-top: 10px;
+        transition: transform 0.1s, background 0.2s;
+    }
+
+    button:hover {
+        background: #e6e6e6;
+    }
     
-    <style>
-        /* --- CSS 樣式：Roblox 深色風格 --- */
-        body {
-            background-color: #232527; 
-            color: #ffffff;
-            font-family: 'Montserrat', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            overflow: hidden;
-            user-select: none; /* 防止選取文字破壞體驗 */
-        }
+    button:active {
+        transform: scale(0.98);
+    }
 
-        .container {
-            background: #2b2d31; 
-            border-radius: 12px;
-            padding: 40px;
-            width: 360px;
-            text-align: center;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
-            position: relative;
-        }
+    .error-msg {
+        color: #ff6e6e;
+        font-size: 14px;
+        margin-top: 15px;
+        min-height: 1.2em;
+        display: none;
+        font-weight: 500;
+    }
 
-        /* 模擬 Roblox Logo -> 改為 ROBOX */
-        .logo-area {
-            margin-bottom: 30px;
-        }
-        .logo-text {
-            font-size: 32px;
-            font-weight: 900;
-            letter-spacing: 2px;
-            color: white;
-            display: inline-block;
-            border: 4px solid white;
-            padding: 5px 10px;
-            transform: rotate(-3deg); /* 保留原本的旋轉角度 */
-            box-shadow: 2px 2px 0px rgba(0,0,0,0.3);
-        }
+    .footer-links {
+        margin-top: 20px;
+        font-size: 12px;
+        color: #8d8d8d;
+    }
+    .footer-links span {
+        cursor: pointer;
+        text-decoration: underline;
+    }
+    .footer-links span:hover {
+        color: white;
+    }
 
-        h2 {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 30px;
-            color: #ffffff;
-        }
+    #success-view {
+        display: none;
+    }
+    
+    .avatar-circle {
+        width: 80px;
+        height: 80px;
+        background: #393b3d;
+        border-radius: 50%;
+        margin: 0 auto 15px auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 40px;
+        border: 3px solid #00b06f; 
+    }
 
-        .input-group {
-            position: relative;
-            margin-bottom: 15px;
-            text-align: left;
-        }
+    .user-name-display {
+        font-size: 22px;
+        font-weight: 700;
+        margin-bottom: 5px;
+    }
 
-        label {
-            display: none; 
-        }
+    .status-badge {
+        background: #00b06f;
+        color: white;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: bold;
+        display: inline-block;
+        margin-bottom: 20px;
+    }
 
-        input {
-            width: 100%;
-            padding: 12px 15px;
-            padding-right: 45px; /* 預留空間給眼睛圖示 */
-            background: #393b3d; 
-            border: 2px solid transparent;
-            color: #fff;
-            border-radius: 8px; 
-            box-sizing: border-box;
-            font-size: 16px;
-            font-family: inherit;
-            outline: none;
-            transition: all 0.2s;
-        }
+    .secret-data {
+        margin-top: 20px;
+        padding: 15px;
+        background: #111216;
+        border-radius: 8px;
+        color: #aaaaaa;
+        text-align: left;
+        font-size: 14px;
+        border: 1px solid #393b3d;
+    }
+    
+    .secret-data strong {
+        color: white;
+    }
 
-        input::placeholder {
-            color: #8d8d8d;
-        }
+    .logout-btn {
+        background: transparent;
+        border: 1px solid #5a5a5a;
+        color: white;
+        margin-top: 20px;
+        font-weight: 500;
+    }
+    .logout-btn:hover {
+        background: rgba(255,255,255,0.1);
+        color: white;
+    }
 
-        input:focus {
-            background: #111216;
-            border-color: #ffffff; 
-        }
+</style>
+</head> <body>
 
-        /* Google Material Icons 眼睛樣式 */
-        .material-icons.eye-icon {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-            font-size: 24px; /* 圖示大小 */
-            color: #8d8d8d;
-            user-select: none;
-        }
-        .material-icons.eye-icon:hover {
-            color: white;
-        }
-
-        button {
-            width: 100%;
-            padding: 12px;
-            background: white; 
-            color: #232527;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 18px;
-            font-weight: 700;
-            margin-top: 10px;
-            transition: transform 0.1s, background 0.2s;
-        }
-
-        button:hover {
-            background: #e6e6e6;
-        }
+<div class="container">
+    <div id="login-view">
+        <div class="logo-area">
+            <div class="logo-text">ROBOX</div>
+        </div>
         
-        button:active {
-            transform: scale(0.98);
-        }
+        <h2>Login</h2> 
 
-        .error-msg {
-            color: #ff6e6e;
-            font-size: 14px;
-            margin-top: 15px;
-            min-height: 1.2em;
-            display: none;
-            font-weight: 500;
-        }
-
-        .footer-links {
-            margin-top: 20px;
-            font-size: 12px;
-            color: #8d8d8d;
-        }
-        .footer-links span {
-            cursor: pointer;
-            text-decoration: underline;
-        }
-        .footer-links span:hover {
-            color: white;
-        }
-
-        /* --- 成功登入後的畫面 --- */
-        #success-view {
-            display: none;
-        }
-        
-        .avatar-circle {
-            width: 80px;
-            height: 80px;
-            background: #393b3d;
-            border-radius: 50%;
-            margin: 0 auto 15px auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 40px;
-            border: 3px solid #00b06f; 
-        }
-
-        .user-name-display {
-            font-size: 22px;
-            font-weight: 700;
-            margin-bottom: 5px;
-        }
-
-        .status-badge {
-            background: #00b06f;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            display: inline-block;
-            margin-bottom: 20px;
-        }
-
-        .secret-data {
-            margin-top: 20px;
-            padding: 15px;
-            background: #111216;
-            border-radius: 8px;
-            color: #aaaaaa;
-            text-align: left;
-            font-size: 14px;
-            border: 1px solid #393b3d;
-        }
-        
-        .secret-data strong {
-            color: white;
-        }
-
-        .logout-btn {
-            background: transparent;
-            border: 1px solid #5a5a5a;
-            color: white;
-            margin-top: 20px;
-            font-weight: 500;
-        }
-        .logout-btn:hover {
-            background: rgba(255,255,255,0.1);
-            color: white;
-        }
-
-    </style>
-</head>
-<body>
-
-    <div class="container">
-        <div id="login-view">
-            <div class="logo-area">
-                <div class="logo-text">ROBOX</div>
-            </div>
-            
-            <h2>Login</h2> 
-
-            <div class="input-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" placeholder="Username / Email / Phone">
-            </div>
-
-            <div class="input-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" placeholder="Password">
-                <span class="material-icons eye-icon" onclick="togglePassword()">visibility_off</span>
-            </div>
-
-            <button onclick="attemptLogin()">Log In</button>
-            <div id="error-msg" class="error-msg">Incorrect username or password.</div>
-
-            <div class="footer-links">
-                <span>Forgot Password or Username?</span>
-            </div>
+        <div class="input-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" placeholder="Username / Email / Phone">
         </div>
 
-        <div id="success-view">
-            <div class="avatar-circle">😎</div>
-            <div class="user-name-display">Student_Admin</div>
-            <div class="status-badge">ONLINE</div>
-            
-            <div class="secret-data">
-                <strong>System Message:</strong><br>
-                Welcome to ROBOX System.<br>
-                <br>
-                <strong>Debug Info:</strong><br>
-                Cookie Status: <span style="color:#00b06f">Active</span><br>
-                Access Level: <span style="color:#00b06f">Developer</span>
-            </div>
+        <div class="input-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Password">
+            <span class="material-icons eye-icon" onclick="togglePassword()">visibility_off</span>
+        </div>
 
-            <button class="logout-btn" onclick="logout()">Log Out</button>
+        <button onclick="attemptLogin()">Log In</button>
+        <div id="error-msg" class="error-msg">Incorrect username or password.</div>
+
+        <div class="footer-links">
+            <span>Forgot Password or Username?</span>
         </div>
     </div>
 
-    <script>
-        const CORRECT_USER = "student";
-        const CORRECT_PASS = "thisistest";
-        const SESSION_KEY = "auth_token"; 
-        const SESSION_VALUE = "valid_access_granted_12345";
+    <div id="success-view">
+        <div class="avatar-circle">😎</div>
+        <div class="user-name-display">Student_Admin</div>
+        <div class="status-badge">ONLINE</div>
+        
+        <div class="secret-data">
+            <strong>System Message:</strong><br>
+            Welcome to ROBOX System.<br>
+            <br>
+            <strong>Debug Info:</strong><br>
+            Cookie Status: <span style="color:#00b06f">Active</span><br>
+            Access Level: <span style="color:#00b06f">Developer</span><br>
+            <span style="font-size:10px; color:#555;" id="token-display"></span>
+        </div>
 
-        window.onload = function() {
-            checkCookie();
-        };
+        <button class="logout-btn" onclick="logout()">Log Out</button>
+    </div>
+</div>
 
-        function checkCookie() {
-            let cookies = document.cookie;
-            if (cookies.includes(`${SESSION_KEY}=${SESSION_VALUE}`)) {
+<script>
+    // 設定區：帳密不變，Cookie 名稱不變
+    const CORRECT_USER = "student";
+    const CORRECT_PASS = "thisistest";
+    const SESSION_KEY = "auth_token"; 
+    
+    // 模擬伺服器端資料庫的 Key (用於驗證 Token 是否過期/合法)
+    const SERVER_DB_KEY = "server_valid_token_record";
+
+    window.onload = function() {
+        checkAuth();
+    };
+
+    // 1. 驗證邏輯：比對 Cookie 與 模擬伺服器紀錄
+    function checkAuth() {
+        const clientCookie = getCookie(SESSION_KEY);
+        const serverRecord = localStorage.getItem(SERVER_DB_KEY);
+
+        // 如果兩邊都有資料
+        if (clientCookie) {
+            if (clientCookie === serverRecord) {
+                // Token 一致，驗證成功
+                document.getElementById("token-display").innerText = "Token: " + clientCookie.substring(0, 15) + "...";
                 showSuccessPage();
             } else {
-                showLoginPage();
+                // 有 Cookie 但跟伺服器紀錄不符 (模擬駭客使用舊憑證)
+                console.error("401 Unauthorized: Token mismatch or expired.");
+                alert("⚠️ Error 401: Unauthorized\n\n系統偵測到無效的憑證 (Invalid Token)。\n您的連線已逾時或憑證已被撤銷。");
+                logout(); // 強制登出銷毀無效憑證
             }
+        } else {
+            // 沒有 Cookie，直接顯示登入頁
+            showLoginPage();
         }
+    }
 
-        // 修改點：切換 Google Material Icons
-        function togglePassword() {
-            const pwdInput = document.getElementById("password");
-            const icon = document.querySelector(".eye-icon");
-            
-            if (pwdInput.type === "password") {
-                // 變成明碼 -> 眼睛打開 (visibility)
-                pwdInput.type = "text";
-                icon.textContent = "visibility"; 
-            } else {
-                // 變成密碼 -> 眼睛閉上 (visibility_off)
-                pwdInput.type = "password";
-                icon.textContent = "visibility_off"; 
-            }
+    // 2. 登入邏輯：生成獨一無二 Token 並同步存入 Server 與 Client
+    function attemptLogin() {
+        const userIn = document.getElementById("username").value;
+        const passIn = document.getElementById("password").value;
+        const errorDiv = document.getElementById("error-msg");
+        const container = document.querySelector('.container');
+
+        if (userIn === CORRECT_USER && passIn === CORRECT_PASS) {
+            // 生成隨機 Token (模擬獨一無二憑證)
+            const uniqueToken = generateRandomToken();
+
+            // A. 寫入模擬伺服器 (localStorage)
+            localStorage.setItem(SERVER_DB_KEY, uniqueToken);
+
+            // B. 寫入使用者 Cookie
+            document.cookie = `${SESSION_KEY}=${uniqueToken}; path=/; max-age=86400`;
+
+            errorDiv.style.display = "none";
+            checkAuth(); // 重新驗證並跳轉
+        } else {
+            errorDiv.style.display = "block";
+            // 震動特效
+            container.style.transform = 'translateX(5px)';
+            setTimeout(() => { container.style.transform = 'translateX(-5px)'; }, 50);
+            setTimeout(() => { container.style.transform = 'translateX(5px)'; }, 100);
+            setTimeout(() => { container.style.transform = 'translateX(0)'; }, 150);
         }
+    }
 
-        function attemptLogin() {
-            const userIn = document.getElementById("username").value;
-            const passIn = document.getElementById("password").value;
-            const errorDiv = document.getElementById("error-msg");
-            const container = document.querySelector('.container');
+    // 3. 登出邏輯：銷毀雙邊紀錄
+    function logout() {
+        // A. 銷毀伺服器端紀錄
+        localStorage.removeItem(SERVER_DB_KEY);
 
-            if (userIn === CORRECT_USER && passIn === CORRECT_PASS) {
-                document.cookie = `${SESSION_KEY}=${SESSION_VALUE}; path=/; max-age=86400`;
-                errorDiv.style.display = "none";
-                showSuccessPage();
-            } else {
-                errorDiv.style.display = "block";
-                // 震動特效
-                container.style.transform = 'translateX(5px)';
-                setTimeout(() => { container.style.transform = 'translateX(-5px)'; }, 50);
-                setTimeout(() => { container.style.transform = 'translateX(5px)'; }, 100);
-                setTimeout(() => { container.style.transform = 'translateX(0)'; }, 150);
-            }
+        // B. 銷毀 Client 端 Cookie
+        document.cookie = `${SESSION_KEY}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+        
+        location.reload(); 
+    }
+
+    // 輔助函式：生成亂數 Token
+    function generateRandomToken() {
+        return 'rbx_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now().toString(36);
+    }
+
+    // 輔助函式：取得特定 Cookie 值
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+        return null;
+    }
+
+    function togglePassword() {
+        const pwdInput = document.getElementById("password");
+        const icon = document.querySelector(".eye-icon");
+        if (pwdInput.type === "password") {
+            pwdInput.type = "text";
+            icon.textContent = "visibility"; 
+        } else {
+            pwdInput.type = "password";
+            icon.textContent = "visibility_off"; 
         }
+    }
 
-        function logout() {
-            document.cookie = `${SESSION_KEY}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
-            location.reload(); 
-        }
+    function showSuccessPage() {
+        document.getElementById("login-view").style.display = "none";
+        document.getElementById("success-view").style.display = "block";
+    }
 
-        function showSuccessPage() {
-            document.getElementById("login-view").style.display = "none";
-            document.getElementById("success-view").style.display = "block";
-        }
-
-        function showLoginPage() {
-            document.getElementById("login-view").style.display = "block";
-            document.getElementById("success-view").style.display = "none";
-        }
-    </script>
-</body>
-</html>
+    function showLoginPage() {
+        document.getElementById("login-view").style.display = "block";
+        document.getElementById("success-view").style.display = "none";
+    }
+</script>
+</body> </html>
