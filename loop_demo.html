@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scratch 累加教學模擬器</title>
+    <style>
+        :root {
+            --scratch-motion: #4c97ff;
+            --scratch-looks: #9966ff;
+            --scratch-sound: #cf63cf;
+            --scratch-events: #ffbf00;
+            --scratch-control: #ffab19;
+            --scratch-sensing: #5cb1d6;
+            --scratch-operators: #59c059;
+            --scratch-variables: #ff8c1a;
+            --bg-color: #e6f0ff;
+        }
+
+        body {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h2 { color: #575e75; margin-bottom: 10px; }
+        
+        .controls {
+            margin-bottom: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.1);
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        input { width: 50px; padding: 5px; text-align: center; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; }
+        
+        button {
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            color: white;
+            font-size: 16px;
+            transition: 0.1s;
+        }
+        .btn-green-flag { background-color: #4c97ff; display: flex; align-items: center; gap: 5px; }
+        .btn-green-flag::before { content: '🚩'; } 
+        .btn-reset { background-color: #ff6680; }
+        button:active { transform: scale(0.95); opacity: 0.9; }
+
+        /* 模擬 Scratch 介面 */
+        .scratch-interface {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            width: 100%;
+            max-width: 900px;
+            justify-content: center;
+        }
+
+        /* 程式積木區 */
+        .script-area {
+            flex: 1;
+            min-width: 320px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            position: relative;
+        }
+
+        /* 舞台區 */
+        .stage-area {
+            flex: 1;
+            min-width: 320px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            background-image: radial-gradient(#dceeff 2px, transparent 2px);
+            background-size: 20px 20px;
+        }
+
+        /* 積木樣式 */
+        .block {
+            padding: 10px 15px;
+            margin-bottom: -3px; /* 接合感 */
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            border-radius: 4px;
+            cursor: default;
+            position: relative;
+            box-shadow: inset 1px 1px 0 rgba(255,255,255,0.3), 1px 1px 2px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+        }
+        
+        /* 積木凹凸造型模擬 (簡化版) */
+        .block:not(:last-child) { border-bottom-left-radius: 2px; border-bottom-right-radius: 2px; }
+        
+        /* 類型顏色 */
+        .b-event { background-color: var(--scratch-events); border: 1px solid #cc9900; border-radius: 20px 20px 4px 4px; margin-bottom: 2px;}
+        .b-var { background-color: var(--scratch-variables); border: 1px solid #cc7015; }
+        .b-control { background-color: var(--scratch-control); border: 1px solid #cf8b17; padding-left: 15px;}
+        .b-looks { background-color: var(--scratch-looks); border: 1px solid #774dcf; }
+
+        /* C型迴圈結構 */
+        .c-block-container {
+            background-color: var(--scratch-control);
+            padding: 5px 0 5px 10px; /* 左邊留厚度 */
+            border-radius: 4px;
+            margin-bottom: -3px;
+            border: 1px solid #cf8b17;
+            display: flex;
+            flex-direction: column;
+        }
+        .c-mouth {
+            padding-left: 15px; /* 內縮 */
+            background: white; /* 內部鏤空 */
+            min-height: 40px;
+            border-top: 1px solid #cf8b17;
+            border-bottom: 1px solid #cf8b17;
+            display: flex;
+            flex-direction: column;
+        }
+        .c-header, .c-footer {
+            padding: 8px 10px;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        /* 輸入框模擬 */
+        .val-bubble {
+            background: white;
+            color: black;
+            border-radius: 10px;
+            padding: 2px 8px;
+            margin: 0 5px;
+            font-weight: normal;
+        }
+        
+        .var-oval {
+            background: var(--scratch-variables);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.9em;
+            margin: 0 5px;
+            border: 1px solid rgba(0,0,0,0.2);
+        }
+
+        /* 高亮執行中積木 */
+        .active-block {
+            filter: drop-shadow(0 0 5px yellow);
+            transform: scale(1.02);
+            z-index: 10;
+            border: 2px solid white !important;
+        }
+
+        /* 變數監看視窗 (Stage Monitor) */
+        .monitor {
+            background: #e6e7e8;
+            border: 1px solid #b0b0b0;
+            border-radius: 5px;
+            padding: 5px;
+            margin: 5px;
+            width: 120px;
+            font-size: 12px;
+            color: #575e75;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .monitor-val {
+            background: #ff8c1a;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+            min-width: 30px;
+            text-align: center;
+        }
+        .monitor-val.changed {
+            animation: pop 0.3s ease;
+        }
+
+        @keyframes pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.4); background: red; }
+            100% { transform: scale(1); }
+        }
+
+        /* 角色 */
+        .sprite {
+            font-size: 80px;
+            margin-top: 50px;
+            position: relative;
+        }
+        .bubble {
+            position: absolute;
+            top: -60px;
+            left: 80px;
+            background: white;
+            border: 2px solid #575e75;
+            border-radius: 10px;
+            padding: 10px;
+            width: 180px;
+            font-size: 14px;
+            display: none;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+        }
+        .bubble::after {
+            content: '';
+            position: absolute;
+            left: -10px;
+            top: 20px;
+            border-width: 10px 10px 10px 0;
+            border-style: solid;
+            border-color: transparent #575e75 transparent transparent;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h2>Scratch 重複結構：累加 (Summation)</h2>
+    <p style="color:#666; font-size: 0.9em;">教學重點：變數「改變」的意思就是累加</p>
+
+    <div class="controls">
+        <label>設定重複 N = <input type="number" id="inputN" value="5" min="1" max="20"></label>
+        <button class="btn-green-flag" onclick="startOrNext()">單步執行</button>
+        <button class="btn-reset" onclick="reset()">停止並重置</button>
+    </div>
+
+    <div class="scratch-interface">
+        
+        <div class="script-area">
+            <div id="b1" class="block b-event">當 🚩 被點擊</div>
+            
+            <div id="b2" class="block b-var">變數 <span class="val-bubble" style="background:none; color:white; border:none; padding:0;">sum</span> 設為 <span class="val-bubble">0</span></div>
+            
+            <div id="b3" class="block b-var">變數 <span class="val-bubble" style="background:none; color:white; border:none; padding:0;">i</span> 設為 <span class="val-bubble">1</span></div>
+
+            <div id="b4" class="c-block-container">
+                <div class="c-header">
+                    重複 <span class="val-bubble" id="block-n-val">5</span> 次
+                </div>
+                <div class="c-mouth">
+                    <div id="b5" class="block b-var" style="margin-top:5px;">
+                        變數 <span class="var-oval">sum</span> 改變 <span class="var-oval">i</span>
+                    </div>
+                    <div id="b6" class="block b-var">
+                        變數 <span class="var-oval">i</span> 改變 <span class="val-bubble">1</span>
+                    </div>
+                    <div id="b7" class="block b-looks">
+                        說出 <span class="var-oval">sum</span> 持續 <span class="val-bubble">1</span> 秒
+                    </div>
+                </div>
+            </div>
+            
+            <div id="b8" class="block b-looks" style="margin-top: 5px;">說出 <span class="val-bubble">計算完成!</span></div>
+
+        </div>
+
+        <div class="stage-area">
+            <div style="width: 100%; display: flex; flex-direction: column; align-items: flex-start;">
+                <div class="monitor">
+                    <b>sum</b> (累加)
+                    <div id="monitor-sum" class="monitor-val">0</div>
+                </div>
+                <div class="monitor">
+                    <b>i</b> (計數)
+                    <div id="monitor-i" class="monitor-val">0</div>
+                </div>
+            </div>
+
+            <div class="sprite">
+                🐱
+                <div id="speech-bubble" class="bubble">準備開始...</div>
+            </div>
+            
+            <div id="math-hint" style="margin-top: 20px; color: #666; font-family: monospace; font-size: 18px; background: rgba(255,255,255,0.8); padding: 10px; border-radius: 5px;">
+                目前算式: 0
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let step = 0;
+        let i = 1;
+        let sum = 0;
+        let n = 5;
+        let loopCount = 0;
+
+        function reset() {
+            step = 0;
+            i = 1;
+            sum = 0;
+            loopCount = 0;
+            n = parseInt(document.getElementById('inputN').value);
+            document.getElementById('block-n-val').innerText = n;
+            
+            updateMonitor('sum', 0);
+            updateMonitor('i', 0); // 初始畫面通常顯示上次結果，這裡歸零比較好懂
+            
+            clearActive();
+            say("準備好就按綠旗！");
+            document.getElementById('math-hint').innerText = "等待開始...";
+        }
+
+        function startOrNext() {
+            n = parseInt(document.getElementById('inputN').value);
+            document.getElementById('block-n-val').innerText = n;
+
+            // 狀態機
+            // 0: Start
+            // 1: Init sum
+            // 2: Init i
+            // 3: Check Loop (Loop Start)
+            // 4: sum change by i
+            // 5: i change by 1
+            // 6: say sum
+            // 7: Loop End / Repeat logic
+            // 8: Finish
+
+            clearActive();
+
+            if (step === 0) {
+                highlight('b1');
+                say("開始囉！");
+                step = 1;
+            } else if (step === 1) {
+                sum = 0;
+                highlight('b2');
+                updateMonitor('sum', sum);
+                say("把 sum 歸零");
+                document.getElementById('math-hint').innerText = "Sum = 0";
+                step = 2;
+            } else if (step === 2) {
+                i = 1;
+                highlight('b3');
+                updateMonitor('i', i);
+                say("把 i 設為 1 (從1開始)");
+                step = 3;
+            } else if (step === 3) {
+                // 進入迴圈頭部
+                if (loopCount < n) {
+                    highlight('b4'); // Highlight C-header
+                    say(`第 ${loopCount + 1} 次迴圈，準備累加`);
+                    step = 4;
+                } else {
+                    step = 8; // 迴圈結束
+                    startOrNext(); // 直接跳轉
+                    return;
+                }
+            } else if (step === 4) {
+                // 核心累加
+                highlight('b5');
+                let oldSum = sum;
+                sum = sum + i;
+                updateMonitor('sum', sum);
+                say(`sum 改變 ${i} (現在 sum 是 ${sum})`);
+                document.getElementById('math-hint').innerHTML = `Sum = ${oldSum} + <span style='color:red'>${i}</span> = <b>${sum}</b>`;
+                step = 5;
+            } else if (step === 5) {
+                highlight('b6');
+                i = i + 1;
+                updateMonitor('i', i);
+                say("i 改變 1 (準備下一個數字)");
+                step = 6;
+            } else if (step === 6) {
+                highlight('b7');
+                say(`目前總和是 ${sum}`);
+                step = 7;
+            } else if (step === 7) {
+                // 迴圈底部，判斷是否回頭
+                loopCount++;
+                step = 3; // 回到迴圈檢查點
+                startOrNext(); // 自動跳轉回頭部讓體驗更流暢
+            } else if (step === 8) {
+                highlight('b8');
+                say(`計算完成！ 1加到${n}等於${sum}`);
+                document.getElementById('math-hint').innerText = `最終結果: ${sum}`;
+                step = 9; // End
+            } else if (step === 9) {
+                alert("程式結束，請按重置。");
+            }
+        }
+
+        // 工具函式
+        function highlight(id) {
+            const el = document.getElementById(id);
+            if (el) el.classList.add('active-block');
+        }
+
+        function clearActive() {
+            document.querySelectorAll('.active-block').forEach(el => el.classList.remove('active-block'));
+        }
+
+        function updateMonitor(name, val) {
+            const el = document.getElementById('monitor-' + name);
+            el.innerText = val;
+            el.classList.remove('changed');
+            void el.offsetWidth;
+            el.classList.add('changed');
+        }
+
+        function say(text) {
+            const b = document.getElementById('speech-bubble');
+            b.innerText = text;
+            b.style.display = 'block';
+        }
+
+        // Init
+        reset();
+    </script>
+</body>
+</html>
