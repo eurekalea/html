@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>假訊息案例滑動互動</title>
+  <style>
+    :root {
+      --bg1: #0b1120;
+      --bg2: #172554;
+      --panel: rgba(15, 23, 42, 0.76);
+      --line: rgba(255,255,255,0.14);
+      --text: #f8fafc;
+      --muted: #cbd5e1;
+      --green: #22c55e;
+      --red: #ef4444;
+      --blue: #60a5fa;
+      --shadow: 0 24px 80px rgba(0, 0, 0, .34);
+      --radius: 30px;
+      --phone-ratio: 9 / 18;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top, rgba(96,165,250,.25), transparent 28%),
+        linear-gradient(180deg, var(--bg2) 0%, var(--bg1) 100%);
+      min-height: 100vh;
+    }
+    .app {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 18px 16px 28px;
+      gap: 16px;
+    }
+    .topbar {
+      width: min(1100px, 100%);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .title-wrap h1 {
+      margin: 0;
+      font-size: clamp(1.4rem, 2.3vw, 2rem);
+    }
+    .title-wrap p {
+      margin: 6px 0 0;
+      color: var(--muted);
+    }
+    .progress {
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.1);
+      border: 1px solid rgba(255,255,255,.12);
+      font-weight: 800;
+    }
+    .stage {
+      width: min(1100px, 100%);
+      flex: 1;
+      display: grid;
+      place-items: center;
+      padding: 4px 0 0;
+    }
+    .phone-shell {
+      width: min(92vw, 390px);
+      aspect-ratio: var(--phone-ratio);
+      position: relative;
+      border-radius: 44px;
+      background: linear-gradient(180deg, #1e293b 0%, #020617 100%);
+      box-shadow: var(--shadow);
+      padding: 14px;
+      border: 1px solid rgba(255,255,255,.18);
+    }
+    .phone-shell::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 10px;
+      transform: translateX(-50%);
+      width: 34%;
+      height: 24px;
+      border-radius: 0 0 18px 18px;
+      background: #020617;
+      z-index: 4;
+      opacity: .9;
+    }
+    .phone-screen {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      border-radius: 34px;
+      background: #020617;
+      border: 1px solid rgba(255,255,255,.08);
+    }
+    .phone-screen.summary-mode {
+      overflow-y: auto;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+    }
+    .image-viewport {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background: #0f172a;
+    }
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      will-change: transform;
+      transition: transform .34s cubic-bezier(.22,.78,.17,1);
+    }
+    .slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      background: #e5e7eb;
+    }
+    .scrim {
+      position: absolute;
+      inset: auto 0 0 0;
+      height: 34%;
+      background: linear-gradient(180deg, rgba(2,6,23,0) 0%, rgba(2,6,23,.82) 42%, rgba(2,6,23,.96) 100%);
+      pointer-events: none;
+      z-index: 2;
+    }
+    .case-meta {
+      position: absolute;
+      left: 14px;
+      right: 14px;
+      bottom: 16px;
+      z-index: 3;
+      padding: 14px 16px;
+      border-radius: 22px;
+      background: rgba(15, 23, 42, .56);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255,255,255,.1);
+      box-shadow: 0 8px 32px rgba(0,0,0,.22);
+    }
+    .case-meta .index {
+      color: #bfdbfe;
+      font-size: .86rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+    .case-meta .case-title {
+      font-size: clamp(1rem, 2vw, 1.15rem);
+      font-weight: 900;
+      line-height: 1.42;
+    }
+    .badge {
+      position: absolute;
+      top: 68px;
+      z-index: 3;
+      padding: 10px 14px;
+      border-radius: 16px;
+      border: 3px solid currentColor;
+      font-size: 1rem;
+      font-weight: 900;
+      letter-spacing: .08em;
+      background: rgba(15,23,42,.55);
+      opacity: 0;
+      transition: opacity .15s ease;
+      pointer-events: none;
+    }
+    .badge.left { left: 16px; color: #fca5a5; }
+    .badge.right { right: 16px; color: #86efac; }
+    .controls {
+      width: min(1100px, 100%);
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+    button {
+      border: 0;
+      border-radius: 999px;
+      padding: 14px 22px;
+      font-size: 1rem;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 16px 40px rgba(0,0,0,.28);
+    }
+    .btn-left { background: #fee2e2; color: #991b1b; }
+    .btn-right { background: #dcfce7; color: #166534; }
+    .btn-reset, .btn-export, .btn-restart { background: #dbeafe; color: #1d4ed8; }
+    .summary {
+      width: 100%;
+      min-height: 100%;
+      background: linear-gradient(180deg, rgba(15,23,42,.96) 0%, rgba(2,6,23,.98) 100%);
+      padding: 22px 18px 28px;
+    }
+    .summary h2 { margin: 0 0 16px; font-size: clamp(1.4rem, 2vw, 2rem); }
+    .summary p { color: var(--muted); margin-top: 0; }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin: 18px 0 24px;
+    }
+    .stat-card {
+      background: rgba(15,23,42,.55);
+      border-radius: 22px;
+      padding: 18px;
+      border: 1px solid rgba(255,255,255,.08);
+    }
+    .big { font-size: 2rem; font-weight: 900; margin: 6px 0; }
+    .thumb-section { margin-top: 18px; }
+    .thumb-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 12px;
+    }
+    .thumb {
+      background: rgba(15,23,42,.48);
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.08);
+    }
+    .thumb img {
+      width: 100%;
+      aspect-ratio: 3/4;
+      object-fit: cover;
+      display: block;
+      background: #e5e7eb;
+    }
+    .thumb .caption {
+      padding: 10px;
+      font-size: .84rem;
+      line-height: 1.36;
+    }
+    .empty {
+      padding: 16px;
+      border-radius: 16px;
+      background: rgba(15,23,42,.35);
+      color: var(--muted);
+    }
+    @media (max-width: 760px) {
+      .phone-shell { width: min(96vw, 390px); }
+      .controls button { flex: 1 1 calc(50% - 8px); }
+      .btn-reset, .btn-restart { flex-basis: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="topbar">
+      <div class="title-wrap">
+        <h1>假訊息案例滑動互動</h1>
+        <p>固定比例手機卡槽版。按右邊是分享，按左邊是不分享；下一張會在框內平行滑入。</p>
+      </div>
+      <div class="progress" id="progressText">案例 1 / 30</div>
+    </div>
+
+    <div class="stage">
+      <div class="phone-shell">
+        <div class="phone-screen" id="cardWrap"></div>
+      </div>
+    </div>
+
+    <div class="controls" id="controls">
+      <button class="btn-left" id="rejectBtn">← 不分享</button>
+      <button class="btn-right" id="shareBtn">分享給朋友 →</button>
+      <button class="btn-reset" id="resetBtn">重新開始</button>
+    </div>
+  </div>
+
+  <script>
+    const caseTitles = [
+      '關羽刮骨療傷',
+      '趙雲長坂坡七進七出',
+      '住飯店也要能夠清涼一下！',
+      '台灣品牌搭載AI新科技 Zenfone 12 Ultra',
+      '相機產業的蕭條與沒落',
+      '周幽王烽火戲諸侯',
+      '秦始皇焚書坑儒',
+      '光電板被吹落到魚池有毒害？',
+      '丹娜絲重創嘉義！光電板遭強風摧毀',
+      '鳳凰颱風來襲，部分縣市宣布停班停課',
+      '放1天颱風假台灣損失315億！',
+      '丁允恭專欄：風險應該由勞資與政府三方分攤',
+      '短影音看多變抖音腦？',
+      '避免在電源軌道附近使用藍牙耳機！',
+      '手機電池剩一格，輻射是千倍',
+      '手機訊號剩一格，電磁波更強',
+      '在網路世界中保護你的隱私',
+      '冷知識，拍護照封面會洩漏個資',
+      '拍照比YA恐被偷指紋？',
+      '北宋第一渣男 - 風流駙馬陳世美',
+      '失蹤網紅晚安小雞還活著開直播',
+      '青花瓷魚世罕見，有幸來欣賞！',
+      '這就是冥燼黨的光電..',
+      '台灣國土山坡農田水庫都已經被詐騙集團大肆破壞',
+      '文化大學 這天氣比颱風天還猛',
+      '偏遠地區要注意老虎出沒！',
+      '緊急！非常難防的盜取個資再行詐騙手法',
+      '無人能不被感動：90歲無家可歸老夫婦的二重奏',
+      '格致路滑水道',
+      "I can't stop laughing was my first reaction"
+    ];
+    const cases = caseTitles.map((title, index) => ({
+      id: index + 1,
+      title,
+      image: `img-fake/case${index + 1}.jpg`
+    }));
+
+    let currentIndex = 0;
+    let decisionStart = performance.now();
+    let dragState = null;
+    let incomingDirection = 0;
+    const results = [];
+
+    const cardWrap = document.getElementById('cardWrap');
+    const progressText = document.getElementById('progressText');
+    const controls = document.getElementById('controls');
+
+    function avgSeconds(list) {
+      if (!list.length) return '0.0';
+      const total = list.reduce((sum, item) => sum + item.seconds, 0);
+      return (total / list.length).toFixed(1);
+    }
+
+    function escapeHtml(text) {
+      return text
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#39;');
+    }
+
+    function renderThumbs(items) {
+      if (!items.length) return '<div class="empty">目前沒有案例。</div>';
+      return `<div class="thumb-grid">${items.map(item => `
+        <div class="thumb">
+          <img src="${item.image}" alt="${escapeHtml(item.title)}">
+          <div class="caption">#${item.id} ${escapeHtml(item.title)}<br>用時 ${item.seconds.toFixed(1)} 秒</div>
+        </div>
+      `).join('')}</div>`;
+    }
+
+    function renderSummary() {
+      cardWrap.classList.add('summary-mode');
+      const shared = results.filter(item => item.decision === 'share');
+      const rejected = results.filter(item => item.decision === 'reject');
+      progressText.textContent = '統計完成';
+      controls.innerHTML = '<button class="btn-restart" id="restartBtn">重新測一次</button>';
+      document.getElementById('restartBtn').addEventListener('click', resetApp);
+      cardWrap.innerHTML = `
+        <section class="summary">
+          <h2>最後一頁統計</h2>
+          <p>你已完成 ${results.length} 則案例判斷。</p>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <h3>分享給朋友</h3>
+              <div class="big">${shared.length}</div>
+              <div>平均下決定秒數：<strong>${avgSeconds(shared)}</strong> 秒</div>
+            </div>
+            <div class="stat-card">
+              <h3>不分享</h3>
+              <div class="big">${rejected.length}</div>
+              <div>平均下決定秒數：<strong>${avgSeconds(rejected)}</strong> 秒</div>
+            </div>
+          </div>
+          <div class="thumb-section">
+            <h3>「分享給朋友」故事縮圖彙整</h3>
+            ${renderThumbs(shared)}
+          </div>
+          <div class="thumb-section">
+            <h3>「不分享」故事縮圖彙整</h3>
+            ${renderThumbs(rejected)}
+          </div>
+        </section>
+      `;
+    }
+
+    function updateProgress() {
+      progressText.textContent = currentIndex < cases.length
+        ? `案例 ${currentIndex + 1} / ${cases.length}`
+        : '統計完成';
+    }
+
+    function createSlide(item, x = 0) {
+      const slide = document.createElement('article');
+      slide.className = 'slide';
+      slide.style.transform = `translateX(${x}px)`;
+      slide.innerHTML = `
+        <div class="badge left">不分享</div>
+        <div class="badge right">分享給朋友</div>
+        <div class="image-viewport">
+          <img src="${item.image}" alt="${escapeHtml(item.title)}">
+          <div class="scrim"></div>
+        </div>
+        <div class="case-meta">
+          <div class="index">案例 ${item.id}</div>
+          <div class="case-title">${escapeHtml(item.title)}</div>
+        </div>
+      `;
+      return slide;
+    }
+
+    function attachSwipe(slide) {
+      const likeBadge = slide.querySelector('.badge.right');
+      const nopeBadge = slide.querySelector('.badge.left');
+
+      function onPointerDown(e) {
+        if (currentIndex >= cases.length) return;
+        dragState = {
+          id: e.pointerId,
+          startX: e.clientX,
+          x: 0
+        };
+        slide.setPointerCapture(e.pointerId);
+        slide.style.transition = 'none';
+      }
+
+      function onPointerMove(e) {
+        if (!dragState || dragState.id !== e.pointerId) return;
+        dragState.x = e.clientX - dragState.startX;
+        const limitedX = Math.max(-90, Math.min(90, dragState.x));
+        slide.style.transform = `translateX(${limitedX}px)`;
+        likeBadge.style.opacity = dragState.x > 0 ? Math.min(dragState.x / 100, 1) : 0;
+        nopeBadge.style.opacity = dragState.x < 0 ? Math.min(Math.abs(dragState.x) / 100, 1) : 0;
+      }
+
+      function onPointerUp(e) {
+        if (!dragState || dragState.id !== e.pointerId) return;
+        const dx = dragState.x;
+        dragState = null;
+        try { slide.releasePointerCapture(e.pointerId); } catch (err) {}
+        if (dx > 80) {
+          animateDecision('share');
+        } else if (dx < -80) {
+          animateDecision('reject');
+        } else {
+          slide.style.transition = 'transform .22s ease';
+          slide.style.transform = 'translateX(0px)';
+          likeBadge.style.opacity = 0;
+          nopeBadge.style.opacity = 0;
+        }
+      }
+
+      slide.addEventListener('pointerdown', onPointerDown);
+      slide.addEventListener('pointermove', onPointerMove);
+      slide.addEventListener('pointerup', onPointerUp);
+      slide.addEventListener('pointercancel', onPointerUp);
+    }
+
+    function animateDecision(decision) {
+      const currentSlide = cardWrap.querySelector('.slide.current');
+      if (!currentSlide) return;
+      const width = cardWrap.clientWidth;
+      const exitX = decision === 'share' ? width : -width;
+      const entryX = decision === 'share' ? -width : width;
+      const currentItem = cases[currentIndex];
+      const nextItem = cases[currentIndex + 1];
+
+      currentSlide.style.transition = 'transform .32s cubic-bezier(.22,.78,.17,1)';
+      currentSlide.style.transform = `translateX(${exitX}px)`;
+
+      let nextSlide = null;
+      if (nextItem) {
+        nextSlide = createSlide(nextItem, entryX);
+        nextSlide.classList.add('incoming');
+        cardWrap.appendChild(nextSlide);
+      }
+
+      requestAnimationFrame(() => {
+        if (nextSlide) {
+          nextSlide.style.transform = 'translateX(0px)';
+        }
+      });
+
+      window.setTimeout(() => recordDecision(decision), 340);
+    }
+
+    function recordDecision(decision) {
+      const item = cases[currentIndex];
+      const seconds = (performance.now() - decisionStart) / 1000;
+      results.push({ ...item, decision, seconds });
+      currentIndex += 1;
+      decisionStart = performance.now();
+      render();
+    }
+
+    function render() {
+      updateProgress();
+      cardWrap.classList.remove('summary-mode');
+      cardWrap.innerHTML = '';
+      if (currentIndex >= cases.length) {
+        renderSummary();
+        return;
+      }
+      const slide = createSlide(cases[currentIndex], 0);
+      slide.classList.add('current');
+      cardWrap.appendChild(slide);
+      attachSwipe(slide);
+    }
+
+    function resetApp() {
+      currentIndex = 0;
+      results.length = 0;
+      decisionStart = performance.now();
+      controls.innerHTML = `
+        <button class="btn-left" id="rejectBtn">← 不分享</button>
+        <button class="btn-right" id="shareBtn">分享給朋友 →</button>
+        <button class="btn-reset" id="resetBtn">重新開始</button>
+      `;
+      wireButtons();
+      render();
+    }
+
+    function wireButtons() {
+      document.getElementById('shareBtn')?.addEventListener('click', () => animateDecision('share'));
+      document.getElementById('rejectBtn')?.addEventListener('click', () => animateDecision('reject'));
+      document.getElementById('resetBtn')?.addEventListener('click', resetApp);
+    }
+
+    wireButtons();
+    render();
+  </script>
+</body>
+</html>
