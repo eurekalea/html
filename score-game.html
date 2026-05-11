@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>加減分遊戲</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Helvetica Neue', 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #FFD89B 0%, #FFC75F 100%);
+            transition: background 0.5s ease;
+        }
+
+        body.dark-mode {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        }
+
+        .container {
+            text-align: center;
+            background: white;
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            margin-bottom: 40px;
+            color: #333;
+            font-size: 28px;
+        }
+
+        .score-display {
+            font-size: 80px;
+            margin: 30px 0;
+            min-height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            letter-spacing: 8px;
+            animation: twinkle 0.3s ease-out;
+            font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji', 'Android Emoji', 'EmojiSymbols', 'EmojiOne Mozilla', 'Twemoji Mozilla', 'Segoe UI', 'Helvetica Neue', 'Arial', sans-serif;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        @keyframes twinkle {
+            0% {
+                opacity: 0.6;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-top: 80px;
+        }
+
+        button {
+            font-size: 24px;
+            width: 34px;
+            height: 34px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.18);
+        }
+
+        .btn-plus {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+        }
+
+        .btn-plus:hover:not(:disabled) {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+        }
+
+        .btn-plus:active:not(:disabled) {
+            transform: scale(0.95);
+        }
+
+        .btn-plus:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .btn-minus {
+            background: linear-gradient(135deg, #f44336 0%, #da190b 100%);
+            color: white;
+        }
+
+        .btn-minus:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(244, 67, 54, 0.4);
+        }
+
+        .btn-minus:active {
+            transform: scale(0.95);
+        }
+
+        /* 放鞭炮特效 */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #FFD700;
+            pointer-events: none;
+            animation: explode 0.8s ease-out forwards;
+        }
+
+        @keyframes explode {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--tx), var(--ty)) scale(0);
+            }
+        }
+
+        .info-text {
+            margin-top: 30px;
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>記分板</h1>
+        
+        <div class="score-display" id="scoreDisplay">👍👍</div>
+        
+        <div class="buttons">
+            <button class="btn-minus" id="btnMinus">−</button>
+            <button class="btn-plus" id="btnPlus">+</button>
+        </div>
+
+        <div class="info-text">
+            <p>按 + 最多加到 6 分（出現特效）</p>
+            <p>按 − 可以扣到負分</p>
+        </div>
+    </div>
+
+    <script>
+        let score = 2;
+        const scoreDisplay = document.getElementById('scoreDisplay');
+        const btnPlus = document.getElementById('btnPlus');
+        const btnMinus = document.getElementById('btnMinus');
+
+        function updateDisplay() {
+            if (score > 0) {
+                // 正分：顯示星星符號
+                scoreDisplay.textContent = '⭐'.repeat(score);
+                document.body.classList.remove('dark-mode');
+            } else if (score === 0) {
+                // 0分：顯示0
+                scoreDisplay.textContent = '0';
+                document.body.classList.remove('dark-mode');
+            } else {
+                // 負分：顯示臭臉符號
+                scoreDisplay.textContent = '😠'.repeat(Math.abs(score));
+                document.body.classList.add('dark-mode');
+            }
+
+            // 更新加分按鈕是否禁用
+            btnPlus.disabled = score >= 6;
+            
+            // 觸發閃爍動畫
+            scoreDisplay.style.animation = 'none';
+            setTimeout(() => {
+                scoreDisplay.style.animation = 'twinkle 0.3s ease-out';
+            }, 10);
+        }
+
+        function createConfetti() {
+            const button = btnPlus;
+            const rect = button.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+
+            for (let i = 0; i < 30; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                
+                const angle = (Math.PI * 2 * i) / 30;
+                const velocity = 300 + Math.random() * 200;
+                const tx = Math.cos(angle) * velocity;
+                const ty = Math.sin(angle) * velocity - 100;
+
+                confetti.style.left = centerX + 'px';
+                confetti.style.top = centerY + 'px';
+                confetti.style.setProperty('--tx', tx + 'px');
+                confetti.style.setProperty('--ty', ty + 'px');
+                confetti.style.background = ['#FFD700', '#FF69B4', '#00CED1', '#FF6347', '#32CD32'][Math.floor(Math.random() * 5)];
+
+                document.body.appendChild(confetti);
+
+                setTimeout(() => confetti.remove(), 800);
+            }
+        }
+
+        btnPlus.addEventListener('click', () => {
+            if (score < 6) {
+                score++;
+                updateDisplay();
+
+                // 當達到6分時，放鞭炮
+                if (score === 6) {
+                    createConfetti();
+                }
+            }
+        });
+
+        btnMinus.addEventListener('click', () => {
+            score--;
+            updateDisplay();
+        });
+
+        // 初始化顯示
+        updateDisplay();
+    </script>
+</body>
+</html>
