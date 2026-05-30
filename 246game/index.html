@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2-4-6 認知覺醒實驗</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-primary: #111827;
+    --bg-surface: #1F2937;
+    --bg-contrast: #F9FAFB;
+    --text-primary: #F3F4F6;
+    --text-secondary: #9CA3AF;
+    --text-muted: #6B7280;
+    --neon-yellow: #FACC15;
+    --cyber-blue: #38BDF8;
+    --alert-red: #EF4444;
+    --success-green: #22C55E;
+    --border-subtle: #374151;
+    --border-blue: rgba(56,189,248,0.35);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 15px;
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  /* Grid background */
+  body::before {
+    content: '';
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background-image:
+      linear-gradient(rgba(56,189,248,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(56,189,248,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page {
+    position: relative; z-index: 1;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 48px 40px 80px;
+  }
+
+  /* Header */
+  .page-header {
+    border-bottom: 1px solid var(--border-subtle);
+    padding-bottom: 24px;
+    margin-bottom: 36px;
+  }
+  .page-header .tag {
+    display: inline-block;
+    font-family: 'Fira Code', monospace;
+    font-size: 11px;
+    color: var(--cyber-blue);
+    border: 1px solid var(--cyber-blue);
+    border-radius: 4px;
+    padding: 2px 10px;
+    margin-bottom: 12px;
+    letter-spacing: 0.1em;
+  }
+  .page-header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+  }
+  .page-header h1 span { color: var(--neon-yellow); }
+  .page-header p {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 6px;
+    font-family: 'Fira Code', monospace;
+  }
+
+  /* Section label */
+  .section-label {
+    font-family: 'Fira Code', monospace;
+    font-size: 11px;
+    color: var(--cyber-blue);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--border-blue), transparent);
+  }
+
+  /* Meta fields */
+  .meta-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 2fr;
+    gap: 12px;
+    margin-bottom: 36px;
+  }
+  .meta-field { display: flex; flex-direction: column; gap: 5px; }
+  .meta-field label {
+    font-size: 11px;
+    font-family: 'Fira Code', monospace;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+  }
+  .meta-field input {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 6px;
+    color: var(--text-primary);
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 14px;
+    padding: 8px 12px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .meta-field input:focus { border-color: var(--cyber-blue); }
+  .meta-field input::placeholder { color: var(--text-muted); }
+
+  /* Info box */
+  .info-box {
+    background: var(--bg-surface);
+    border: 2px solid var(--cyber-blue);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin-bottom: 36px;
+    box-shadow: 0 10px 25px -5px rgba(56,189,248,0.15);
+    line-height: 1.8;
+    font-size: 15px;
+  }
+  .info-box p { margin-bottom: 10px; color: var(--text-primary); }
+  .info-box p:last-child { margin-bottom: 0; }
+  .info-box .seq-display {
+    display: inline-flex;
+    gap: 12px;
+    background: var(--bg-primary);
+    border: 1px solid var(--neon-yellow);
+    border-radius: 8px;
+    padding: 8px 20px;
+    margin: 8px 0;
+    font-family: 'Fira Code', monospace;
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--neon-yellow);
+    letter-spacing: 0.2em;
+  }
+  .info-box em { color: var(--cyber-blue); font-style: normal; font-weight: 500; }
+
+  /* Table */
+  .table-wrap { margin-bottom: 24px; }
+  .table-header {
+    display: grid;
+    grid-template-columns: 188px 72px 1fr 130px;
+    gap: 8px;
+    padding: 10px 14px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px 8px 0 0;
+    border-bottom: 1px solid var(--cyber-blue);
+  }
+  .table-header span {
+    font-family: 'Fira Code', monospace;
+    font-size: 11px;
+    color: var(--cyber-blue);
+    letter-spacing: 0.08em;
+  }
+  #rows-container { border-left: 1px solid var(--border-subtle); border-right: 1px solid var(--border-subtle); }
+  .exp-row {
+    display: grid;
+    grid-template-columns: 188px 72px 1fr 130px;
+    gap: 8px;
+    align-items: center;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border-subtle);
+    animation: rowIn 0.2s ease;
+  }
+  @keyframes rowIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .seq-inputs { display: flex; gap: 5px; align-items: center; }
+  .seq-inputs input {
+    width: 48px; text-align: center;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-subtle);
+    border-radius: 6px;
+    color: var(--text-primary);
+    font-family: 'Fira Code', monospace;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 6px 4px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .seq-inputs input:focus { border-color: var(--neon-yellow); }
+  .seq-inputs input:disabled { opacity: 0.6; }
+  .seq-inputs input.field-error { border-color: var(--alert-red) !important; background: rgba(239,68,68,0.08); }
+  .hyp-input.field-error { border-color: var(--alert-red) !important; background: rgba(239,68,68,0.08); }
+  .conf-input.field-error { border-color: var(--alert-red) !important; background: rgba(239,68,68,0.08); }
+  .field-error { animation: flerr 0.35s ease; }
+  @keyframes flerr { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-7px)} 60%{transform:translateX(7px)} }
+  .row-validation-msg {
+    grid-column: 1 / -1;
+    font-family: 'Fira Code', monospace;
+    font-size: 11px;
+    color: var(--alert-red);
+    padding: 2px 2px 6px;
+    letter-spacing: 0.04em;
+    display: none;
+  }
+  .row-validation-msg.visible { display: block; }
+  .seq-inputs .sep { color: var(--text-muted); font-size: 13px; }
+  .verify-btn {
+    font-family: 'Fira Code', monospace;
+    font-size: 12px;
+    padding: 6px 0;
+    width: 60px;
+    background: transparent;
+    border: 1px solid var(--cyber-blue);
+    border-radius: 6px;
+    color: var(--cyber-blue);
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: center;
+  }
+  .verify-btn:hover { background: rgba(56,189,248,0.1); }
+  .verify-btn.happy {
+    font-size: 20px;
+    border-color: var(--success-green);
+    background: rgba(34,197,94,0.08);
+  }
+  .verify-btn.sad {
+    font-size: 20px;
+    border-color: var(--alert-red);
+    background: rgba(239,68,68,0.08);
+  }
+  .hyp-input {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-subtle);
+    border-radius: 6px;
+    color: var(--text-primary);
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 13px;
+    padding: 7px 10px;
+    outline: none;
+    width: 100%;
+    transition: border-color 0.2s;
+  }
+  .hyp-input:focus { border-color: var(--neon-yellow); }
+  .hyp-input::placeholder { color: var(--text-muted); }
+  .conf-input {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-subtle);
+    border-radius: 6px;
+    color: var(--neon-yellow);
+    font-family: 'Fira Code', monospace;
+    font-size: 14px;
+    padding: 7px 10px;
+    outline: none;
+    width: 80px;
+    text-align: center;
+    transition: border-color 0.2s;
+  }
+  .conf-input:focus { border-color: var(--neon-yellow); }
+  .conf-input::placeholder { color: var(--text-muted); font-size: 11px; }
+  .table-footer {
+    border: 1px solid var(--border-subtle);
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    padding: 6px;
+    background: var(--bg-surface);
+  }
+
+  /* Action buttons */
+  .action-row {
+    display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px;
+  }
+  .btn {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-family: 'Fira Code', monospace;
+    font-size: 13px;
+    padding: 9px 18px;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: all 0.15s;
+    border: none;
+  }
+  .btn-continue {
+    background: transparent;
+    border: 1px solid var(--cyber-blue);
+    color: var(--cyber-blue);
+  }
+  .btn-continue:hover { background: rgba(56,189,248,0.12); }
+  .btn-print {
+    background: var(--neon-yellow);
+    color: #111827;
+    font-weight: 700;
+    border: none;
+  }
+  .btn-print:hover { background: #eab308; }
+  .btn-reveal {
+    background: var(--alert-red);
+    color: #fff;
+    font-weight: 700;
+  }
+  .btn-reveal:hover { background: #dc2626; }
+
+  /* Password modal */
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+  }
+  .modal-overlay.active { display: flex; }
+  .modal-box {
+    background: var(--bg-surface);
+    border: 2px solid var(--cyber-blue);
+    border-radius: 14px;
+    padding: 32px 36px;
+    width: 340px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 40px rgba(56,189,248,0.15);
+    text-align: center;
+    animation: modalIn 0.2s ease;
+  }
+  @keyframes modalIn {
+    from { opacity: 0; transform: scale(0.92); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  .modal-box .modal-icon {
+    font-size: 32px; margin-bottom: 12px;
+  }
+  .modal-box h3 {
+    font-size: 16px; font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+  }
+  .modal-box p {
+    font-size: 12px; color: var(--text-muted);
+    font-family: 'Fira Code', monospace;
+    margin-bottom: 18px;
+  }
+  .modal-box input {
+    width: 100%;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-subtle);
+    border-radius: 7px;
+    color: var(--text-primary);
+    font-family: 'Fira Code', monospace;
+    font-size: 18px;
+    letter-spacing: 0.2em;
+    text-align: center;
+    padding: 10px;
+    outline: none;
+    margin-bottom: 14px;
+    transition: border-color 0.2s;
+  }
+  .modal-box input:focus { border-color: var(--cyber-blue); }
+  .modal-box input.error { border-color: var(--alert-red); animation: shake 0.3s; }
+  @keyframes shake {
+    0%,100%{ transform: translateX(0); }
+    25%{ transform: translateX(-8px); }
+    75%{ transform: translateX(8px); }
+  }
+  .modal-btn-row { display: flex; gap: 8px; }
+  .modal-btn-row button {
+    flex: 1;
+    font-family: 'Fira Code', monospace;
+    font-size: 13px;
+    padding: 9px;
+    border-radius: 7px;
+    cursor: pointer;
+    border: none;
+    font-weight: 500;
+  }
+  .modal-cancel { background: var(--bg-primary); color: var(--text-secondary); border: 1px solid var(--border-subtle) !important; }
+  .modal-confirm { background: var(--cyber-blue); color: #111827; font-weight: 700; }
+  .modal-error-msg {
+    font-size: 11px;
+    color: var(--alert-red);
+    font-family: 'Fira Code', monospace;
+    margin-bottom: 10px;
+    min-height: 16px;
+  }
+
+  /* Answer box */
+  .answer-box {
+    display: none;
+    margin-top: 20px;
+    background: var(--bg-surface);
+    border-left: 4px solid var(--success-green);
+    border-radius: 0 10px 10px 0;
+    padding: 20px 24px;
+    font-size: 15px;
+    line-height: 1.8;
+    animation: fadeIn 0.3s ease;
+  }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .answer-box .ans-title {
+    font-family: 'Fira Code', monospace;
+    font-size: 12px;
+    color: var(--success-green);
+    letter-spacing: 0.1em;
+    margin-bottom: 10px;
+  }
+  .answer-box .rule {
+    color: var(--neon-yellow);
+    font-weight: 700;
+  }
+  .answer-box em { color: var(--cyber-blue); font-style: normal; }
+  .answer-box p { margin-bottom: 8px; }
+  .answer-box p:last-child { margin-bottom: 0; }
+
+  /* Icon placeholder using unicode */
+  .ico::before { margin-right: 5px; }
+</style>
+</head>
+<body>
+<div class="page" id="app">
+
+  <div class="page-header">
+    <div class="tag">COGNITIVE SCIENCE // WASON_246</div>
+    <h1>彼得華生 <span>2–4–6</span> 認知實驗</h1>
+    <p>// Peter Wason Selection Task · 1960s · Confirmation Bias</p>
+  </div>
+
+  <div class="section-label">// 基本資料</div>
+  <div class="meta-grid">
+    <div class="meta-field">
+      <label>CLASS_ID</label>
+      <input id="meta-class" type="text" placeholder="班級">
+    </div>
+    <div class="meta-field">
+      <label>GROUP_ID</label>
+      <input id="meta-group" type="text" placeholder="組別">
+    </div>
+    <div class="meta-field">
+      <label>MEMBERS</label>
+      <input id="meta-members" type="text" placeholder="組員姓名">
+    </div>
+  </div>
+
+  <div class="section-label">// 規則說明</div>
+  <div class="info-box">
+    <p>嗨 👋</p>
+    <p>這是基於 <em>彼得華生（Peter Wason）</em> 在 20 世紀 60 年代進行的一項認知科學實驗。我會引導你完成整個過程。</p>
+    <p>首先，請看這個三數列：</p>
+    <div><div class="seq-display"><span>2</span><span>4</span><span>6</span></div></div>
+    <p>這個數列符合我心中的一個規則。但我現在不會告訴你規則是什麼。目標是讓你自己找出這個規則。</p>
+    <p>你可以給我任何三個數字的數列，我會告訴你這個數列是否符合我的秘密規則 😊 或 ☹️。你可以重複這個過程，次數不限。</p>
+    <p>當你認為自己找到了規則後，點擊「<span style="color:var(--neon-yellow);font-weight:700;">列印過程</span>」，下載檔案後交給老師。</p>
+  </div>
+
+  <div class="section-label">// 測試記錄</div>
+  <div class="table-wrap">
+    <div class="table-header">
+      <span>SEQUENCE</span>
+      <span>RESULT</span>
+      <span>HYPOTHESIS</span>
+      <span>CONFIDENCE %</span>
+    </div>
+    <div id="rows-container"></div>
+    <div class="table-footer"></div>
+  </div>
+
+  <div class="action-row">
+    <button class="btn btn-continue" onclick="addRow()">＋ 繼續測試</button>
+    <button class="btn btn-print" onclick="printJPG()">⬇ 列印過程</button>
+    <button class="btn btn-reveal" onclick="openPasswordModal()">🔐 看答案</button>
+  </div>
+
+  <div class="answer-box" id="answer-box">
+    <div class="ans-title">// RULE_UNLOCKED · ACCESS GRANTED</div>
+    <p>規則是「<span class="rule">三個數字按從小到大的順序排列（遞增序列）</span>」。並非只有偶數，也不限於公差為 2 的等差數列。</p>
+    <p>這個實驗揭示了人們的 <em>確認偏誤（Confirmation Bias）</em>——我們傾向於只測試符合自己假設的序列，而非主動嘗試能推翻假設的序列。</p>
+    <p>真正的科學思維，應該努力「<em>證偽（Falsification）</em>」而非「<em>證實（Verification）</em>」。</p>
+  </div>
+</div>
+
+<!-- Password Modal -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal-box">
+    <div class="modal-icon">🔐</div>
+    <h3>請輸入密碼</h3>
+    <p>// ENTER_ACCESS_CODE</p>
+    <input type="password" id="pwd-input" placeholder="••••••" maxlength="12"
+      onkeydown="if(event.key==='Enter')confirmPwd()">
+    <div class="modal-error-msg" id="pwd-error"></div>
+    <div class="modal-btn-row">
+      <button class="modal-cancel" onclick="closeModal()">取消</button>
+      <button class="modal-confirm" onclick="confirmPwd()">確認</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+var rowCount = 0;
+
+function isHappy(a, b, c) {
+  return a < b && b < c;
+}
+
+function markError(el) {
+  el.classList.remove('field-error');
+  void el.offsetWidth;
+  el.classList.add('field-error');
+  el.addEventListener('input', function() { el.classList.remove('field-error'); }, { once: true });
+}
+
+function addRow() {
+  // Validate the last row before adding a new one
+  if (rowCount > 0) {
+    var id = rowCount;
+    var missing = [];
+    var hasError = false;
+
+    var n1 = document.getElementById('n1-'+id);
+    var n2 = document.getElementById('n2-'+id);
+    var n3 = document.getElementById('n3-'+id);
+    var vbtn = document.getElementById('vbtn-'+id);
+    var hyp = document.getElementById('hyp-'+id);
+    var conf = document.getElementById('conf-'+id);
+    var msg = document.getElementById('vmsg-'+id);
+
+    // Check sequence verified
+    if (!vbtn.disabled) {
+      if (n1.value === '') { markError(n1); hasError = true; }
+      if (n2.value === '') { markError(n2); hasError = true; }
+      if (n3.value === '') { markError(n3); hasError = true; }
+      if (hasError || n1.value === '' || n2.value === '' || n3.value === '') {
+        missing.push('序列數字');
+      } else {
+        missing.push('「驗證」按鈕（請先驗證序列）');
+      }
+    }
+
+    if (hyp.value.trim() === '') { markError(hyp); missing.push('假設'); hasError = true; }
+    if (conf.value === '' || conf.value < 0 || conf.value > 100) { markError(conf); missing.push('確定度'); hasError = true; }
+
+    // Also check if verify was done (btn still enabled = not verified)
+    if (vbtn.disabled === false && (n1.value !== '' && n2.value !== '' && n3.value !== '')) {
+      // sequence filled but not verified
+      if (!missing.includes('「驗證」按鈕（請先驗證序列）')) missing.push('「驗證」按鈕（請先驗證序列）');
+      hasError = true;
+    }
+
+    if (hasError || missing.length > 0) {
+      msg.textContent = '// 請先完成：' + missing.join('、');
+      msg.classList.add('visible');
+      return;
+    } else {
+      msg.classList.remove('visible');
+    }
+  }
+
+  rowCount++;
+  var id = rowCount;
+  var container = document.getElementById('rows-container');
+  var div = document.createElement('div');
+  div.className = 'exp-row';
+  div.id = 'row-' + id;
+  div.style.display = 'grid';
+  div.style.gridTemplateColumns = '188px 72px 1fr 130px';
+  div.style.gridTemplateRows = 'auto auto';
+  div.innerHTML =
+    '<div class="seq-inputs">' +
+      '<input type="number" id="n1-'+id+'" placeholder="?" step="any">' +
+      '<span class="sep">,</span>' +
+      '<input type="number" id="n2-'+id+'" placeholder="?" step="any">' +
+      '<span class="sep">,</span>' +
+      '<input type="number" id="n3-'+id+'" placeholder="?" step="any">' +
+    '</div>' +
+    '<button class="verify-btn" id="vbtn-'+id+'" onclick="verify('+id+')">驗證</button>' +
+    '<input class="hyp-input" id="hyp-'+id+'" type="text" placeholder="輸入你的假設...">' +
+    '<input class="conf-input" id="conf-'+id+'" type="number" min="0" max="100" placeholder="0~100">' +
+    '<div class="row-validation-msg" id="vmsg-'+id+'"></div>';
+  container.appendChild(div);
+  document.getElementById('n1-'+id).focus();
+}
+
+function verify(id) {
+  var n1 = document.getElementById('n1-'+id);
+  var n2 = document.getElementById('n2-'+id);
+  var n3 = document.getElementById('n3-'+id);
+  var msg = document.getElementById('vmsg-'+id);
+  var hasErr = false;
+  if (n1.value === '') { markError(n1); hasErr = true; }
+  if (n2.value === '') { markError(n2); hasErr = true; }
+  if (n3.value === '') { markError(n3); hasErr = true; }
+  if (hasErr) {
+    msg.textContent = '// 請輸入完整的三個序列數字';
+    msg.classList.add('visible');
+    return;
+  }
+  msg.classList.remove('visible');
+  var a = parseFloat(n1.value), b = parseFloat(n2.value), c = parseFloat(n3.value);
+  var btn = document.getElementById('vbtn-'+id);
+  if (isHappy(a, b, c)) {
+    btn.textContent = '😊';
+    btn.className = 'verify-btn happy';
+  } else {
+    btn.textContent = '☹️';
+    btn.className = 'verify-btn sad';
+  }
+  btn.disabled = true;
+  n1.disabled = true;
+  n2.disabled = true;
+  n3.disabled = true;
+}
+
+function openPasswordModal() {
+  document.getElementById('pwd-input').value = '';
+  document.getElementById('pwd-error').textContent = '';
+  document.getElementById('pwd-input').classList.remove('error');
+  document.getElementById('modal-overlay').classList.add('active');
+  setTimeout(function(){ document.getElementById('pwd-input').focus(); }, 100);
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('active');
+}
+
+function confirmPwd() {
+  var val = document.getElementById('pwd-input').value;
+  if (val === '246ans') {
+    closeModal();
+    var box = document.getElementById('answer-box');
+    box.style.display = 'block';
+    box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } else {
+    var inp = document.getElementById('pwd-input');
+    inp.classList.remove('error');
+    void inp.offsetWidth;
+    inp.classList.add('error');
+    document.getElementById('pwd-error').textContent = '// ERROR: 密碼錯誤，請再試一次';
+    inp.value = '';
+    inp.focus();
+  }
+}
+
+document.getElementById('modal-overlay').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+function printJPG() {
+  if (!window.html2canvas) { alert('截圖工具載入中，請稍後再試...'); return; }
+  var el = document.getElementById('app');
+  html2canvas(el, { scale: 2, useCORS: true, backgroundColor: '#111827' }).then(function(canvas) {
+    var link = document.createElement('a');
+    link.download = 'Wason_246實驗記錄.jpg';
+    link.href = canvas.toDataURL('image/jpeg', 0.95);
+    link.click();
+  });
+}
+
+addRow();
+</script>
+</body>
+</html>
