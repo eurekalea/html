@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>校園資安防詐特訓班</title>
+  
+  <!-- 載入 Tailwind CSS 用於網頁排版與美化 -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- 載入字體 -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Noto Sans TC', sans-serif; background-color: #f8fafc; }
+  </style>
+
+  <!-- 載入 Babel 編譯器 (讓瀏覽器能直接看懂 React JSX 語法) -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+  <!-- React 應用程式的掛載點 -->
+  <div id="root"></div>
+
+  <!-- 主要程式碼區塊 -->
+  <script type="text/babel" data-type="module">
+    // 從 CDN 引入 React 與相關套件
+    import React, { useState, useEffect } from 'https://esm.sh/react@18.2.0';
+    import { createRoot } from 'https://esm.sh/react-dom@18.2.0/client';
+    import { ShieldAlert, ShieldCheck, AlertTriangle, ChevronRight, CheckCircle2, Search, Mail, Smartphone, CreditCard, Trash2, MousePointerClick } from 'https://esm.sh/lucide-react@0.292.0';
+
+    // --- 首頁大廳 ---
+    const Home = ({ onStart }) => (
+      <div className="flex flex-col items-center justify-center min-h-[80vh] text-center px-4 animate-in fade-in duration-700">
+        <div className="bg-slate-900 p-8 rounded-3xl shadow-2xl border border-red-500/30 max-w-2xl relative overflow-hidden">
+          <div className="absolute top-[-50px] left-[-50px] w-40 h-40 bg-red-600/20 rounded-full blur-3xl"></div>
+          <ShieldAlert className="w-24 h-24 text-red-500 mx-auto mb-6 animate-pulse" />
+          <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4 tracking-tight">
+            校園資安防詐特訓班
+          </h1>
+          <p className="text-xl text-slate-300 mb-2 font-medium">
+            實戰破解釣魚陷阱
+          </p>
+          <div className="h-px w-full bg-gradient-to-r from-transparent via-slate-500 to-transparent my-6"></div>
+          <p className="text-2xl text-red-400 font-bold mb-8">
+            「你以為的日常通知，可能都是駭客的陷阱！」
+          </p>
+          <p className="text-slate-400 mb-8 leading-relaxed">
+            各位老師好，歡迎來到防詐實戰大廳。在這裡，你將親自面對最真實的釣魚攻擊情境。請運用你的觀察力，找出隱藏在細節中的破綻！
+          </p>
+          <button 
+            onClick={onStart}
+            className="group relative inline-flex items-center justify-center px-8 py-4 font-bold text-white bg-red-600 rounded-full overflow-hidden transition-all hover:scale-105 hover:bg-red-500 focus:outline-none focus:ring-4 focus:ring-red-500/50"
+          >
+            <span className="mr-2">接受挑戰 / 開始測驗</span>
+            <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+          </button>
+        </div>
+      </div>
+    );
+
+    // --- 第一關：日常交通陷阱 ---
+    const Level1 = ({ onNext }) => {
+      const [step, setStep] = useState(1);
+      const [plate, setPlate] = useState('');
+      const [isTrapRevealed, setIsTrapRevealed] = useState(false);
+
+      const handleQuery = (e) => {
+        e.preventDefault();
+        setStep(2); // 無論輸入什麼，都跳轉到付款要求
+      };
+
+      const handlePay = (e) => {
+        e.preventDefault();
+        setIsTrapRevealed(true); // 觸發陷阱解答
+      };
+
+      return (
+        <div className="max-w-4xl mx-auto p-4 animate-in fade-in slide-in-from-bottom-4">
+          <div className="mb-8">
+            <span className="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-bold tracking-wider">第一關</span>
+            <h2 className="text-3xl font-bold text-slate-800 mt-2">日常交通陷阱：eTag未繳</h2>
+            <p className="text-slate-600 mt-2">情境：你收到一封來自「遠通電收」的信件，表示有通行費未繳納... 試試看輸入假資料吧！</p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* 左側：假信件展示 */}
+            <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+              <div className="bg-slate-100 px-4 py-2 border-b border-slate-200 text-sm text-slate-500 font-mono">
+                收件匣 ＞ 未處理費用通知
+              </div>
+              <div className="p-6">
+                <h3 className="font-bold text-lg mb-4">系統顯示您目前仍有一筆通行費用尚未繳納</h3>
+                <p className="text-slate-700 mb-4 text-sm leading-relaxed">
+                  金額為新台幣 <strong className="text-red-500 text-lg">120元</strong>。為保障您的 eTag 通行服務與會員帳戶正常運作，請於 114 年 5 月 10 日(含)前完成繳費，以免產生額外負擔及相關法律責任。
+                </p>
+                <div className="bg-red-50 text-red-700 p-3 rounded text-sm mb-4 border border-red-100">
+                  ⚠️ 信用風險增加：長期欠費將列入紀錄，恐對個人信用產生影響。
+                </div>
+                <p className="text-sm text-slate-500">※ 點擊右側表單進行查詢與繳費 ※</p>
+              </div>
+            </div>
+
+            {/* 右側：互動表單 */}
+            <div className="relative bg-white rounded-xl shadow-lg border border-slate-200 p-6">
+              {!isTrapRevealed ? (
+                step === 1 ? (
+                  <form onSubmit={handleQuery} className="space-y-4">
+                    <div className="text-center mb-6">
+                      <div className="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-2">
+                        <Search className="w-8 h-8" />
+                      </div>
+                      <h3 className="font-bold text-xl">快速繳費中心</h3>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-1">車牌號碼</label>
+                      <input type="text" value={plate} onChange={e => setPlate(e.target.value)} required placeholder="請輸入車牌 (可隨意輸入)" className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-1">車主身分證字號</label>
+                      <input type="text" required placeholder="請輸入身分證 (可隨意輸入)" className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+                    </div>
+                    <button type="submit" className="w-full bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition">
+                      查詢欠費
+                    </button>
+                  </form>
+                ) : (
+                  <form onSubmit={handlePay} className="space-y-4 animate-in fade-in">
+                    <div className="bg-red-50 text-red-700 p-4 rounded-lg text-center mb-6 border border-red-200">
+                      <p className="text-sm">查詢結果</p>
+                      <p className="text-2xl font-bold">待繳金額：NT$ 120</p>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-1">信用卡卡號</label>
+                      <input type="text" required placeholder="0000-0000-0000-0000" className="w-full px-4 py-2 border border-slate-300 rounded-lg" />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-slate-700 mb-1">有效期限</label>
+                        <input type="text" required placeholder="MM/YY" className="w-full px-4 py-2 border border-slate-300 rounded-lg" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-slate-700 mb-1">安全碼 (CVV)</label>
+                        <input type="text" required placeholder="123" className="w-full px-4 py-2 border border-slate-300 rounded-lg" />
+                      </div>
+                    </div>
+                    <button type="submit" className="w-full bg-green-600 text-white font-bold py-3 rounded-lg hover:bg-green-700 transition flex items-center justify-center">
+                      <CreditCard className="w-5 h-5 mr-2"/> 確認付款
+                    </button>
+                  </form>
+                )
+              ) : (
+                // 陷阱揭曉
+                <div className="absolute inset-0 bg-slate-900 rounded-xl p-8 text-center flex flex-col justify-center items-center text-white animate-in zoom-in-95">
+                  <AlertTriangle className="w-20 h-20 text-yellow-400 mb-4 animate-bounce" />
+                  <h3 className="text-2xl font-bold text-red-400 mb-2">⚠️ 嗶嗶！你中計了！</h3>
+                  <p className="text-slate-300 mb-6">
+                    你有發現嗎？不管你輸入什麼奇怪的車號，系統都會顯示「欠費 120 元」！<br/><br/>
+                    <strong className="text-white bg-red-600/30 px-2 py-1 rounded">破解關鍵：正常的通知信件一定會顯示你的「車號」！</strong>
+                    這類釣魚網站根本沒有連線資料庫，只為了騙取你的信用卡資料。
+                  </p>
+                  <button onClick={onNext} className="bg-white text-slate-900 font-bold px-6 py-2 rounded-full hover:bg-slate-200 transition">
+                    進入下一關
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    // --- 第二關：LINE 投票詐騙 ---
+    const Level2 = ({ onNext }) => {
+      const [isHacked, setIsHacked] = useState(false);
+
+      return (
+        <div className="max-w-4xl mx-auto p-4 animate-in fade-in slide-in-from-bottom-4">
+          <div className="mb-8">
+            <span className="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-bold tracking-wider">第二關</span>
+            <h2 className="text-3xl font-bold text-slate-800 mt-2">親情與友情的考驗</h2>
+            <p className="text-slate-600 mt-2">情境：朋友突然傳來訊息，拜託你幫忙小朋友畫作比賽投票... 請嘗試點擊下方的假登入畫面！</p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8 items-center">
+            {/* 左側：對話情境 */}
+            <div className="bg-[#8ec2f9] p-4 rounded-3xl shadow-inner max-w-sm mx-auto w-full border-8 border-slate-800 relative">
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-slate-800 rounded-b-3xl"></div>
+              <div className="text-center font-bold text-slate-800 mb-4 mt-4">SaLLy</div>
+              <div className="space-y-4">
+                <div className="flex justify-start">
+                  <div className="bg-white p-3 rounded-2xl rounded-tl-none max-w-[80%] text-sm shadow-sm">
+                    小朋友在參加線上畫作比賽可以幫忙投一票嗎
+                  </div>
+                </div>
+                <div className="flex justify-start">
+                  <div className="bg-white p-3 rounded-2xl rounded-tl-none max-w-[80%] text-sm shadow-sm">
+                    麻煩幫我投14號 謝謝了<br/>
+                    <a href="#" className="text-blue-500 underline" onClick={(e)=>e.preventDefault()}>https://t5.denvoryjq5.top</a>
+                  </div>
+                </div>
+                <div className="flex justify-end pt-4">
+                  <div className="bg-[#a5e665] p-3 rounded-2xl rounded-tr-none max-w-[80%] text-sm shadow-sm">
+                    好喔，我點進去看看
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 右側：互動介面 */}
+            <div className="relative bg-white rounded-3xl shadow-xl border-8 border-slate-800 overflow-hidden h-[500px] flex flex-col">
+              <div className="bg-[#00c300] text-white py-4 text-center font-bold">
+                LINE 授權投票
+              </div>
+              
+              {!isHacked ? (
+                <div className="p-6 flex-1 flex flex-col">
+                  <p className="text-center text-sm text-slate-600 mb-6">歡迎使用line 進行授權投票<br/>輸入電話號碼密碼並點選下一步代表您已經同意</p>
+                  
+                  <div className="space-y-4 flex-1">
+                    <div>
+                      <label className="text-xs text-slate-500">*電話號碼</label>
+                      <input type="text" placeholder="請輸入LINE電話號碼" className="w-full border-b border-slate-300 py-2 outline-none focus:border-[#00c300]" />
+                    </div>
+                    <div>
+                      <label className="text-xs text-slate-500">*輸入密碼</label>
+                      <input type="password" placeholder="請輸入密碼" className="w-full border-b border-slate-300 py-2 outline-none focus:border-[#00c300]" />
+                    </div>
+                    <div className="flex gap-2 items-end">
+                      <div className="flex-1">
+                        <label className="text-xs text-slate-500">*輸入認證碼</label>
+                        <input type="text" placeholder="請輸入簡訊認證碼" className="w-full border-b border-slate-300 py-2 outline-none focus:border-[#00c300]" />
+                      </div>
+                      <button onClick={() => setIsHacked(true)} className="bg-slate-200 text-slate-700 px-3 py-1 rounded text-sm hover:bg-slate-300">
+                        發送
+                      </button>
+                    </div>
+                  </div>
+                  
+                  <button onClick={() => setIsHacked(true)} className="w-full bg-[#00c300] text-white font-bold py-3 rounded-lg mt-auto hover:bg-[#00a000] flex justify-center items-center gap-2 transition-transform active:scale-95">
+                     <MousePointerClick className="w-5 h-5"/> 點擊登入投票
+                  </button>
+                </div>
+              ) : (
+                <div className="absolute inset-0 bg-red-600 p-6 flex flex-col justify-center items-center text-white text-center animate-in zoom-in duration-300">
+                   <Smartphone className="w-24 h-24 mb-4 text-white/80 animate-pulse" />
+                   <h3 className="text-3xl font-bold mb-2">帳號已遭盜用！</h3>
+                   <div className="bg-black/20 p-4 rounded-xl mb-6 text-left w-full">
+                      <p className="text-sm mb-2">歹徒正使用您的帳號發送以下訊息給親友：</p>
+                      <ul className="text-sm space-y-2 opacity-90 font-mono">
+                        <li>「兄弟，借我錢周轉下」</li>
+                        <li>「轉帳已達限額，幫我轉帳」</li>
+                        <li>「家裡有急事需借醫藥費...」</li>
+                      </ul>
+                   </div>
+                   <p className="mb-6 font-bold bg-white text-red-600 px-3 py-2 rounded-lg">
+                     破解關鍵：要求輸入 LINE 密碼及「手機簡訊認證碼」絕對是詐騙！
+                   </p>
+                   <button onClick={onNext} className="bg-slate-900 text-white font-bold px-8 py-3 rounded-full hover:bg-slate-800 transition shadow-lg">
+                      進入最後一關
+                     </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    // --- 第三關：網址放大鏡 ---
+    const Level3 = ({ onNext }) => {
+      const initialEmails = [
+        { id: 1, sender: 'Apple', subject: '您的付款方式已被拒絕', url: 'https://fakecheck.my.canva.site/verify-id3', isFake: true },
+        { id: 2, sender: '財政部電子發票', subject: '發票中獎通知：請確認載具', url: 'https://eniinvoice-nat-gov-tw.net/tw', isFake: true },
+        { id: 3, sender: 'Google', subject: '安全快訊：新登入活動', url: 'https://myaccount.google.com/security', isFake: false },
+        { id: 4, sender: '遠通電收', subject: 'eTag 扣款成功通知', url: 'https://www.fetc.net.tw/', isFake: false },
+      ];
+
+      const [emails, setEmails] = useState(initialEmails);
+      const [hoveredId, setHoveredId] = useState(null);
+      const [message, setMessage] = useState('');
+      const [score, setScore] = useState({ fake: 0, real: 0 });
+
+      const handleTrash = (email) => {
+        if (email.isFake) {
+          setMessage('✅ 成功刪除一封釣魚信件！');
+          setScore(s => ({ ...s, fake: s.fake + 1 }));
+        } else {
+          setMessage('❌ 哎呀！你刪到正常的官方信件了。');
+          setScore(s => ({ ...s, real: s.real + 1 }));
+        }
+        setEmails(emails.filter(e => e.id !== email.id));
+      };
+
+      const isComplete = emails.length === 0;
+
+      return (
+        <div className="max-w-4xl mx-auto p-4 animate-in fade-in slide-in-from-bottom-4">
+          <div className="mb-8">
+            <span className="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-bold tracking-wider">第三關</span>
+            <h2 className="text-3xl font-bold text-slate-800 mt-2">官方偽造信件：網址放大鏡</h2>
+            <p className="text-slate-600 mt-2">情境：駭客常偽裝成 Apple 或政府機關。<br/>任務：請將游標懸停 (Hover) 在「前往連結」按鈕上檢查真實網址，並將釣魚信件刪除！</p>
+          </div>
+
+          <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+            <div className="flex justify-between items-center mb-6 border-b pb-4">
+              <h3 className="font-bold text-lg flex items-center gap-2"><Mail className="text-blue-500"/> 你的收件匣</h3>
+              <div className="text-sm font-mono text-slate-500 bg-slate-100 px-3 py-1 rounded-full">
+                剩餘信件：{emails.length}
+              </div>
+            </div>
+
+            {message && (
+              <div className={`p-3 rounded-lg mb-4 text-center font-bold animate-in fade-in ${message.includes('✅') ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                {message}
+              </div>
+            )}
+
+            <div className="space-y-4">
+              {emails.map((email) => (
+                <div key={email.id} className="border border-slate-200 rounded-lg p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 hover:bg-slate-50 transition">
+                  <div>
+                    <p className="font-bold text-slate-800">{email.sender}</p>
+                    <p className="text-slate-600">{email.subject}</p>
+                  </div>
+                  
+                  <div className="flex items-center gap-2 w-full md:w-auto">
+                    <div className="relative flex-1 md:flex-none">
+                      <button 
+                        onMouseEnter={() => setHoveredId(email.id)}
+                        onMouseLeave={() => setHoveredId(null)}
+                        className="bg-blue-50 text-blue-600 border border-blue-200 px-4 py-2 rounded-lg text-sm w-full font-medium hover:bg-blue-100 transition"
+                      >
+                        前往連結
+                      </button>
+                      
+                      {/* Tooltip 顯示網址 */}
+                      {hoveredId === email.id && (
+                        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-max max-w-[250px] md:max-w-md bg-slate-800 text-white text-xs p-2 rounded shadow-xl break-all z-10 animate-in fade-in slide-in-from-bottom-2">
+                          <span className="text-slate-400">實際導向：</span><br/>
+                          <span className={email.isFake ? "text-red-400 font-bold" : "text-green-400"}>{email.url}</span>
+                          <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-800"></div>
+                        </div>
+                      )}
+                    </div>
+                    
+                    <button 
+                      onClick={() => handleTrash(email)}
+                      className="bg-red-50 text-red-600 p-2 rounded-lg hover:bg-red-600 hover:text-white transition group"
+                      title="刪除這封信"
+                    >
+                      <Trash2 className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+
+              {isComplete && (
+                <div className="text-center py-10 animate-in zoom-in">
+                  <CheckCircle2 className="w-20 h-20 text-green-500 mx-auto mb-4" />
+                  <h3 className="text-2xl font-bold text-slate-800 mb-2">信件整理完畢！</h3>
+                  <p className="text-slate-600 mb-6">
+                    正確刪除釣魚信件：{score.fake} 封 <br/>
+                    誤刪正常信件：{score.real} 封
+                  </p>
+                  <button onClick={onNext} className="bg-slate-900 text-white font-bold px-8 py-3 rounded-full hover:bg-slate-800 transition shadow-lg">
+                    查看課程總結
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    // --- 課程總結 ---
+    const Summary = ({ onRestart }) => (
+      <div className="max-w-4xl mx-auto p-4 animate-in fade-in slide-in-from-bottom-4">
+        <div className="bg-slate-900 text-white p-8 rounded-t-3xl text-center relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl"></div>
+          <ShieldCheck className="w-20 h-20 text-green-400 mx-auto mb-4" />
+          <h2 className="text-3xl font-bold mb-2">恭喜完成防詐特訓！</h2>
+          <p className="text-slate-300">請老師們截圖保存以下的「防詐心法口訣」，作為校園宣導的教材。</p>
+        </div>
+        
+        <div className="bg-white p-6 md:p-8 rounded-b-3xl shadow-xl border border-slate-200">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="bg-slate-100 text-slate-700">
+                  <th className="p-4 rounded-tl-xl font-bold w-1/4">詐騙類型</th>
+                  <th className="p-4 font-bold w-1/3">常見話術與特徵</th>
+                  <th className="p-4 rounded-tr-xl font-bold">防禦破解關鍵</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 text-slate-600">
+                <tr className="hover:bg-slate-50 transition">
+                  <td className="p-4 font-bold text-slate-800 flex items-center gap-2"><CreditCard className="w-4 h-4 text-blue-500 mr-1"/> eTag / 罰單未繳</td>
+                  <td className="p-4">系統顯示尚有費用未繳，將產生法律責任。</td>
+                  <td className="p-4 font-bold text-red-600 bg-red-50/50">沒有提供「車號」就是詐騙！絕不輕易點擊信件內連結。</td>
+                </tr>
+                <tr className="hover:bg-slate-50 transition">
+                  <td className="p-4 font-bold text-slate-800 flex items-center gap-2"><Smartphone className="w-4 h-4 text-green-500 mr-1"/> LINE 幫忙投票</td>
+                  <td className="p-4">朋友臨時拜託幫小朋友畫作或寵物投票。</td>
+                  <td className="p-4 font-bold text-red-600 bg-red-50/50">絕對不可交出 LINE「密碼」與「手機簡訊認證碼」。遇到借錢務必先查證！</td>
+                </tr>
+                <tr className="hover:bg-slate-50 transition">
+                  <td className="p-4 font-bold text-slate-800 flex items-center gap-2"><Mail className="w-4 h-4 text-purple-500 mr-1"/> 官方帳號 / 發票</td>
+                  <td className="p-4">付款被拒絕或發票中獎，需點擊連結更新資料。</td>
+                  <td className="p-4 font-bold text-red-600 bg-red-50/50">檢查網址是否為奇怪拼音或非官方網域，正常官方不會一次要求過多個資。</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div className="mt-10 text-center">
+            <button onClick={onRestart} className="text-slate-500 hover:text-slate-800 underline transition">
+              重新體驗測驗
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+
+    // --- 主應用程式容器 ---
+    function App() {
+      const [stage, setStage] = useState('home');
+
+      return (
+        <div className="min-h-screen pb-12 pt-6 font-sans text-slate-900 selection:bg-red-200">
+          {/* 導覽進度列 */}
+          {stage !== 'home' && (
+            <div className="max-w-4xl mx-auto px-4 mb-8">
+              <div className="flex items-center justify-center gap-2 md:gap-4 text-sm md:text-base font-bold text-slate-400">
+                <span className={stage === 'level1' ? 'text-red-600 border-b-2 border-red-600 pb-1' : ''}>1. 交通陷阱</span>
+                <ChevronRight className="w-4 h-4" />
+                <span className={stage === 'level2' ? 'text-red-600 border-b-2 border-red-600 pb-1' : ''}>2. LINE詐騙</span>
+                <ChevronRight className="w-4 h-4" />
+                <span className={stage === 'level3' ? 'text-red-600 border-b-2 border-red-600 pb-1' : ''}>3. 假信件鑑識</span>
+                <ChevronRight className="w-4 h-4" />
+                <span className={stage === 'summary' ? 'text-green-600 border-b-2 border-green-600 pb-1' : ''}>結業總結</span>
+              </div>
+            </div>
+          )}
+
+          {/* 關卡切換邏輯 */}
+          {stage === 'home' && <Home onStart={() => setStage('level1')} />}
+          {stage === 'level1' && <Level1 onNext={() => setStage('level2')} />}
+          {stage === 'level2' && <Level2 onNext={() => setStage('level3')} />}
+          {stage === 'level3' && <Level3 onNext={() => setStage('summary')} />}
+          {stage === 'summary' && <Summary onRestart={() => setStage('home')} />}
+        </div>
+      );
+    }
+
+    // 啟動 React 應用程式
+    const root = createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
