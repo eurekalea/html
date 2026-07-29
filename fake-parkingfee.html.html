@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>教育示範｜模擬電子繳費詐騙流程（虛構品牌）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;700;900&family=Noto+Sans+TC:wght@400;500;700&family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-950:#0A1F2E;
+    --navy-800:#0E2A3D;
+    --navy-700:#123A50;
+    --teal-600:#12586B;
+    --teal-500:#1B7488;
+    --gold-500:#C89B3C;
+    --gold-600:#A87D26;
+    --paper:#F3F1E9;
+    --card:#FFFFFF;
+    --ink:#17242B;
+    --ink-soft:#5B6B72;
+    --ink-faint:#8B979C;
+    --line:#DEDACB;
+    --line-soft:#EAE7DB;
+    --danger:#B3261E;
+    --danger-bg:#FBEAE8;
+    --safe-bg:#E9F1EA;
+    --safe:#2C6E48;
+    --radius-lg:16px;
+    --radius-md:12px;
+    --radius-sm:8px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    padding-top:40px;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{font-family:"Noto Serif TC","Noto Sans TC",serif;margin:0;}
+  .mono{font-family:"Roboto Mono",monospace;}
+  a{color:inherit;text-decoration:none;}
+
+  /* ---------- persistent education banner ---------- */
+  .edu-banner{
+    position:fixed;top:0;left:0;right:0;z-index:999;
+    background:repeating-linear-gradient(135deg,var(--danger),var(--danger) 16px,#821712 16px,#821712 32px);
+    color:#fff;text-align:center;
+    font-weight:700;font-size:12.5px;letter-spacing:.02em;
+    padding:8px 12px;
+    box-shadow:0 2px 10px rgba(0,0,0,.3);
+  }
+  .edu-banner span{
+    background:rgba(0,0,0,.3);
+    padding:3px 10px;border-radius:20px;
+  }
+
+  .wrap{max-width:700px;margin:0 auto;padding:0 0 60px;}
+  .page{display:none;animation:fade .35s ease;}
+  .page.active{display:block;}
+  @keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+  /* ---------- utility bar + nav (page1) ---------- */
+  .util-bar{
+    background:var(--navy-950);color:#B9C7CC;font-size:11px;
+    display:flex;justify-content:space-between;padding:6px 20px;
+  }
+  .util-bar .u-left span{margin-right:14px;}
+  .navbar{
+    background:#fff;border-bottom:1px solid var(--line);
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 20px;
+  }
+  .brand{display:flex;align-items:center;gap:11px;}
+  .brand-badge{
+    width:40px;height:40px;border-radius:9px;
+    background:linear-gradient(150deg,var(--teal-500),var(--navy-800));
+    display:flex;align-items:center;justify-content:center;
+    color:var(--gold-500);font-weight:900;font-size:18px;font-family:"Noto Serif TC",serif;
+    box-shadow:0 4px 10px rgba(10,31,46,.35);
+  }
+  .brand-name{font-weight:700;font-size:18px;color:var(--navy-800);letter-spacing:.01em;}
+  .brand-sub{font-size:10.5px;color:var(--ink-faint);letter-spacing:.03em;}
+  .nav-links{display:flex;gap:22px;font-size:13px;font-weight:500;color:var(--ink-soft);}
+  .nav-links a{padding:6px 2px;border-bottom:2px solid transparent;}
+  .nav-links a.on{color:var(--navy-800);border-color:var(--gold-500);}
+  .nav-login{
+    background:var(--navy-800);color:#fff;font-size:12.5px;font-weight:700;
+    padding:8px 16px;border-radius:20px;
+  }
+  @media(max-width:640px){.nav-links{display:none;}}
+
+  /* ---------- hero ---------- */
+  .hero{
+    background:
+      radial-gradient(circle at 85% 20%, rgba(200,155,60,.25), transparent 45%),
+      linear-gradient(160deg,var(--navy-950),var(--navy-800) 60%,var(--teal-600));
+    padding:38px 20px 74px;color:#fff;position:relative;
+  }
+  .hero-eyebrow{font-size:11.5px;letter-spacing:.16em;color:var(--gold-500);font-weight:700;text-transform:uppercase;padding:0 4px;}
+  .hero h1{font-size:25px;margin-top:10px;line-height:1.55;padding:0 4px;max-width:30ch;}
+  .hero p{font-size:12.5px;color:#C7D7DB;margin-top:10px;padding:0 4px;max-width:38ch;line-height:1.7;}
+
+  .notice-strip{
+    display:flex;gap:14px;overflow-x:auto;padding:16px 20px 0;
+  }
+  .notice-chip{
+    flex:0 0 auto;background:#fff;border:1px solid var(--line);border-radius:var(--radius-sm);
+    padding:10px 14px;font-size:11.5px;color:var(--ink-soft);min-width:200px;
+  }
+  .notice-chip b{display:block;color:var(--navy-800);font-size:12px;margin-bottom:3px;}
+  .notice-chip .d{color:var(--gold-600);font-weight:700;font-size:10.5px;}
+
+  /* ---------- floating query card ---------- */
+  .query-wrap{padding:0 20px;margin-top:-52px;position:relative;z-index:5;}
+  .form-card{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius-lg);
+    padding:26px 24px;box-shadow:0 14px 34px rgba(10,31,46,.16);
+  }
+  .form-card h2{font-size:16.5px;color:var(--navy-800);margin-bottom:4px;}
+  .form-card .desc{font-size:12px;color:var(--ink-faint);margin-bottom:18px;}
+  label{display:block;font-size:12px;font-weight:700;color:var(--navy-800);margin:15px 0 6px;letter-spacing:.01em;}
+  input[type=text],input[type=password]{
+    width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:9px;
+    font-size:14px;background:#FBFAF6;transition:border-color .15s, background .15s;
+    font-family:"Roboto Mono","Noto Sans TC",monospace;
+  }
+  input:focus{outline:none;border-color:var(--teal-500);background:#fff;}
+  .err{color:var(--danger);font-size:11.5px;margin-top:5px;display:none;font-weight:500;}
+  .err.show{display:block;}
+  .captcha-row{display:flex;gap:10px;align-items:center;}
+  canvas#captchaCanvas{border-radius:8px;border:1.5px solid var(--line);cursor:pointer;flex-shrink:0;}
+  .refresh-btn{
+    background:var(--line-soft);border:none;border-radius:8px;width:42px;height:42px;
+    font-size:16px;cursor:pointer;flex-shrink:0;color:var(--teal-600);
+  }
+  .btn-primary{
+    width:100%;margin-top:22px;padding:13.5px;border:none;border-radius:9px;
+    background:linear-gradient(135deg,var(--gold-500),var(--gold-600));
+    color:#2E2205;font-weight:700;font-size:14.5px;cursor:pointer;letter-spacing:.02em;
+    box-shadow:0 6px 16px rgba(168,125,38,.32);
+  }
+  .btn-primary:hover{filter:brightness(1.04);}
+  .btn-secondary{
+    width:100%;margin-top:10px;padding:12px;border:1.5px solid var(--line);border-radius:9px;
+    background:#fff;color:var(--ink-soft);font-weight:500;font-size:13.5px;cursor:pointer;
+  }
+  .form-link{display:block;text-align:center;margin-top:16px;font-size:12px;color:var(--teal-600);font-weight:500;}
+
+  .service-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:22px 20px 4px;}
+  .service-item{
+    background:#fff;border:1px solid var(--line);border-radius:var(--radius-md);
+    padding:14px 8px;text-align:center;
+  }
+  .service-item .ic{
+    width:34px;height:34px;margin:0 auto 8px;border-radius:9px;
+    background:linear-gradient(150deg,var(--teal-500),var(--navy-700));
+    display:flex;align-items:center;justify-content:center;color:var(--gold-500);font-size:15px;font-weight:900;
+  }
+  .service-item .t{font-size:11px;color:var(--ink-soft);font-weight:500;}
+  @media(max-width:480px){.service-grid{grid-template-columns:repeat(2,1fr);}}
+
+  .site-footer{
+    margin-top:30px;background:var(--navy-950);color:#8FA1A8;padding:24px 20px;font-size:11px;
+  }
+  .site-footer .cols{display:flex;gap:30px;flex-wrap:wrap;margin-bottom:16px;}
+  .site-footer h5{color:#DCE6E9;font-size:12px;margin-bottom:8px;font-weight:700;}
+  .site-footer p{margin:5px 0;line-height:1.7;}
+  .site-footer .fine{border-top:1px solid #1D3A47;padding-top:14px;font-size:10.5px;color:#6C8189;}
+
+  /* ---------- page 2 : dashboard / overdue fee ---------- */
+  .page-body{padding:24px 20px 10px;}
+  .dash-header{
+    background:linear-gradient(150deg,var(--navy-950),var(--navy-800) 70%);
+    color:#fff;border-radius:var(--radius-lg);padding:22px;margin-bottom:18px;
+    display:flex;justify-content:space-between;align-items:center;
+    box-shadow:0 10px 24px rgba(10,31,46,.2);
+  }
+  .plate-num{font-size:21px;font-weight:700;letter-spacing:.06em;font-family:"Roboto Mono",monospace;}
+  .plate-tag{font-size:11px;color:#B9CBD1;margin-top:5px;}
+  .balance-pill{background:rgba(255,255,255,.12);border-radius:10px;padding:9px 16px;text-align:center;}
+  .balance-pill .amt{font-size:19px;font-weight:800;color:var(--gold-500);font-family:"Roboto Mono",monospace;}
+  .balance-pill .lbl{font-size:9.5px;color:#B9CBD1;margin-top:2px;}
+
+  .status-flag{
+    display:inline-flex;align-items:center;gap:6px;
+    color:var(--danger);font-weight:700;font-size:12.5px;
+    background:var(--danger-bg);border-radius:20px;padding:6px 14px;margin-bottom:16px;
+  }
+  .status-flag::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--danger);}
+
+  table.fee-table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:6px;}
+  table.fee-table th{background:var(--navy-800);color:#fff;padding:11px 8px;font-weight:500;font-size:11.5px;}
+  table.fee-table th:first-child{border-radius:8px 0 0 0;}
+  table.fee-table th:last-child{border-radius:0 8px 0 0;}
+  table.fee-table td{padding:12px 8px;border-bottom:1px solid var(--line-soft);text-align:center;color:var(--ink);font-family:"Roboto Mono",monospace;}
+  table.fee-table td.amt{color:var(--danger);font-weight:700;}
+
+  /* ---------- page 3 : credit card ---------- */
+  .steps{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;}
+  .step{flex:1;text-align:center;position:relative;}
+  .step .dot{
+    width:30px;height:30px;border-radius:50%;background:var(--line);color:#fff;
+    display:flex;align-items:center;justify-content:center;margin:0 auto 6px;font-weight:700;font-size:13px;
+  }
+  .step.active .dot{background:var(--gold-500);color:#2E2205;}
+  .step.done .dot{background:var(--teal-600);}
+  .step .lbl{font-size:10.5px;color:var(--ink-faint);}
+  .kv{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px dashed var(--line);font-size:13px;}
+  .kv b{color:var(--navy-800);font-family:"Roboto Mono",monospace;}
+  .btn-row{display:flex;gap:10px;margin-top:22px;}
+  .btn-row .btn-secondary{margin-top:0;}
+  .card-chip-row{display:flex;gap:8px;margin-top:8px;}
+  .card-chip{
+    font-size:10px;font-weight:700;padding:4px 9px;border-radius:5px;
+    background:var(--line-soft);color:var(--ink-faint);letter-spacing:.03em;
+  }
+
+  /* ---------- page 4 : education reveal ---------- */
+  .warn-hero{
+    background:var(--danger-bg);border:1.5px solid #EAC0BC;border-radius:var(--radius-lg);
+    padding:28px 20px;text-align:center;margin-bottom:18px;
+  }
+  .warn-hero .icon{font-size:34px;}
+  .warn-hero h2{color:var(--danger);font-size:19px;margin:8px 0 4px;}
+  .warn-hero p{color:#7f2620;font-size:13px;}
+  .tip-list{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-lg);padding:20px 22px;margin-bottom:18px;}
+  .tip-list h3{font-size:14.5px;color:var(--navy-800);margin-bottom:10px;}
+  .tip-list ul{margin:0;padding-left:20px;font-size:13px;color:var(--ink-soft);line-height:1.9;}
+  .tip-list li b{color:var(--ink);}
+
+  .data-block{border-radius:12px;padding:16px 18px;margin-bottom:14px;}
+  .data-block h4{font-size:13px;margin-bottom:10px;color:var(--ink);}
+  .data-block .row{display:flex;justify-content:space-between;font-size:13px;padding:5px 0;color:var(--ink);font-family:"Roboto Mono",monospace;}
+  .data-block .row span:first-child{color:var(--ink-soft);font-family:"Noto Sans TC",sans-serif;}
+  .blk-account{background:#FBF1D9;}
+  .blk-personal{background:var(--safe-bg);}
+  .blk-card{background:#E2ECF4;}
+
+  .impact{background:var(--danger-bg);border-radius:12px;padding:16px 18px;font-size:12.5px;color:#7f2620;margin-bottom:18px;}
+  .impact b{display:block;margin-bottom:6px;}
+
+  .footer-note{text-align:center;font-size:11px;color:var(--ink-faint);margin-top:20px;line-height:1.8;padding:0 20px;}
+  .footer-note b{color:var(--danger);}
+
+  /* ---------- page 4 : teaching screens use Roboto Mono, emphasis = bold + larger ---------- */
+  #page4, #page4 input{font-family:"Roboto Mono",monospace;}
+  #page4 .warn-hero h2{font-size:22px;font-weight:700;}
+  #page4 .warn-hero p{font-size:14px;font-weight:700;}
+  #page4 .form-card h3{font-size:15.5px;font-weight:700;}
+  #page4 .form-card p{font-size:13.5px;line-height:1.8;}
+  #page4 .form-card p b{font-size:15px;font-weight:700;color:var(--danger);}
+  #page4 .tip-list h3{font-size:16px;font-weight:700;}
+  #page4 .tip-list ul{font-size:13.5px;line-height:2;}
+  #page4 .tip-list li b{font-size:15px;font-weight:700;}
+  #page4 .data-block h4{font-size:14.5px;font-weight:700;}
+  #page4 .data-block .row{font-size:14px;}
+  #page4 .data-block .row span:last-child{font-weight:700;font-size:15px;}
+  #page4 .impact{font-size:13.5px;line-height:1.8;}
+  #page4 .impact b{font-size:15.5px;font-weight:700;}
+  #page4 .btn-primary{font-size:15.5px;font-weight:700;}
+</style>
+</head>
+<body>
+
+<div class="edu-banner">⚠ <span>教育示範</span> 這是模擬釣魚流程教學網站，任何頁面都請勿輸入真實個資或卡片資料 ⚠</div>
+
+<div class="wrap">
+
+  <!-- ============ PAGE 1 ============ -->
+  <section class="page active" id="page1">
+
+    <div class="util-bar">
+      <div class="u-left"><span>客服專線 0800-000-000（示範）</span><span>意見信箱（示範）</span></div>
+      <div class="u-right">中文 ｜ EN</div>
+    </div>
+
+    <div class="navbar">
+      <div class="brand">
+        <div class="brand-badge">安</div>
+        <div>
+          <div class="brand-name">安捷通行電收</div>
+          <div class="brand-sub">DEMO ETC SERVICE · 虛構品牌・教學示範</div>
+        </div>
+      </div>
+      <div class="nav-links">
+        <a class="on" href="javascript:void(0)">首頁</a>
+        <a href="javascript:void(0)">查詢繳費</a>
+        <a href="javascript:void(0)">會員中心</a>
+        <a href="javascript:void(0)">常見問題</a>
+      </div>
+      <div class="nav-login">會員登入</div>
+    </div>
+
+    <div class="hero">
+      <div class="hero-eyebrow">安全公告</div>
+      <h1>沒有車號的簡訊、電子郵件都是詐騙，一律不需理會。</h1>
+      <p>本頁為防詐教育示範，模擬常見的「電子繳費」詐騙頁面樣式與排版，協助你在安全情境下練習辨識與應對可疑連結。</p>
+    </div>
+
+    <div class="notice-strip">
+      <div class="notice-chip"><span class="d">2026-07-20</span><b>假冒繳費簡訊示警</b>近期大量發送，請勿點擊不明連結</div>
+      <div class="notice-chip"><span class="d">2026-07-10</span><b>資安提醒</b>官方絕不會於簡訊中要求輸入卡片完整資料</div>
+      <div class="notice-chip"><span class="d">2026-06-28</span><b>查詢方式</b>如需查詢欠費，請自行輸入官方網址，勿點簡訊連結</div>
+    </div>
+
+    <div class="query-wrap">
+      <div class="form-card">
+        <h2>車籍資料查詢（示範表單）</h2>
+        <div class="desc">此為模擬表單，資料僅暫存在你的瀏覽器中，不會被傳送或儲存。</div>
+
+        <label for="plate">車號</label>
+        <input type="text" id="plate" placeholder="請輸入車牌號碼，例如 AB-1234">
+        <div class="err" id="plateErr">格式錯誤：車號應包含「-」的資料（例如：AB-1234）</div>
+
+        <label for="idnum">車主身分證字號或統一編號</label>
+        <input type="text" id="idnum" placeholder="請輸入身分證字號或統一編號">
+        <div class="err" id="idErr">請輸入車主身分證字號或統一編號</div>
+
+        <label>驗證碼</label>
+        <div class="captcha-row">
+          <input type="text" id="captchaInput" placeholder="請輸入右側驗證碼" style="flex:1;">
+          <canvas id="captchaCanvas" width="100" height="42" title="看不清楚？點擊圖片重新產生"></canvas>
+          <button type="button" class="refresh-btn" id="refreshCaptcha">⟳</button>
+        </div>
+        <div class="err" id="captchaErr">驗證碼輸入錯誤，請重新輸入</div>
+
+        <button class="btn-primary" id="toPage2">送出查詢</button>
+        <a class="form-link">立即申請會員帳號 →</a>
+      </div>
+    </div>
+
+    <div class="service-grid">
+      <div class="service-item"><div class="ic">查</div><div class="t">欠費查詢</div></div>
+      <div class="service-item"><div class="ic">繳</div><div class="t">線上繳費</div></div>
+      <div class="service-item"><div class="ic">單</div><div class="t">電子帳單</div></div>
+      <div class="service-item"><div class="ic">問</div><div class="t">常見問題</div></div>
+    </div>
+
+    <div class="site-footer">
+      <div class="cols">
+        <div>
+          <h5>安捷通行電收（示範）</h5>
+          <p>本網站為防詐教育示範用途，非真實企業，頁面上所有聯絡方式、統編、地址均為虛構。</p>
+        </div>
+        <div>
+          <h5>快速連結</h5>
+          <p>會員登入 / 欠費查詢 / 常見問題</p>
+        </div>
+        <div>
+          <h5>防詐資源</h5>
+          <p>165 反詐騙諮詢專線（真實）</p>
+        </div>
+      </div>
+      <div class="fine">© 2026 教學示範網站，非任何真實公司之官方網站，僅供資安教育使用。</div>
+    </div>
+  </section>
+
+  <!-- ============ PAGE 2 ============ -->
+  <section class="page" id="page2">
+    <div class="util-bar">
+      <div class="u-left"><span>客服專線 0800-000-000（示範）</span></div>
+      <div class="u-right">中文 ｜ EN</div>
+    </div>
+    <div class="navbar">
+      <div class="brand">
+        <div class="brand-badge">安</div>
+        <div>
+          <div class="brand-name">安捷通行電收</div>
+          <div class="brand-sub">DEMO ETC SERVICE · 教學示範</div>
+        </div>
+      </div>
+      <div class="nav-links">
+        <a href="javascript:void(0)">首頁</a>
+        <a class="on" href="javascript:void(0)">查詢繳費</a>
+        <a href="javascript:void(0)">會員中心</a>
+      </div>
+    </div>
+
+    <div class="page-body">
+      <div class="dash-header">
+        <div>
+          <div class="plate-num" id="maskedPlate">--</div>
+          <div class="plate-tag">自動儲值用戶（示範帳戶）</div>
+        </div>
+        <div class="balance-pill">
+          <div class="amt">40元</div>
+          <div class="lbl">即時試算餘額</div>
+        </div>
+      </div>
+
+      <div class="status-flag">欠費未繳</div>
+
+      <div class="form-card">
+        <h2 style="margin-bottom:14px;">路邊停車費</h2>
+        <table class="fee-table">
+          <thead><tr><th>停車日期</th><th>金額</th><th>停車單號碼</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>2026/07/12</td>
+              <td class="amt">120元</td>
+              <td id="ticketNo">P----------</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <button class="btn-primary" id="toPage3">立即繳納</button>
+        <button class="btn-secondary" id="backTo1From2">返回上一頁</button>
+      </div>
+
+      <div class="footer-note">提醒：真實繳費紀錄請務必透過官方 App 或官方網站確認，切勿透過簡訊連結進行繳費。</div>
+    </div>
+  </section>
+
+  <!-- ============ PAGE 3 ============ -->
+  <section class="page" id="page3">
+    <div class="page-body">
+      <div class="form-card">
+        <div class="steps">
+          <div class="step done"><div class="dot">✓</div><div class="lbl">繳費確認</div></div>
+          <div class="step active"><div class="dot">2</div><div class="lbl">輸入卡片資料</div></div>
+          <div class="step"><div class="dot">3</div><div class="lbl">繳費結果</div></div>
+        </div>
+
+        <div class="kv"><span>特約商店</span><b>DemoETCService（示範）</b></div>
+        <div class="kv"><span>交易日期</span><b id="txDate">2026/07/29</b></div>
+        <div class="kv"><span>交易金額</span><b>NT$120</b></div>
+
+        <label for="ccNum">信用卡卡號</label>
+        <input type="text" id="ccNum" placeholder="0000-0000-0000-0000">
+        <div class="card-chip-row">
+          <span class="card-chip">卡別 A</span><span class="card-chip">卡別 B</span><span class="card-chip">卡別 C</span>
+        </div>
+
+        <div style="display:flex;gap:12px;">
+          <div style="flex:1;">
+            <label for="ccExp">有效期</label>
+            <input type="text" id="ccExp" placeholder="MM/YY">
+          </div>
+          <div style="flex:1;">
+            <label for="ccCvv">CVV</label>
+            <input type="text" id="ccCvv" placeholder="000">
+          </div>
+        </div>
+
+        <label for="ccName">持卡人姓名</label>
+        <input type="text" id="ccName" placeholder="請輸入姓名">
+
+        <div class="btn-row">
+          <button class="btn-secondary" id="clearForm">清除資料</button>
+          <button class="btn-primary" id="toPage4" style="margin-top:0;">確認送出</button>
+        </div>
+      </div>
+      <div class="footer-note">⚠ 此為釣魚流程模擬：請隨意輸入假資料練習，<b>切勿輸入真實卡片資訊</b>。</div>
+    </div>
+  </section>
+
+  <!-- ============ PAGE 4 ============ -->
+  <section class="page" id="page4">
+    <div class="page-body">
+
+    <div id="page4-step1">
+      <div class="warn-hero">
+        <div class="icon">⚠️</div>
+        <h2>釣魚網站警告</h2>
+        <p>這是一個教育示範</p>
+      </div>
+
+      <div class="form-card" style="margin-bottom:18px;">
+        <h3 style="color:var(--navy-800);font-size:14.5px;margin-bottom:8px;">你剛才經歷了一次模擬的釣魚攻擊</h3>
+        <p style="font-size:12.5px;color:var(--ink-soft);line-height:1.7;">
+          在真實的釣魚攻擊中，你的個資和信用卡資料可能會在幾秒內被傳送給詐騙集團，並被用來盜刷、冒名申辦或進一步詐騙你身邊的人。
+        </p>
+      </div>
+
+      <div class="tip-list">
+        <h3>如何辨識釣魚網站：</h3>
+        <ul>
+          <li><b>檢查網址</b>——合法網站有固定的官方網域，切勿相信簡訊或訊息中的短網址</li>
+          <li><b>留意瀏覽器安全標示</b>——確認網站使用 HTTPS 且憑證正確</li>
+          <li><b>警惕過度要求個資的頁面</b>——正常查詢不需要一次填完身分證、卡號、CVV</li>
+          <li><b>官方不會用簡訊 / 電子郵件索取密碼或卡片資訊</b></li>
+          <li><b>如有疑問，直接撥打官方客服電話或前往官方 App 確認</b></li>
+        </ul>
+      </div>
+
+      <button class="btn-primary" id="revealData">看看你剛才「被騙走」了哪些資料</button>
+    </div>
+
+    <div id="page4-step2" style="display:none;">
+      <div class="warn-hero">
+        <div class="icon">⚠️</div>
+        <h2>被盜資料一覽</h2>
+        <p>這些是你在模擬釣魚頁面上輸入的資料</p>
+      </div>
+
+      <div class="data-block blk-account">
+        <h4>帳號資料</h4>
+        <div class="row"><span>車號</span><span id="revPlate">-</span></div>
+        <div class="row"><span>身分證字號 / 統編</span><span id="revId">-</span></div>
+      </div>
+
+      <div class="data-block blk-card">
+        <h4>信用卡資料</h4>
+        <div class="row"><span>持卡人姓名</span><span id="revCcName">-</span></div>
+        <div class="row"><span>卡號</span><span id="revCcNum">-</span></div>
+        <div class="row"><span>到期日</span><span id="revCcExp">-</span></div>
+        <div class="row"><span>安全碼</span><span id="revCcCvv">-</span></div>
+      </div>
+
+      <div class="impact">
+        <b>在真實的釣魚攻擊中，這些資料可能被用於：</b>
+        盜用帳號、進行身份冒用、未經授權的信用卡交易，以及針對你親友的進一步社交工程詐騙。
+      </div>
+
+      <div class="tip-list">
+        <h3>下次遇到類似訊息，請這樣做：</h3>
+        <ul>
+          <li>不要點擊簡訊或訊息中的連結，改用官方 App 或自行輸入官方網址</li>
+          <li>不確定時先向 165 反詐騙諮詢專線查證</li>
+          <li>任何要求輸入完整卡號＋有效期＋CVV 的頁面都要提高警覺</li>
+        </ul>
+      </div>
+
+      <button class="btn-primary" id="restartDemo">重新開始教學</button>
+    </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+(function(){
+  const state = { plate:"", idnum:"", ccName:"", ccNum:"", ccExp:"", ccCvv:"" };
+  let captchaCode = "";
+
+  function show(pageId){
+    document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+    document.getElementById(pageId).classList.add("active");
+    window.scrollTo({top:0,behavior:"smooth"});
+  }
+
+  // ---------- captcha ----------
+  function genCaptcha(){
+    const chars = "0123456789";
+    captchaCode = "";
+    for(let i=0;i<4;i++) captchaCode += chars[Math.floor(Math.random()*chars.length)];
+    drawCaptcha();
+  }
+  function drawCaptcha(){
+    const c = document.getElementById("captchaCanvas");
+    const ctx = c.getContext("2d");
+    ctx.clearRect(0,0,c.width,c.height);
+    ctx.fillStyle = "#FBFAF6";
+    ctx.fillRect(0,0,c.width,c.height);
+    for(let i=0;i<5;i++){
+      ctx.strokeStyle = `rgba(18,88,107,${0.15+Math.random()*0.2})`;
+      ctx.beginPath();
+      ctx.moveTo(Math.random()*c.width, Math.random()*c.height);
+      ctx.lineTo(Math.random()*c.width, Math.random()*c.height);
+      ctx.stroke();
+    }
+    ctx.font = "bold 22px 'Roboto Mono', monospace";
+    ctx.textBaseline = "middle";
+    for(let i=0;i<captchaCode.length;i++){
+      ctx.save();
+      const x = 14 + i*20;
+      const y = c.height/2 + (Math.random()*8-4);
+      ctx.translate(x,y);
+      ctx.rotate((Math.random()*0.4-0.2));
+      ctx.fillStyle = ["#12586B","#0E2A3D","#A87D26"][i%3];
+      ctx.fillText(captchaCode[i], 0, 0);
+      ctx.restore();
+    }
+  }
+  genCaptcha();
+  document.getElementById("captchaCanvas").addEventListener("click", genCaptcha);
+  document.getElementById("refreshCaptcha").addEventListener("click", genCaptcha);
+
+  // ---------- page1 -> page2 ----------
+  document.getElementById("toPage2").addEventListener("click", ()=>{
+    let ok = true;
+    const plate = document.getElementById("plate").value.trim();
+    const idnum = document.getElementById("idnum").value.trim();
+    const captchaInput = document.getElementById("captchaInput").value.trim();
+
+    const plateOk = /^[A-Za-z0-9]{2,4}-[A-Za-z0-9]{2,4}$/.test(plate);
+    document.getElementById("plateErr").classList.toggle("show", !plateOk);
+    if(!plateOk) ok = false;
+
+    const idOk = idnum.length > 0;
+    document.getElementById("idErr").classList.toggle("show", !idOk);
+    if(!idOk) ok = false;
+
+    const captchaOk = captchaInput.length>0 && captchaInput.toUpperCase() === captchaCode;
+    document.getElementById("captchaErr").classList.toggle("show", !captchaOk);
+    if(!captchaOk){ ok = false; genCaptcha(); document.getElementById("captchaInput").value=""; }
+
+    if(!ok) return;
+
+    state.plate = plate;
+    state.idnum = idnum;
+
+    const parts = plate.split("-");
+    let masked = plate;
+    if(parts.length===2){
+      const tail = parts[1];
+      const visible = tail.slice(-2);
+      const hidden = "*".repeat(Math.max(tail.length-2,1));
+      masked = parts[0] + "-" + hidden + visible;
+    }
+    document.getElementById("maskedPlate").textContent = masked;
+
+    const ticket = "P" + Math.floor(1000000000 + Math.random()*8999999999);
+    document.getElementById("ticketNo").textContent = ticket;
+
+    show("page2");
+  });
+
+  // ---------- page2 nav ----------
+  document.getElementById("toPage3").addEventListener("click", ()=> show("page3"));
+  document.getElementById("backTo1From2").addEventListener("click", ()=> show("page1"));
+
+  // ---------- page3 ----------
+  document.getElementById("clearForm").addEventListener("click", ()=>{
+    ["ccNum","ccExp","ccCvv","ccName"].forEach(id=> document.getElementById(id).value="");
+  });
+
+  document.getElementById("toPage4").addEventListener("click", ()=>{
+    state.ccNum = document.getElementById("ccNum").value.trim();
+    state.ccExp = document.getElementById("ccExp").value.trim();
+    state.ccCvv = document.getElementById("ccCvv").value.trim();
+    state.ccName = document.getElementById("ccName").value.trim();
+
+    document.getElementById("page4-step1").style.display = "";
+    document.getElementById("page4-step2").style.display = "none";
+    show("page4");
+  });
+
+  // ---------- page4 reveal ----------
+  function maskCard(num){
+    const digits = num.replace(/\D/g,"");
+    if(digits.length < 4) return "**** **** **** ****";
+    return "**** **** **** " + digits.slice(-4);
+  }
+  document.getElementById("revealData").addEventListener("click", ()=>{
+    document.getElementById("revPlate").textContent = state.plate || "（未輸入）";
+    document.getElementById("revId").textContent = state.idnum || "（未輸入）";
+    document.getElementById("revCcName").textContent = state.ccName || "（未輸入）";
+    document.getElementById("revCcNum").textContent = state.ccNum ? maskCard(state.ccNum) : "（未輸入）";
+    document.getElementById("revCcExp").textContent = state.ccExp || "（未輸入）";
+    document.getElementById("revCcCvv").textContent = state.ccCvv ? "*".repeat(state.ccCvv.length) : "（未輸入）";
+
+    document.getElementById("page4-step1").style.display = "none";
+    document.getElementById("page4-step2").style.display = "";
+  });
+
+  document.getElementById("restartDemo").addEventListener("click", ()=>{
+    document.getElementById("plate").value="";
+    document.getElementById("idnum").value="";
+    document.getElementById("captchaInput").value="";
+    document.querySelectorAll(".err").forEach(e=>e.classList.remove("show"));
+    ["ccNum","ccExp","ccCvv","ccName"].forEach(id=> document.getElementById(id).value="");
+    genCaptcha();
+    show("page1");
+  });
+
+})();
+</script>
+
+</body>
+</html>
