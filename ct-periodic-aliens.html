@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>外星人失蹤事件｜Decomposition</title>
+<title>ALIEN40｜運算思維拆解挑戰</title>
 
 <style>
 :root{
@@ -18,6 +18,8 @@
   --accent-bg:#eff6ff;
   --highlight:#fef3c7;
   --highlight-border:#f59e0b;
+  --correct:#ecfdf3;
+  --correct-border:#22c55e;
   --alien-head:#a7d8ff;
   --alien-body:#a8e6cf;
 }
@@ -40,8 +42,7 @@ body{
 
 button,
 input,
-textarea,
-select{
+textarea{
   font:inherit;
 }
 
@@ -49,15 +50,11 @@ button{
   cursor:pointer;
 }
 
-button:focus-visible,
-input:focus-visible,
-textarea:focus-visible,
-select:focus-visible{
-  outline:3px solid rgba(37,99,235,.3);
-  outline-offset:2px;
+button:disabled{
+  cursor:not-allowed;
+  opacity:.55;
 }
 
-/* 修正：明確設定所有輸入欄位的灰色提示詞 */
 input::placeholder,
 textarea::placeholder{
   color:var(--placeholder);
@@ -65,15 +62,15 @@ textarea::placeholder{
 }
 
 .container{
-  width:min(1100px, calc(100% - 24px));
-  margin:20px auto 50px;
+  width:min(1120px, calc(100% - 24px));
+  margin:22px auto 50px;
 }
 
 .header{
   display:flex;
   justify-content:space-between;
   align-items:flex-start;
-  gap:16px;
+  gap:12px;
   margin-bottom:14px;
 }
 
@@ -87,27 +84,9 @@ textarea::placeholder{
   font-size:14px;
 }
 
-.step-text{
+.stage-indicator{
   font-size:14px;
   font-weight:800;
-  white-space:nowrap;
-}
-
-.progress{
-  display:flex;
-  gap:8px;
-  margin-bottom:16px;
-}
-
-.progress span{
-  width:12px;
-  height:12px;
-  border-radius:50%;
-  background:#d6dbe4;
-}
-
-.progress span.on{
-  background:var(--accent);
 }
 
 .panel{
@@ -136,33 +115,21 @@ textarea::placeholder{
   color:var(--muted);
   font-size:13px;
   font-weight:900;
-  letter-spacing:.04em;
+  letter-spacing:.05em;
 }
 
 h1,h2,h3,p{
   margin-top:0;
 }
 
-h2{
-  margin-bottom:6px;
-}
-
-.muted{
-  color:var(--muted);
-}
-
 .btn{
   min-height:44px;
-  padding:9px 15px;
+  padding:9px 14px;
   border:1px solid var(--border);
   border-radius:11px;
   background:#fff;
   color:var(--text);
   font-weight:800;
-}
-
-.btn:hover{
-  background:#f6f8fb;
 }
 
 .btn-primary{
@@ -173,7 +140,22 @@ h2{
 
 .btn.selected{
   border-color:var(--accent);
-  outline:3px solid rgba(37,99,235,.22);
+  outline:3px solid rgba(37,99,235,.2);
+}
+
+input,
+textarea{
+  width:100%;
+  padding:11px 12px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  background:#fff;
+  color:var(--text);
+  font-size:16px;
+}
+
+textarea{
+  resize:vertical;
 }
 
 .flex{
@@ -192,10 +174,6 @@ h2{
   gap:12px;
 }
 
-.justify-between{
-  justify-content:space-between;
-}
-
 .justify-end{
   justify-content:flex-end;
 }
@@ -204,52 +182,31 @@ h2{
   align-items:center;
 }
 
-.mt-8{ margin-top:8px; }
-.mt-12{ margin-top:12px; }
-.mt-16{ margin-top:16px; }
-.mt-20{ margin-top:20px; }
-.mt-24{ margin-top:24px; }
+.mt-8{margin-top:8px;}
+.mt-12{margin-top:12px;}
+.mt-16{margin-top:16px;}
+.mt-20{margin-top:20px;}
+.mt-24{margin-top:24px;}
 
-input,
-textarea,
-select{
-  width:100%;
-  padding:10px 12px;
-  border:1px solid var(--border);
-  border-radius:10px;
-  background:#fff;
-  color:var(--text);
-  font-size:16px;
+.muted{
+  color:var(--muted);
 }
 
-textarea{
-  resize:vertical;
+.message{
+  min-height:24px;
+  margin-top:10px;
+  font-weight:700;
+}
+
+.status{
+  padding:11px 13px;
+  border-left:4px solid var(--accent);
+  border-radius:9px;
+  background:#f7f9fc;
 }
 
 .grid{
   display:grid;
-}
-
-.sample-grid{
-  grid-template-columns:repeat(6,1fr);
-  gap:8px;
-}
-
-.feature-grid{
-  grid-template-columns:repeat(3,1fr);
-  gap:8px;
-}
-
-.puzzle15{
-  grid-template-columns:repeat(5,1fr);
-  gap:8px;
-  min-width:620px;
-}
-
-.puzzle40{
-  grid-template-columns:repeat(8,1fr);
-  gap:6px;
-  min-width:900px;
 }
 
 .scroll-x{
@@ -258,55 +215,107 @@ textarea{
 
 .alien{
   display:block;
-  width:82px;
-  height:92px;
+  width:70px;
+  height:80px;
   margin:auto;
 }
 
-.alien-small{
-  width:67px;
-  height:76px;
+
+/* =========================
+   STAGE 1
+========================= */
+
+.mystery-row{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+  max-width:620px;
+  margin:22px auto;
 }
 
-.muted-part{
-  opacity:.1;
+.mystery-alien{
+  position:relative;
+  min-height:150px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid var(--border);
+  border-radius:16px;
+  background:#f8fafc;
+  overflow:hidden;
 }
 
-.active-part{
-  opacity:1;
+.mystery-alien svg{
+  filter:grayscale(1);
+  opacity:.48;
+  width:105px;
+  height:120px;
+}
+
+.question-overlay{
+  position:absolute;
+  inset:0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:58px;
+  font-weight:900;
+  color:#475467;
+  text-shadow:0 1px 0 #fff;
+}
+
+.start-row{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:10px;
+  margin-top:14px;
+}
+
+
+/* =========================
+   STAGE 2
+========================= */
+
+.puzzle40{
+  grid-template-columns:repeat(8,1fr);
+  gap:6px;
+  min-width:900px;
 }
 
 .missing{
   position:relative;
-  min-height:108px;
+  min-height:103px;
   display:flex;
-  justify-content:center;
   align-items:center;
+  justify-content:center;
   border:2px dashed var(--accent);
-  border-radius:13px;
-  background:var(--accent-bg);
-  font-size:30px;
+  border-radius:12px;
+  background:var(--card);
+  font-size:26px;
   font-weight:900;
 }
 
 .missing.active-blank{
-  background:var(--highlight);
-  border-color:var(--highlight-border);
-  box-shadow:
-    0 0 0 3px rgba(245,158,11,.16) inset,
-    0 0 0 2px rgba(245,158,11,.15);
+  background:var(--accent-bg);
+  border-color:var(--accent);
 }
 
-.missing.filled{
-  padding:4px;
-  font-size:inherit;
+.missing.wrong{
+  background:var(--highlight);
+  border-color:var(--highlight-border);
+  box-shadow:0 0 0 2px rgba(245,158,11,.18) inset;
+}
+
+.missing.correct{
+  background:var(--correct);
+  border-color:var(--correct-border);
 }
 
 .blank-label{
   position:absolute;
   top:4px;
   left:5px;
-  z-index:3;
+  z-index:2;
   padding:1px 7px;
   border:1px solid var(--border);
   border-radius:999px;
@@ -315,10 +324,20 @@ textarea{
   font-weight:900;
 }
 
+.blank-tab.on{
+  border-color:var(--accent);
+  background:var(--accent-bg);
+  outline:2px solid rgba(37,99,235,.22);
+}
+
 .two-col{
   display:grid;
   grid-template-columns:210px 1fr;
   gap:16px;
+}
+
+.preview{
+  text-align:center;
 }
 
 .builder{
@@ -333,524 +352,198 @@ textarea{
   gap:8px;
 }
 
-.preview-box{
-  text-align:center;
+.assignment-box{
+  padding:12px 14px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:#f8fafc;
+  white-space:pre-wrap;
 }
 
-.status{
-  padding:11px 13px;
-  border-left:4px solid var(--accent);
-  border-radius:9px;
-  background:#f7f9fc;
+.score-box{
+  border:2px solid var(--accent);
+  background:var(--accent-bg);
+  border-radius:15px;
+  padding:16px;
 }
 
-.message{
-  min-height:25px;
-  margin-top:10px;
-  font-weight:700;
+.score-big{
+  font-size:36px;
+  line-height:1;
+  font-weight:900;
 }
 
-.blank-tab.on{
-  border-color:var(--highlight-border);
-  background:var(--highlight);
-  outline:2px solid rgba(245,158,11,.3);
-}
-
-.discussion-grid{
+.score-grid{
   display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-}
-
-.result-row{
-  padding:7px 0;
-  border-bottom:1px solid var(--border);
-}
-
-.result-row:last-child{
-  border-bottom:none;
-}
-
-.concept-flow{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
+  grid-template-columns:repeat(3,1fr);
   gap:9px;
 }
 
-.concept-flow .card{
+.score-card{
   text-align:center;
+  border:1px solid var(--border);
+  border-radius:11px;
+  background:#fff;
+  padding:10px;
 }
 
-.number{
-  font-size:20px;
-  font-weight:900;
+.locked-note{
+  padding:10px 12px;
+  border-radius:9px;
+  background:#fef3c7;
+  color:#854d0e;
+  font-weight:800;
+}
+
+.hidden{
+  display:none !important;
 }
 
 @media(max-width:760px){
 
-  .sample-grid{
-    grid-template-columns:repeat(3,1fr);
+  .mystery-row{
+    grid-template-columns:1fr;
   }
 
-  .feature-grid{
-    grid-template-columns:repeat(2,1fr);
+  .start-row{
+    grid-template-columns:1fr;
   }
 
   .two-col{
     grid-template-columns:1fr;
   }
 
-  .discussion-grid{
+  .score-grid{
     grid-template-columns:1fr;
   }
 
-  .concept-flow{
-    grid-template-columns:1fr 1fr;
-  }
-
   .alien{
-    width:70px;
-    height:80px;
+    width:60px;
+    height:70px;
   }
 }
 </style>
 </head>
 
+
 <body>
 
-<main class="container" id="app">
+<main class="container">
 
 <header class="header">
+
   <div>
-    <div class="logo">Alien Research Center</div>
-    <div class="subtitle" id="subtitle">
-      LEVEL 1｜拆解外星人的特徵
+    <div class="logo">
+      Alien Research Center
+    </div>
+
+    <div class="subtitle">
+      ALIEN40｜運算思維拆解挑戰
     </div>
   </div>
-
-  <div class="step-text" id="stepText">
-    1 / 5
-  </div>
-</header>
-
-<div class="progress">
-  <span class="on"></span>
-  <span></span>
-  <span></span>
-  <span></span>
-  <span></span>
-</div>
-
-
-<!-- =====================================================
-     1 / 5
-===================================================== -->
-
-<section id="intro" class="stage active panel">
-
-  <div class="stage-label">
-    STAGE 1｜觀察
-  </div>
-
-  <h2>
-    先觀察，不急著猜規則
-  </h2>
-
-  <p>
-    如果要向一個沒看過 Alien 的同學描述它，
-    你會把它分成哪些部分？
-  </p>
-
-  <div id="samples"
-       class="grid sample-grid mt-16">
-  </div>
-
-  <!-- 修正：textarea 中間不可有空白 -->
-  <textarea
-    id="observe"
-    rows="2"
-    class="mt-16"
-    placeholder="我先注意到……"></textarea>
-
-  <div class="flex justify-end mt-16">
-    <button
-      id="introNext"
-      class="btn btn-primary"
-      type="button">
-      開始拆解 →
-    </button>
-  </div>
-
-</section>
-
-
-<!-- =====================================================
-     2 / 5
-===================================================== -->
-
-<section id="decompose" class="stage panel">
-
-  <div class="stage-label">
-    STAGE 2｜拆解
-  </div>
-
-  <h2>
-    哪些部分值得分開處理？
-  </h2>
-
-  <p class="muted">
-    至少選 4 項。
-    目的不是拆得最多，而是讓後續比較更容易。
-  </p>
 
   <div
-    id="featurePick"
-    class="grid feature-grid mt-16">
+    class="stage-indicator"
+    id="stageIndicator">
+    STAGE 1 / 2
   </div>
 
-  <div class="card mt-16">
-
-    <strong>
-      想一想：
-    </strong>
-
-    <div class="mt-8">
-      如果把 Alien 拆成 30 個小部分，
-      一定會更容易解題嗎？
-    </div>
-
-    <select id="fineSplit"
-            class="mt-8">
-
-      <option value="">
-        先選一個想法
-      </option>
-
-      <option value="一定會">
-        一定會
-      </option>
-
-      <option value="不一定">
-        不一定
-      </option>
-
-      <option value="不知道">
-        不知道
-      </option>
-
-    </select>
-
-  </div>
-
-  <div id="decompMsg"
-       class="message"
-       aria-live="polite">
-  </div>
-
-  <div class="flex justify-end mt-16">
-
-    <button
-      id="decompNext"
-      class="btn btn-primary"
-      type="button">
-      進入第一題 →
-    </button>
-
-  </div>
-
-</section>
+</header>
 
 
-<!-- =====================================================
-     3 / 5
-===================================================== -->
+<!-- =================================================
+     STAGE 1
+================================================= -->
 
-<section id="level1" class="stage panel">
+<section
+  id="stage1"
+  class="stage active panel">
 
   <div class="stage-label">
-    STAGE 3｜逐項比較
+    STAGE 1｜任務啟動
   </div>
 
   <h2>
-    LEVEL 1｜找回 1 隻失蹤 Alien
+    Alien 資料遺失事件
   </h2>
 
   <p>
-    一次只看一個特徵，
-    再把各個子問題的答案重新組合。
+    有 3 隻 Alien 資料遺失了。請觀察整體規律，自行決定如何拆解、比較與推論，再重建 A、B、C 三隻 Alien。
   </p>
 
-  <div class="flex flex-wrap align-center gap-8 mt-12">
 
-    <label for="focus1">
+  <div
+    id="mysteryAliens"
+    class="mystery-row">
+  </div>
+
+
+  <div class="mt-20">
+
+    <label for="assignment">
       <strong>
-        現在只看：
+        小組分工
       </strong>
     </label>
 
-    <select id="focus1"
-            style="max-width:200px">
-
-      <option value="all">
-        完整 Alien
-      </option>
-
-      <option value="head">
-        頭部
-      </option>
-
-      <option value="eyes">
-        眼睛
-      </option>
-
-      <option value="antenna">
-        觸角
-      </option>
-
-      <option value="body">
-        身體
-      </option>
-
-      <option value="symbol">
-        身體符號
-      </option>
-
-    </select>
-
-  </div>
-
-
-  <div class="scroll-x mt-16">
-
-    <div
-      id="grid15"
-      class="grid puzzle15">
-    </div>
-
-  </div>
-
-
-  <div class="two-col mt-20">
-
-    <div class="card preview-box">
-
-      <strong>
-        你的推測
-      </strong>
-
-      <div id="preview1"
-           class="mt-8">
-      </div>
-
-    </div>
-
-
-    <div
-      id="builder1"
-      class="builder">
-    </div>
-
-  </div>
-
-
-  <div class="discussion-grid mt-16">
-
-    <!-- 修正 -->
     <textarea
-      id="ev1a"
-      rows="2"
-      placeholder="證據 1：我認為……因為……"></textarea>
-
-    <!-- 修正 -->
-    <textarea
-      id="ev1b"
-      rows="2"
-      placeholder="證據 2：我認為……因為……"></textarea>
+      id="assignment"
+      rows="4"
+      class="mt-8"
+      placeholder="請寫下你們這組的分工"></textarea>
 
   </div>
 
 
-  <div id="l1msg"
-       class="message"
-       aria-live="polite">
-  </div>
+  <div class="start-row">
 
-
-  <div class="flex justify-end mt-16">
+    <input
+      id="startCode"
+      autocomplete="off"
+      placeholder="輸入開始解題代碼">
 
     <button
-      id="check1"
-      class="btn btn-primary"
-      type="button">
-      驗證第一題
+      id="startBtn"
+      type="button"
+      class="btn btn-primary">
+      輸入代碼開始解題
     </button>
 
   </div>
 
-</section>
-
-
-<!-- =====================================================
-     4 / 5
-===================================================== -->
-
-<section id="group" class="stage panel">
-
-  <div class="stage-label">
-    STAGE 4｜組內討論
-  </div>
-
-  <h2>
-    先停下來：組內討論 RULES
-  </h2>
-
-  <p>
-    比較彼此的解法，再共同形成一個：
-    「好的拆解應該……」的結論。
-  </p>
-
-
-  <div class="discussion-grid mt-16">
-
-    <input
-      id="className"
-      placeholder="班級，例如 701">
-
-    <input
-      id="groupName"
-      placeholder="組別，例如 第3組">
-
-  </div>
-
-
-  <!-- 修正 -->
-  <textarea
-    id="groupRule"
-    rows="3"
-    class="mt-12"
-    placeholder="我們組的 RULE：好的拆解應該……"></textarea>
-
-
-  <!-- 修正 -->
-  <textarea
-    id="groupEvidence"
-    rows="2"
-    class="mt-12"
-    placeholder="我們的證據：從 Alien 任務中，我們發現……"></textarea>
-
-
-  <button
-    id="submitGroup"
-    class="btn btn-primary mt-12"
-    type="button">
-    送出小組成果
-  </button>
-
 
   <div
-    id="submitMsg"
+    id="stage1Message"
     class="message"
     aria-live="polite">
   </div>
 
-
-  <div class="card mt-16">
-
-    <strong>
-      已送出的小組成果
-    </strong>
-
-    <div
-      id="submissionList"
-      class="muted mt-8">
-      尚未送出。
-    </div>
-
-  </div>
-
-
-  <div
-    class="mt-24"
-    style="
-      border-top:1px solid var(--border);
-      padding-top:18px;
-    ">
-
-    <h3>
-      進階研究區
-    </h3>
-
-    <p class="muted">
-      完成老師指定的討論後，
-      輸入進階關卡通關代碼。
-    </p>
-
-    <div
-      class="flex gap-8 mt-12"
-      style="flex-wrap:wrap">
-
-      <input
-        id="passcode"
-        autocomplete="off"
-        placeholder="輸入通關代碼"
-        style="
-          flex:1;
-          min-width:220px;
-        ">
-
-      <button
-        id="unlock"
-        class="btn btn-primary"
-        type="button">
-        解鎖
-      </button>
-
-    </div>
-
-    <div
-      id="codeMsg"
-      class="message"
-      aria-live="polite">
-    </div>
-
-  </div>
-
 </section>
 
 
-<!-- =====================================================
-     5 / 5 — ALIEN 40
-===================================================== -->
+<!-- =================================================
+     STAGE 2
+================================================= -->
 
-<section id="level40" class="stage panel">
+<section
+  id="stage2"
+  class="stage panel">
 
   <div class="stage-label">
-    CODE ACCEPTED｜ALIEN40
+    STAGE 2｜ALIEN40 解題
   </div>
 
   <h2>
-    LEVEL 2｜40 Alien 進階挑戰
+    重建 3 隻失蹤 Alien
   </h2>
 
   <p>
-    這次有
-    <strong>3 個失蹤位置</strong>。
-    前一關的方法還能不能用？
-    請自行決定如何拆解、比較與推論。
+    請觀察 40 隻 Alien 的整體規律，自行決定如何拆解、比較與推論。
   </p>
 
+
   <div class="status mt-16">
-
-    <strong>
-      進階任務規則：
-    </strong>
-
-    <br>
-
-    這一關不再提供「只看某一特徵」的工具，
-    也不提供提示。
-    請把上一題形成的方法遷移到新的問題。
-
+    本關不提供特徵濾鏡與提示。請依照小組自己的策略完成 A、B、C。
   </div>
 
 
@@ -864,25 +557,25 @@ textarea{
   </div>
 
 
-  <div class="flex gap-8 flex-wrap mt-20">
+  <div class="flex flex-wrap gap-8 mt-20">
 
     <button
-      class="btn blank-tab on"
       type="button"
+      class="btn blank-tab on"
       data-blank="A">
       缺格 A
     </button>
 
     <button
-      class="btn blank-tab"
       type="button"
+      class="btn blank-tab"
       data-blank="B">
       缺格 B
     </button>
 
     <button
-      class="btn blank-tab"
       type="button"
+      class="btn blank-tab"
       data-blank="C">
       缺格 C
     </button>
@@ -890,23 +583,23 @@ textarea{
   </div>
 
 
-  <div class="two-col mt-12">
+  <div class="two-col mt-16">
 
-    <div class="card preview-box">
+    <div class="card preview">
 
       <strong id="currentBlankTitle">
         正在解：A
       </strong>
 
       <div
-        id="preview40"
+        id="previewAlien"
         class="mt-8">
       </div>
 
       <button
-        id="saveBlank"
-        class="btn btn-primary mt-12"
+        id="lockBlank"
         type="button"
+        class="btn btn-primary mt-12"
         style="width:100%">
         鎖定這一格
       </button>
@@ -915,177 +608,66 @@ textarea{
 
 
     <div
-      id="builder40"
+      id="builder"
       class="builder">
     </div>
 
   </div>
 
 
-  <!-- 修正 -->
-  <textarea
-    id="ev40"
-    rows="3"
-    class="mt-16"
-    placeholder="請寫出你解這三格時使用的方法或證據。"></textarea>
+  <!-- Stage 1 的回答帶入 Stage 2 -->
 
-
-  <div class="card mt-16">
+  <div class="mt-20">
 
     <strong>
-      答案驗證
+      你們這組的分工
     </strong>
 
-    <p class="muted mt-8">
-      完成三個缺格後，
-      輸入老師提供的驗證代碼。
-    </p>
-
-
     <div
-      class="flex gap-8 flex-wrap mt-12">
-
-      <input
-        id="answerCode"
-        placeholder="輸入驗證代碼"
-        autocomplete="off"
-        style="
-          flex:1;
-          min-width:220px;
-        ">
-
-      <button
-        id="check40"
-        class="btn btn-primary"
-        type="button">
-        輸入代碼驗證答案
-      </button>
-
+      id="assignmentDisplay"
+      class="assignment-box mt-8">
     </div>
+
+  </div>
+
+
+  <!-- 已刪除「方法或證據」文字框 -->
+
+
+  <div
+    id="lockedNotice"
+    class="locked-note mt-20 hidden">
+
+    答案已送出，作答內容已鎖定，無法再修改。
+
+  </div>
+
+
+  <div class="flex justify-end mt-20">
+
+    <button
+      id="submitAnswer"
+      type="button"
+      class="btn btn-primary">
+
+      計算分數
+
+    </button>
 
   </div>
 
 
   <div
-    id="l40msg"
+    id="stage2Message"
     class="message"
     aria-live="polite">
   </div>
 
-</section>
 
-
-<!-- =====================================================
-     FINISH
-===================================================== -->
-
-<section id="finish"
-         class="stage panel">
-
-  <div class="stage-label">
-    MISSION COMPLETE
+  <div
+    id="scoreArea"
+    class="mt-20 hidden">
   </div>
-
-  <h2>
-    Decomposition｜拆解
-  </h2>
-
-
-  <div class="concept-flow mt-16">
-
-    <div class="card">
-
-      <div class="number">
-        1
-      </div>
-
-      複雜整體
-
-    </div>
-
-
-    <div class="card">
-
-      <div class="number">
-        2
-      </div>
-
-      拆成子問題
-
-    </div>
-
-
-    <div class="card">
-
-      <div class="number">
-        3
-      </div>
-
-      逐一分析
-
-    </div>
-
-
-    <div class="card">
-
-      <div class="number">
-        4
-      </div>
-
-      重新組合
-
-    </div>
-
-  </div>
-
-
-  <div class="status mt-20">
-
-    <strong>
-      核心理解：
-    </strong>
-
-    <p
-      class="mt-8"
-      style="margin-bottom:0">
-
-      拆解不是「切得越碎越好」，
-      而是把複雜問題拆成較小、
-      較容易理解與處理，
-      而且對解題真正有幫助的子問題。
-
-    </p>
-
-  </div>
-
-
-  <div class="card mt-16">
-
-    <strong>
-      最後討論：
-    </strong>
-
-    <p
-      class="mt-8"
-      style="margin-bottom:0">
-
-      「拆得越細，就代表越會拆解嗎？」
-
-      <br>
-
-      請用剛才的 Alien 任務當證據。
-
-    </p>
-
-  </div>
-
-
-  <button
-    id="restart"
-    class="btn mt-16"
-    type="button">
-    重新開始
-  </button>
 
 </section>
 
@@ -1098,9 +680,9 @@ textarea{
 "use strict";
 
 
-/* =====================================================
-   基本資料
-===================================================== */
+/* =================================================
+   DATA
+================================================= */
 
 const heads = [
   "round",
@@ -1119,11 +701,15 @@ const antennas = [
 ];
 
 
+/*
+只留三種身體，
+避免橢圓與圓形過度相似。
+*/
+
 const bodies = [
   "oval",
   "box",
-  "shield",
-  "round"
+  "shield"
 ];
 
 
@@ -1145,80 +731,18 @@ const featureLabels = {
   eyes:"眼睛",
   antenna:"觸角",
   body:"身體",
-  symbol:"身體符號",
-  arms:"手臂",
-  legs:"腿"
+  symbol:"身體符號"
 
 };
 
 
-/* =====================================================
-   建立第一題 15 Alien
-===================================================== */
-
-function make15(){
-
-  const aliens = [];
-
-
-  for(
-    let row = 0;
-    row < 3;
-    row++
-  ){
-
-    for(
-      let col = 0;
-      col < 5;
-      col++
-    ){
-
-      aliens.push({
-
-        id:
-          row * 5 + col,
-
-        row,
-        col,
-
-        head:
-          heads[row],
-
-        eyes:
-          (col % 3) + 1,
-
-        antenna:
-          antennas[
-            (row + col) % 3
-          ],
-
-        body:
-          bodies[
-            col % 3
-          ],
-
-        symbol:
-          symbols[col]
-
-      });
-
-    }
-
-  }
-
-
-  return aliens;
-
-}
-
-
-/* =====================================================
-   建立進階 40 Alien
-===================================================== */
+/* =================================================
+   CREATE 40 ALIENS
+================================================= */
 
 function make40(){
 
-  const aliens = [];
+  const data = [];
 
 
   for(
@@ -1233,7 +757,7 @@ function make40(){
       col++
     ){
 
-      aliens.push({
+      data.push({
 
         id:
           row * 8 + col,
@@ -1254,7 +778,7 @@ function make40(){
 
         body:
           bodies[
-            col % 4
+            col % 3
           ],
 
         symbol:
@@ -1267,29 +791,14 @@ function make40(){
   }
 
 
-  return aliens;
+  return data;
 
 }
 
 
-const aliens15 =
-  make15();
-
-
-const aliens40 =
+const aliens =
   make40();
 
-
-/*
-第一題遺失位置
-*/
-
-const missing15 = 8;
-
-
-/*
-ALIEN40 三個遺失位置
-*/
 
 const blankLocations = {
 
@@ -1300,18 +809,16 @@ const blankLocations = {
 };
 
 
-/* =====================================================
-   狀態
-===================================================== */
+/* =================================================
+   STATE
+================================================= */
 
-let selectedFeatures =
-  new Set();
+let assignmentText = "";
 
-
-let localSubmissions = [];
+let activeBlank = "A";
 
 
-let build1 = {
+let build = {
 
   head:"round",
   eyes:1,
@@ -1322,22 +829,7 @@ let build1 = {
 };
 
 
-let activeBlank =
-  "A";
-
-
-let build40 = {
-
-  head:"round",
-  eyes:1,
-  antenna:"short",
-  body:"oval",
-  symbol:"dot"
-
-};
-
-
-let saved40 = {
+let saved = {
 
   A:null,
   B:null,
@@ -1346,32 +838,25 @@ let saved40 = {
 };
 
 
-/* =====================================================
-   Alien SVG
-===================================================== */
+let submitted = false;
+
+
+let wrongBlanks =
+  new Set();
+
+
+let correctBlanks =
+  new Set();
+
+
+/* =================================================
+   ALIEN SVG
+================================================= */
 
 function alienSVG(
   alien,
-  focus = "all",
-  size = "normal"
+  grey = false
 ){
-
-  const partClass =
-    name => {
-
-      return (
-        focus === "all" ||
-        focus === name
-      )
-        ? "active-part"
-        : "muted-part";
-
-    };
-
-
-  /*
-  頭
-  */
 
   let headShape = "";
 
@@ -1381,13 +866,10 @@ function alienSVG(
   ){
 
     headShape =
-      `
-      <circle
+      `<circle
         cx="50"
         cy="27"
-        r="18">
-      </circle>
-      `;
+        r="18"/>`;
 
   }
 
@@ -1396,15 +878,12 @@ function alienSVG(
   ){
 
     headShape =
-      `
-      <rect
+      `<rect
         x="32"
         y="9"
         width="36"
         height="36"
-        rx="4">
-      </rect>
-      `;
+        rx="4"/>`;
 
   }
 
@@ -1413,16 +892,13 @@ function alienSVG(
   ){
 
     headShape =
-      `
-      <path
+      `<path
         d="
           M50 7
           L72 45
           L28 45
           Z
-        ">
-      </path>
-      `;
+        "/>`;
 
   }
 
@@ -1431,8 +907,7 @@ function alienSVG(
   ){
 
     headShape =
-      `
-      <path
+      `<path
         d="
           M35 10
           L65 10
@@ -1441,33 +916,24 @@ function alienSVG(
           L35 44
           L27 27
           Z
-        ">
-      </path>
-      `;
+        "/>`;
 
   }
 
   else{
 
     headShape =
-      `
-      <path
+      `<path
         d="
           M50 6
           L72 27
           L50 48
           L28 27
           Z
-        ">
-      </path>
-      `;
+        "/>`;
 
   }
 
-
-  /*
-  眼睛
-  */
 
   let eyeShapes = "";
 
@@ -1487,142 +953,73 @@ function alienSVG(
 
 
     eyeShapes +=
-      `
-      <circle
+      `<circle
         cx="${x}"
         cy="27"
-        r="2.4">
-      </circle>
-      `;
+        r="2.4"/>`;
 
   }
 
 
-  /*
-  觸角
-  */
+  const antennaShape =
 
-  let antennaShape = "";
-
-
-  if(
     alien.antenna === "short"
-  ){
 
-    antennaShape =
-      `
-      <path
+    ? `<path
         d="
           M42 12 L38 4
           M58 12 L62 4
-        ">
-      </path>
-      `;
+        "/>`
 
-  }
+    : alien.antenna === "long"
 
-  else if(
-    alien.antenna === "long"
-  ){
-
-    antennaShape =
-      `
-      <path
+    ? `<path
         d="
           M42 12 L34 0
           M58 12 L66 0
-        ">
-      </path>
-      `;
+        "/>`
 
-  }
+    : alien.antenna === "fork"
 
-  else if(
-    alien.antenna === "fork"
-  ){
-
-    antennaShape =
-      `
-      <path
+    ? `<path
         d="
           M42 12 L37 3
           M37 3 L32 0
           M37 3 L42 0
-
           M58 12 L63 3
           M63 3 L58 0
           M63 3 L68 0
-        ">
-      </path>
-      `;
+        "/>`
 
-  }
-
-  else{
-
-    antennaShape =
-      `
-      <path
+    : `<path
         d="
           M42 12
           C31 3 35 -3 42 3
-
           M58 12
           C69 3 65 -3 58 3
-        ">
-      </path>
-      `;
-
-  }
+        "/>`;
 
 
-  /*
-  身體
-  */
+  const bodyShape =
 
-  let bodyShape = "";
-
-
-  if(
     alien.body === "oval"
-  ){
 
-    bodyShape =
-      `
-      <ellipse
+    ? `<ellipse
         cx="50"
         cy="69"
         rx="23"
-        ry="24">
-      </ellipse>
-      `;
+        ry="24"/>`
 
-  }
+    : alien.body === "box"
 
-  else if(
-    alien.body === "box"
-  ){
-
-    bodyShape =
-      `
-      <rect
+    ? `<rect
         x="28"
         y="49"
         width="44"
         height="43"
-        rx="7">
-      </rect>
-      `;
+        rx="7"/>`
 
-  }
-
-  else if(
-    alien.body === "shield"
-  ){
-
-    bodyShape =
-      `
-      <path
+    : `<path
         d="
           M27 50
           H73
@@ -1630,93 +1027,51 @@ function alienSVG(
           L50 96
           L32 80
           Z
-        ">
-      </path>
-      `;
+        "/>`;
 
-  }
-
-  else{
-
-    bodyShape =
-      `
-      <circle
-        cx="50"
-        cy="70"
-        r="23">
-      </circle>
-      `;
-
-  }
-
-
-  /*
-  身體符號
-  */
 
   const symbolMap = {
 
     dot:
-      `
-      <circle
+      `<circle
         cx="50"
         cy="69"
-        r="5">
-      </circle>
-      `,
-
+        r="5"/>`,
 
     bar:
-      `
-      <rect
+      `<rect
         x="39"
         y="65"
         width="22"
-        height="7">
-      </rect>
-      `,
-
+        height="7"/>`,
 
     diamond:
-      `
-      <path
+      `<path
         d="
           M50 59
           L60 69
           L50 79
           L40 69
           Z
-        ">
-      </path>
-      `,
-
+        "/>`,
 
     cross:
-      `
-      <path
+      `<path
         d="
           M42 61 L58 77
           M58 61 L42 77
         "
-        fill="none">
-      </path>
-      `,
-
+        fill="none"/>`,
 
     ring:
-      `
-      <circle
+      `<circle
         cx="50"
         cy="69"
         r="8"
-        fill="none">
-      </circle>
-      `,
-
+        fill="none"/>`,
 
     star:
-      `
-      <path
+      `<path
         d="
           M50 58
           L53 66
@@ -1729,193 +1084,259 @@ function alienSVG(
           L38 66
           L47 66
           Z
-        ">
-      </path>
-      `,
-
+        "/>`,
 
     plus:
-      `
-      <path
+      `<path
         d="
           M50 59 V79
           M40 69 H60
         "
-        fill="none">
-      </path>
-      `,
-
+        fill="none"/>`,
 
     wave:
-      `
-      <path
+      `<path
         d="
           M39 66
           Q45 59 50 66
           T61 66
         "
-        fill="none">
-      </path>
-      `
+        fill="none"/>`
 
   };
 
 
-  const className =
-    size === "small"
-      ? "alien alien-small"
-      : "alien";
+  const style =
+    grey
+      ? `style="filter:grayscale(1);opacity:.48"`
+      : "";
 
 
   return `
-  <svg
-    class="${className}"
-    viewBox="0 0 100 105"
-    role="img"
-    aria-label="Alien">
-
-    <g
-      stroke="currentColor"
-      stroke-width="3"
-      stroke-linejoin="round"
-      stroke-linecap="round">
+    <svg
+      class="alien"
+      ${style}
+      viewBox="0 0 100 105"
+      role="img"
+      aria-label="Alien">
 
       <g
-        class="${partClass("antenna")}"
-        fill="none">
+        stroke="currentColor"
+        stroke-width="3"
+        stroke-linejoin="round"
+        stroke-linecap="round">
 
-        ${antennaShape}
+        <g fill="none">
+          ${antennaShape}
+        </g>
+
+        <g fill="var(--alien-head)">
+          ${headShape}
+        </g>
+
+        <g
+          fill="var(--text)"
+          stroke="none">
+          ${eyeShapes}
+        </g>
+
+        <g fill="var(--alien-body)">
+          ${bodyShape}
+        </g>
+
+        <g fill="var(--text)">
+          ${symbolMap[
+            alien.symbol
+          ]}
+        </g>
+
+        <g
+          fill="none"
+          opacity=".7">
+
+          <path
+            d="
+              M29 61 L17 74
+              M71 61 L83 74
+              M41 90 L36 101
+              M59 90 L64 101
+            "/>
+
+        </g>
 
       </g>
 
-
-      <g
-        class="${partClass("head")}"
-        fill="var(--alien-head)">
-
-        ${headShape}
-
-      </g>
-
-
-      <g
-        class="${partClass("eyes")}"
-        fill="var(--text)"
-        stroke="none">
-
-        ${eyeShapes}
-
-      </g>
-
-
-      <g
-        class="${partClass("body")}"
-        fill="var(--alien-body)">
-
-        ${bodyShape}
-
-      </g>
-
-
-      <g
-        class="${partClass("symbol")}"
-        fill="var(--text)">
-
-        ${symbolMap[alien.symbol]}
-
-      </g>
-
-
-      <g
-        fill="none"
-        opacity=".7">
-
-        <path
-          d="
-            M29 61 L17 74
-            M71 61 L83 74
-            M41 90 L36 101
-            M59 90 L64 101
-          ">
-        </path>
-
-      </g>
-
-    </g>
-
-  </svg>
+    </svg>
   `;
 
 }
 
 
-/* =====================================================
-   換頁
-===================================================== */
+/* =================================================
+   STAGE 1 RANDOM 3 ALIENS
+================================================= */
 
-function showStage(
-  id,
-  step,
-  subtitle
-){
+function randomThree(){
 
-  document
-    .querySelectorAll(
-      ".stage"
-    )
-    .forEach(
-      section => {
+  const pool =
+    [...aliens];
 
-        section
-          .classList
-          .remove("active");
+  const chosen = [];
 
-      }
+
+  while(
+    chosen.length < 3
+  ){
+
+    const index =
+      Math.floor(
+        Math.random() *
+        pool.length
+      );
+
+
+    chosen.push(
+      pool.splice(
+        index,
+        1
+      )[0]
     );
 
+  }
+
+
+  return chosen;
+
+}
+
+
+function renderMystery(){
 
   document
-    .getElementById(id)
+    .getElementById(
+      "mysteryAliens"
+    )
+    .innerHTML =
+
+      randomThree()
+        .map(
+          alien => {
+
+            return `
+              <div class="mystery-alien">
+
+                ${alienSVG(
+                  alien,
+                  true
+                )}
+
+                <div class="question-overlay">
+                  ?
+                </div>
+
+              </div>
+            `;
+
+          }
+        )
+        .join("");
+
+}
+
+
+renderMystery();
+
+
+/* =================================================
+   STAGE 1 → STAGE 2
+================================================= */
+
+function goStage2(){
+
+  assignmentText =
+    document
+      .getElementById(
+        "assignment"
+      )
+      .value
+      .trim();
+
+
+  const code =
+    document
+      .getElementById(
+        "startCode"
+      )
+      .value
+      .trim()
+      .toLowerCase();
+
+
+  if(
+    !assignmentText
+  ){
+
+    document
+      .getElementById(
+        "stage1Message"
+      )
+      .textContent =
+        "請先寫下你們這組的分工。";
+
+    return;
+
+  }
+
+
+  if(
+    code !== "alien40"
+  ){
+
+    document
+      .getElementById(
+        "stage1Message"
+      )
+      .textContent =
+        "開始解題代碼不正確。";
+
+    return;
+
+  }
+
+
+  document
+    .getElementById(
+      "stage1"
+    )
+    .classList
+    .remove("active");
+
+
+  document
+    .getElementById(
+      "stage2"
+    )
     .classList
     .add("active");
 
 
   document
     .getElementById(
-      "stepText"
+      "stageIndicator"
     )
     .textContent =
-      step + " / 5";
-
-
-  if(subtitle){
-
-    document
-      .getElementById(
-        "subtitle"
-      )
-      .textContent =
-        subtitle;
-
-  }
+      "STAGE 2 / 2";
 
 
   document
-    .querySelectorAll(
-      ".progress span"
+    .getElementById(
+      "assignmentDisplay"
     )
-    .forEach(
-      (dot,index) => {
+    .textContent =
+      assignmentText;
 
-        dot
-          .classList
-          .toggle(
-            "on",
-            index < step
-          );
 
-      }
-    );
+  renderAll();
 
 
   window.scrollTo({
@@ -1926,261 +1347,158 @@ function showStage(
 }
 
 
-/* =====================================================
-   1 / 5
-===================================================== */
-
-function renderSamples(){
-
-  const ids = [
-    0,
-    2,
-    5,
-    7,
-    10,
-    14
-  ];
-
-
-  document
-    .getElementById(
-      "samples"
-    )
-    .innerHTML =
-
-      ids
-        .map(
-          id => {
-
-            return `
-              <div class="card">
-                ${alienSVG(
-                  aliens15[id]
-                )}
-              </div>
-            `;
-
-          }
-        )
-        .join("");
-
-}
-
-
-renderSamples();
+document
+  .getElementById(
+    "startBtn"
+  )
+  .addEventListener(
+    "click",
+    goStage2
+  );
 
 
 document
   .getElementById(
-    "introNext"
+    "startCode"
   )
   .addEventListener(
-    "click",
-    () => {
+    "keydown",
+    event => {
 
-      showStage(
-        "decompose",
-        2,
-        "LEVEL 1｜先把整體拆成可處理部分"
-      );
+      if(
+        event.key === "Enter"
+      ){
+
+        goStage2();
+
+      }
 
     }
   );
 
 
-/* =====================================================
-   2 / 5
-===================================================== */
+/* =================================================
+   GRID
+================================================= */
 
-const featureKeys = [
+function renderGrid(){
 
-  "head",
-  "eyes",
-  "antenna",
-  "body",
-  "symbol",
-  "arms",
-  "legs"
-
-];
+  const reverse = {};
 
 
-function renderFeatureChoices(){
-
-  document
-    .getElementById(
-      "featurePick"
-    )
-    .innerHTML =
-
-      featureKeys
-        .map(
-          key => {
-
-            return `
-              <button
-                type="button"
-                class="btn"
-                data-feature="${key}">
-                ${featureLabels[key]}
-              </button>
-            `;
-
-          }
-        )
-        .join("");
-
-
-  document
-    .querySelectorAll(
-      "[data-feature]"
+  Object
+    .entries(
+      blankLocations
     )
     .forEach(
-      button => {
+      ([key,id]) => {
 
-        button
-          .addEventListener(
-            "click",
-            () => {
-
-              const key =
-                button
-                  .dataset
-                  .feature;
-
-
-              if(
-                selectedFeatures
-                  .has(key)
-              ){
-
-                selectedFeatures
-                  .delete(key);
-
-                button
-                  .classList
-                  .remove(
-                    "selected"
-                  );
-
-              }
-
-              else{
-
-                selectedFeatures
-                  .add(key);
-
-                button
-                  .classList
-                  .add(
-                    "selected"
-                  );
-
-              }
-
-
-              document
-                .getElementById(
-                  "decompMsg"
-                )
-                .textContent =
-                  `目前選了 ${selectedFeatures.size} 個部分。`;
-
-            }
-          );
+        reverse[id] =
+          key;
 
       }
     );
 
-}
-
-
-renderFeatureChoices();
-
-
-document
-  .getElementById(
-    "decompNext"
-  )
-  .addEventListener(
-    "click",
-    () => {
-
-      if(
-        selectedFeatures.size < 4
-      ){
-
-        document
-          .getElementById(
-            "decompMsg"
-          )
-          .textContent =
-            "請至少選 4 個值得分開處理的部分。";
-
-        return;
-
-      }
-
-
-      showStage(
-        "level1",
-        3,
-        "LEVEL 1｜第一題"
-      );
-
-
-      render15();
-      renderBuilder1();
-
-    }
-  );
-
-
-/* =====================================================
-   3 / 5 第一題
-===================================================== */
-
-function render15(){
-
-  const focus =
-    document
-      .getElementById(
-        "focus1"
-      )
-      .value;
-
 
   document
     .getElementById(
-      "grid15"
+      "grid40"
     )
     .innerHTML =
 
-      aliens15
+      aliens
         .map(
           alien => {
 
-            if(
-              alien.id ===
-              missing15
-            ){
+            const key =
+              reverse[
+                alien.id
+              ];
+
+
+            if(!key){
 
               return `
-                <div class="missing">
-                  ?
+                <div class="card">
+                  ${alienSVG(alien)}
                 </div>
               `;
 
             }
 
 
-            return `
-              <div class="card">
+            const classes = [
+              "missing"
+            ];
 
-                ${alienSVG(
-                  alien,
-                  focus
-                )}
+
+            /*
+            作答中：
+            當前處理的格子藍色
+            */
+
+            if(
+              !submitted &&
+              key === activeBlank
+            ){
+
+              classes.push(
+                "active-blank"
+              );
+
+            }
+
+
+            /*
+            送出後：
+            有任一特徵錯誤 → 黃色
+            */
+
+            if(
+              submitted &&
+              wrongBlanks.has(key)
+            ){
+
+              classes.push(
+                "wrong"
+              );
+
+            }
+
+
+            /*
+            五項全部正確 → 綠色
+            */
+
+            if(
+              submitted &&
+              correctBlanks.has(key)
+            ){
+
+              classes.push(
+                "correct"
+              );
+
+            }
+
+
+            return `
+              <div
+                class="${classes.join(" ")}">
+
+                <span class="blank-label">
+                  ${key}
+                </span>
+
+                ${
+                  saved[key]
+
+                    ? alienSVG(
+                        saved[key]
+                      )
+
+                    : "<span>?</span>"
+                }
 
               </div>
             `;
@@ -2192,83 +1510,56 @@ function render15(){
 }
 
 
-document
-  .getElementById(
-    "focus1"
-  )
-  .addEventListener(
-    "change",
-    render15
-  );
-
-
-/* =====================================================
-   Builder 共用標籤
-===================================================== */
+/* =================================================
+   BUILDER LABELS
+================================================= */
 
 const labelHead =
-  value => {
+  value => ({
 
-    return {
+    round:"圓形",
+    square:"方形",
+    triangle:"三角形",
+    hex:"六角形",
+    diamond:"菱形"
 
-      round:"圓形",
-      square:"方形",
-      triangle:"三角形",
-      hex:"六角形",
-      diamond:"菱形"
-
-    }[value];
-
-  };
+  })[value];
 
 
 const labelAntenna =
-  value => {
+  value => ({
 
-    return {
+    short:"短觸角",
+    long:"長觸角",
+    fork:"分叉觸角",
+    loop:"彎曲觸角"
 
-      short:"短觸角",
-      long:"長觸角",
-      fork:"分叉觸角",
-      loop:"彎曲觸角"
-
-    }[value];
-
-  };
+  })[value];
 
 
 const labelBody =
-  value => {
+  value => ({
 
-    return {
+    oval:"橢圓身體",
+    box:"方形身體",
+    shield:"盾形身體"
 
-      oval:"橢圓身體",
-      box:"方形身體",
-      shield:"盾形身體",
-      round:"圓形身體"
-
-    }[value];
-
-  };
+  })[value];
 
 
 const labelSymbol =
-  value => {
+  value => ({
 
-    return {
+    dot:"圓點",
+    bar:"橫條",
+    diamond:"菱形",
+    cross:"叉號",
+    ring:"圓環",
+    star:"星形",
+    plus:"加號",
+    wave:"波浪"
 
-      dot:"圓點",
-      bar:"橫條",
-      diamond:"菱形",
-      cross:"叉號",
-      ring:"圓環",
-      star:"星形",
-      plus:"加號",
-      wave:"波浪"
-
-    }[value];
-
-  };
+  })[value];
 
 
 function optionGroup(
@@ -2297,12 +1588,19 @@ function optionGroup(
                   : "";
 
 
+              const disabled =
+                submitted
+                  ? "disabled"
+                  : "";
+
+
               return `
                 <button
                   type="button"
+                  ${disabled}
                   class="btn ${selected}"
-                  data-builder-key="${key}"
-                  data-builder-value="${value}">
+                  data-key="${key}"
+                  data-value="${value}">
 
                   ${labelFunction(value)}
 
@@ -2321,720 +1619,41 @@ function optionGroup(
 }
 
 
-/* =====================================================
-   第一題 Builder
-===================================================== */
-
-function renderBuilder1(){
-
-  document
-    .getElementById(
-      "preview1"
-    )
-    .innerHTML =
-      alienSVG(build1);
-
-
-  document
-    .getElementById(
-      "builder1"
-    )
-    .innerHTML =
-
-      optionGroup(
-        heads.slice(0,3),
-        "head",
-        build1.head,
-        labelHead
-      )
-
-      +
-
-      optionGroup(
-        [1,2,3],
-        "eyes",
-        build1.eyes,
-        value =>
-          value + " 眼"
-      )
-
-      +
-
-      optionGroup(
-        antennas.slice(0,3),
-        "antenna",
-        build1.antenna,
-        labelAntenna
-      )
-
-      +
-
-      optionGroup(
-        bodies.slice(0,3),
-        "body",
-        build1.body,
-        labelBody
-      )
-
-      +
-
-      optionGroup(
-        symbols.slice(0,5),
-        "symbol",
-        build1.symbol,
-        labelSymbol
-      );
-
-
-  document
-    .getElementById(
-      "builder1"
-    )
-    .querySelectorAll(
-      "[data-builder-key]"
-    )
-    .forEach(
-      button => {
-
-        button
-          .addEventListener(
-            "click",
-            () => {
-
-              const key =
-                button
-                  .dataset
-                  .builderKey;
-
-
-              let value =
-                button
-                  .dataset
-                  .builderValue;
-
-
-              if(
-                key === "eyes"
-              ){
-
-                value =
-                  Number(value);
-
-              }
-
-
-              build1[key] =
-                value;
-
-
-              renderBuilder1();
-
-            }
-          );
-
-      }
-    );
-
-}
-
-
-/* =====================================================
-   第一題驗證
-===================================================== */
-
-document
-  .getElementById(
-    "check1"
-  )
-  .addEventListener(
-    "click",
-    () => {
-
-      const evidence1 =
-        document
-          .getElementById(
-            "ev1a"
-          )
-          .value
-          .trim();
-
-
-      const evidence2 =
-        document
-          .getElementById(
-            "ev1b"
-          )
-          .value
-          .trim();
-
-
-      if(
-        !evidence1 ||
-        !evidence2
-      ){
-
-        document
-          .getElementById(
-            "l1msg"
-          )
-          .textContent =
-            "請先寫下兩項推理證據。";
-
-        return;
-
-      }
-
-
-      const answer =
-        aliens15[
-          missing15
-        ];
-
-
-      const fields = [
-
-        "head",
-        "eyes",
-        "antenna",
-        "body",
-        "symbol"
-
-      ];
-
-
-      const correct =
-        fields
-          .every(
-            key =>
-              build1[key] ===
-              answer[key]
-          );
-
-
-      if(correct){
-
-        document
-          .getElementById(
-            "l1msg"
-          )
-          .textContent =
-            "調查成功！準備進入組內討論。";
-
-
-        setTimeout(
-          () => {
-
-            showStage(
-              "group",
-              4,
-              "LEVEL 1 完成｜組內討論與共識"
-            );
-
-          },
-          550
-        );
-
-      }
-
-      else{
-
-        document
-          .getElementById(
-            "l1msg"
-          )
-          .textContent =
-            "有一個或多個子特徵不符合規律。請切換「現在只看」後逐項檢查。";
-
-      }
-
-    }
-  );
-
-
-/* =====================================================
-   小組成果
-===================================================== */
-
-function escapeHTML(
-  text
-){
-
-  return String(text)
-
-    .replaceAll(
-      "&",
-      "&amp;"
-    )
-
-    .replaceAll(
-      "<",
-      "&lt;"
-    )
-
-    .replaceAll(
-      ">",
-      "&gt;"
-    )
-
-    .replaceAll(
-      '"',
-      "&quot;"
-    )
-
-    .replaceAll(
-      "'",
-      "&#039;"
-    );
-
-}
-
-
-function renderSubmissions(){
-
-  const box =
-    document
-      .getElementById(
-        "submissionList"
-      );
-
-
-  if(
-    localSubmissions.length === 0
-  ){
-
-    box.textContent =
-      "尚未送出。";
-
-    return;
-
-  }
-
-
-  box.innerHTML =
-
-    localSubmissions
-      .map(
-        item => {
-
-          return `
-            <div class="result-row">
-
-              <strong>
-
-                ${escapeHTML(
-                  item.className
-                )}
-
-                ｜
-
-                ${escapeHTML(
-                  item.groupName
-                )}
-
-              </strong>
-
-              <div>
-
-                ${escapeHTML(
-                  item.rule
-                )}
-
-              </div>
-
-            </div>
-          `;
-
-        }
-      )
-      .join("");
-
-}
-
-
-document
-  .getElementById(
-    "submitGroup"
-  )
-  .addEventListener(
-    "click",
-    () => {
-
-      const className =
-        document
-          .getElementById(
-            "className"
-          )
-          .value
-          .trim();
-
-
-      const groupName =
-        document
-          .getElementById(
-            "groupName"
-          )
-          .value
-          .trim();
-
-
-      const rule =
-        document
-          .getElementById(
-            "groupRule"
-          )
-          .value
-          .trim();
-
-
-      const evidence =
-        document
-          .getElementById(
-            "groupEvidence"
-          )
-          .value
-          .trim();
-
-
-      if(
-        !className ||
-        !groupName ||
-        !rule
-      ){
-
-        document
-          .getElementById(
-            "submitMsg"
-          )
-          .textContent =
-            "請至少填寫班級、組別與小組 RULE。";
-
-        return;
-
-      }
-
-
-      const data = {
-
-        className,
-        groupName,
-        rule,
-        evidence
-
-      };
-
-
-      /*
-      GAS Web App 模式
-      */
-
-      if(
-        window.google &&
-        google.script &&
-        google.script.run
-      ){
-
-        google.script.run
-
-          .withSuccessHandler(
-            result => {
-
-              document
-                .getElementById(
-                  "submitMsg"
-                )
-                .textContent =
-                  result.message ||
-                  "小組成果已送出。";
-
-            }
-          )
-
-          .withFailureHandler(
-            error => {
-
-              document
-                .getElementById(
-                  "submitMsg"
-                )
-                .textContent =
-                  "送出失敗：" +
-                  error.message;
-
-            }
-          )
-
-          .saveGroupResult(
-            data
-          );
-
-
-        return;
-
-      }
-
-
-      /*
-      一般 HTML 單機模式
-      */
-
-      localSubmissions
-        .push(data);
-
-
-      renderSubmissions();
-
-
-      document
-        .getElementById(
-          "submitMsg"
-        )
-        .textContent =
-          "已完成本機送出。若部署為 GAS Web App，可直接寫入 Google 試算表。";
-
-    }
-  );
-
-
-/* =====================================================
-   alien40 通關
-===================================================== */
-
-document
-  .getElementById(
-    "unlock"
-  )
-  .addEventListener(
-    "click",
-    unlockAlien40
-  );
-
-
-document
-  .getElementById(
-    "passcode"
-  )
-  .addEventListener(
-    "keydown",
-    event => {
-
-      if(
-        event.key === "Enter"
-      ){
-
-        unlockAlien40();
-
-      }
-
-    }
-  );
-
-
-function unlockAlien40(){
-
-  const code =
-    document
-      .getElementById(
-        "passcode"
-      )
-      .value
-      .trim()
-      .toLowerCase();
-
-
-  if(
-    code !== "alien40"
-  ){
-
-    document
-      .getElementById(
-        "codeMsg"
-      )
-      .textContent =
-        "代碼不正確，請再確認老師提供的通關碼。";
-
-    return;
-
-  }
-
-
-  document
-    .getElementById(
-      "codeMsg"
-    )
-    .textContent =
-      "通關成功！載入 40 Alien 進階挑戰……";
-
-
-  setTimeout(
-    () => {
-
-      showStage(
-        "level40",
-        5,
-        "LEVEL 2｜ALIEN40"
-      );
-
-
-      render40();
-      renderBuilder40();
-
-    },
-    400
-  );
-
-}
-
-
-/* =====================================================
-   ALIEN40
-===================================================== */
-
-function render40(){
-
-  const reverse = {};
-
-
-  Object
-    .entries(
-      blankLocations
-    )
-    .forEach(
-      ([key,id]) => {
-
-        reverse[id] =
-          key;
-
-      }
-    );
-
-
-  document
-    .getElementById(
-      "grid40"
-    )
-    .innerHTML =
-
-      aliens40
-        .map(
-          alien => {
-
-            const blankKey =
-              reverse[
-                alien.id
-              ];
-
-
-            /*
-            普通 Alien
-            */
-
-            if(
-              !blankKey
-            ){
-
-              return `
-                <div class="card">
-
-                  ${alienSVG(
-                    alien,
-                    "all",
-                    "small"
-                  )}
-
-                </div>
-              `;
-
-            }
-
-
-            /*
-            A B C 缺格
-            */
-
-            const isActive =
-              blankKey ===
-              activeBlank;
-
-
-            const prediction =
-              saved40[
-                blankKey
-              ];
-
-
-            return `
-              <div
-                class="
-                  missing
-                  ${isActive
-                    ? "active-blank"
-                    : ""}
-                  ${prediction
-                    ? "filled"
-                    : ""}
-                ">
-
-                <span class="blank-label">
-                  ${blankKey}
-                </span>
-
-                ${
-                  prediction
-
-                    ? alienSVG(
-                        prediction,
-                        "all",
-                        "small"
-                      )
-
-                    : "<span>?</span>"
-                }
-
-              </div>
-            `;
-
-          }
-        )
-        .join("");
-
-}
-
-
-/* =====================================================
-   ALIEN40 Builder
-===================================================== */
-
-function renderBuilder40(){
+/* =================================================
+   BUILDER
+================================================= */
+
+function renderBuilder(){
 
   document
     .getElementById(
       "currentBlankTitle"
     )
     .textContent =
-      "正在解：" +
-      activeBlank;
+      submitted
+        ? "答案已送出"
+        : "正在解：" +
+          activeBlank;
 
 
   document
     .getElementById(
-      "preview40"
+      "previewAlien"
     )
     .innerHTML =
-      alienSVG(
-        build40
-      );
+      alienSVG(build);
 
 
   document
     .getElementById(
-      "builder40"
+      "builder"
     )
     .innerHTML =
 
       optionGroup(
         heads,
         "head",
-        build40.head,
+        build.head,
         labelHead
       )
 
@@ -3043,7 +1662,7 @@ function renderBuilder40(){
       optionGroup(
         [1,2,3,4],
         "eyes",
-        build40.eyes,
+        build.eyes,
         value =>
           value + " 眼"
       )
@@ -3053,7 +1672,7 @@ function renderBuilder40(){
       optionGroup(
         antennas,
         "antenna",
-        build40.antenna,
+        build.antenna,
         labelAntenna
       )
 
@@ -3062,7 +1681,7 @@ function renderBuilder40(){
       optionGroup(
         bodies,
         "body",
-        build40.body,
+        build.body,
         labelBody
       )
 
@@ -3071,95 +1690,79 @@ function renderBuilder40(){
       optionGroup(
         symbols,
         "symbol",
-        build40.symbol,
+        build.symbol,
         labelSymbol
       );
 
 
-  document
-    .getElementById(
-      "builder40"
-    )
-    .querySelectorAll(
-      "[data-builder-key]"
-    )
-    .forEach(
-      button => {
+  if(!submitted){
 
-        button
-          .addEventListener(
-            "click",
-            () => {
+    document
+      .getElementById(
+        "builder"
+      )
+      .querySelectorAll(
+        "[data-key]"
+      )
+      .forEach(
+        button => {
 
-              const key =
-                button
-                  .dataset
-                  .builderKey;
+          button
+            .addEventListener(
+              "click",
+              () => {
 
-
-              let value =
-                button
-                  .dataset
-                  .builderValue;
+                const key =
+                  button
+                    .dataset
+                    .key;
 
 
-              if(
-                key === "eyes"
-              ){
+                let value =
+                  button
+                    .dataset
+                    .value;
 
-                value =
-                  Number(value);
+
+                if(
+                  key ===
+                  "eyes"
+                ){
+
+                  value =
+                    Number(value);
+
+                }
+
+
+                build[key] =
+                  value;
+
+
+                renderBuilder();
 
               }
+            );
 
+        }
+      );
 
-              build40[key] =
-                value;
-
-
-              renderBuilder40();
-
-            }
-          );
-
-      }
-    );
+  }
 
 
   document
-    .querySelectorAll(
-      ".blank-tab"
+    .getElementById(
+      "lockBlank"
     )
-    .forEach(
-      button => {
-
-        button
-          .classList
-          .toggle(
-            "on",
-            button
-              .dataset
-              .blank ===
-            activeBlank
-          );
-
-      }
-    );
-
-
-  /*
-  點 A / B / C 時
-  同步讓對應格子醒目
-  */
-
-  render40();
+    .disabled =
+      submitted;
 
 }
 
 
-/* =====================================================
-   選 A / B / C
-===================================================== */
+/* =================================================
+   SELECT A / B / C
+================================================= */
 
 document
   .querySelectorAll(
@@ -3173,26 +1776,26 @@ document
           "click",
           () => {
 
+            if(submitted){
+              return;
+            }
+
+
             activeBlank =
               button
                 .dataset
                 .blank;
 
 
-            /*
-            如果之前已經鎖定，
-            重新載入原本的預測。
-            */
-
             if(
-              saved40[
+              saved[
                 activeBlank
               ]
             ){
 
-              build40 = {
+              build = {
 
-                ...saved40[
+                ...saved[
                   activeBlank
                 ]
 
@@ -3202,7 +1805,7 @@ document
 
             else{
 
-              build40 = {
+              build = {
 
                 head:"round",
                 eyes:1,
@@ -3215,15 +1818,7 @@ document
             }
 
 
-            renderBuilder40();
-
-
-            document
-              .getElementById(
-                "l40msg"
-              )
-              .textContent =
-                `目前正在處理缺格 ${activeBlank}。`;
+            renderAll();
 
           }
         );
@@ -3232,106 +1827,125 @@ document
   );
 
 
-/* =====================================================
-   鎖定答案
-===================================================== */
+/* =================================================
+   LOCK CURRENT ALIEN
+================================================= */
 
 document
   .getElementById(
-    "saveBlank"
+    "lockBlank"
   )
   .addEventListener(
     "click",
     () => {
 
-      saved40[
+      if(submitted){
+        return;
+      }
+
+
+      saved[
         activeBlank
       ] = {
 
-        ...build40
+        ...build
 
       };
 
 
-      /*
-      把學生預測直接放回 A/B/C 格子
-      同時保留虛線框。
-      */
-
-      render40();
+      renderGrid();
 
 
       document
         .getElementById(
-          "l40msg"
+          "stage2Message"
         )
         .textContent =
-          `缺格 ${activeBlank} 已鎖定；你的預測已放回原本的格子中。`;
+          `缺格 ${activeBlank} 已鎖定，預測 Alien 已放回格子中。`;
 
     }
   );
 
 
-/* =====================================================
-   CS 最終驗證
-===================================================== */
+/* =================================================
+   RENDER ALL
+================================================= */
+
+function renderAll(){
+
+  renderGrid();
+  renderBuilder();
+
+
+  document
+    .querySelectorAll(
+      ".blank-tab"
+    )
+    .forEach(
+      button => {
+
+        button
+          .classList
+          .toggle(
+            "on",
+            !submitted &&
+            button
+              .dataset
+              .blank ===
+            activeBlank
+          );
+
+
+        button.disabled =
+          submitted;
+
+      }
+    );
+
+}
+
+
+/* =================================================
+   計算分數
+================================================= */
 
 document
   .getElementById(
-    "check40"
+    "submitAnswer"
   )
   .addEventListener(
     "click",
-    checkAlien40
+    calculateScore
   );
 
 
-document
-  .getElementById(
-    "answerCode"
-  )
-  .addEventListener(
-    "keydown",
-    event => {
-
-      if(
-        event.key === "Enter"
-      ){
-
-        checkAlien40();
-
-      }
-
-    }
-  );
-
-
-function checkAlien40(){
+function calculateScore(){
 
   /*
-  先驗證老師代碼
+  防止重複計分
   */
 
-  const code =
-    document
-      .getElementById(
-        "answerCode"
-      )
-      .value
-      .trim()
-      .toUpperCase();
+  if(submitted){
+    return;
+  }
 
+
+  /*
+  三個 Alien 都必須先鎖定
+  */
 
   if(
-    code !== "CS"
+    !saved.A ||
+    !saved.B ||
+    !saved.C
   ){
 
     document
       .getElementById(
-        "l40msg"
+        "stage2Message"
       )
       .textContent =
-        "驗證代碼不正確，請再確認老師提供的代碼。";
+        "請先完成並鎖定 A、B、C 三隻 Alien，再計算分數。";
 
     return;
 
@@ -3339,54 +1953,33 @@ function checkAlien40(){
 
 
   /*
-  必須寫推理過程
+  使用瀏覽器確認視窗
   */
 
-  const evidence =
-    document
-      .getElementById(
-        "ev40"
-      )
-      .value
-      .trim();
+  const confirmed =
+    window.confirm(
+      "送出後無法再修改答案，確定送出?"
+    );
 
 
-  if(
-    !evidence
-  ){
+  /*
+  學生按取消
+  */
 
-    document
-      .getElementById(
-        "l40msg"
-      )
-      .textContent =
-        "代碼正確，但請先寫下你使用的方法或證據。";
-
+  if(!confirmed){
     return;
-
   }
 
 
   /*
-  A、B、C 都必須先鎖定
+  學生按確定
   */
 
-  if(
-    !saved40.A ||
-    !saved40.B ||
-    !saved40.C
-  ){
+  submitted = true;
 
-    document
-      .getElementById(
-        "l40msg"
-      )
-      .textContent =
-        "代碼正確，但 A、B、C 三格都要先鎖定答案。";
 
-    return;
-
-  }
+  wrongBlanks.clear();
+  correctBlanks.clear();
 
 
   const fields = [
@@ -3400,8 +1993,21 @@ function checkAlien40(){
   ];
 
 
-  let wrongCount = 0;
+  let totalScore = 0;
 
+
+  const detail = {
+
+    A:0,
+    B:0,
+    C:0
+
+  };
+
+
+  /*
+  A、B、C 分別計分
+  */
 
   [
     "A",
@@ -3409,41 +2015,76 @@ function checkAlien40(){
     "C"
   ]
   .forEach(
-    key => {
+    blank => {
 
       const answer =
-        aliens40[
+        aliens[
           blankLocations[
-            key
+            blank
           ]
         ];
 
 
       const student =
-        saved40[
-          key
+        saved[
+          blank
         ];
 
 
-      const correct =
-        fields
-          .every(
-            field => {
+      fields
+        .forEach(
+          feature => {
 
-              return (
-                student[field] ===
-                answer[field]
-              );
+            /*
+            一個特徵正確 = 1 分
+            */
+
+            if(
+              student[
+                feature
+              ] ===
+              answer[
+                feature
+              ]
+            ){
+
+              totalScore++;
+
+              detail[
+                blank
+              ]++;
 
             }
-          );
 
+          }
+        );
+
+
+      /*
+      一隻 Alien 五個特徵全對
+      */
 
       if(
-        !correct
+        detail[
+          blank
+        ] === 5
       ){
 
-        wrongCount++;
+        correctBlanks
+          .add(blank);
+
+      }
+
+
+      /*
+      任一特徵錯誤
+      整格標黃色
+      */
+
+      else{
+
+        wrongBlanks
+          .add(blank);
 
       }
 
@@ -3452,53 +2093,148 @@ function checkAlien40(){
 
 
   /*
-  不告知是哪一格錯，
-  讓學生回頭自己重新分析。
+  鎖定「計算分數」按鈕
   */
 
-  if(
-    wrongCount > 0
-  ){
-
+  const submitButton =
     document
       .getElementById(
-        "l40msg"
-      )
-      .textContent =
-        "驗證完成：目前還有答案不符合整體規律，請重新檢查你的拆解與推論。";
-
-    return;
-
-  }
+        "submitAnswer"
+      );
 
 
-  showStage(
-    "finish",
-    5,
-    "全部任務完成｜教師統整"
-  );
+  submitButton.disabled =
+    true;
+
+
+  submitButton.textContent =
+    "答案已送出";
+
+
+  /*
+  顯示鎖定訊息
+  */
+
+  document
+    .getElementById(
+      "lockedNotice"
+    )
+    .classList
+    .remove("hidden");
+
+
+  /*
+  重畫：
+  - 保留學生答案
+  - 錯格黃色
+  - 正確格綠色
+  - 所有按鈕 disabled
+  */
+
+  renderAll();
+
+
+  document
+    .getElementById(
+      "stage2Message"
+    )
+    .textContent =
+      "計分完成。黃色格子表示該 Alien 至少有一個特徵需要重新檢查。";
+
+
+  /*
+  顯示分數
+  */
+
+  const scoreArea =
+    document
+      .getElementById(
+        "scoreArea"
+      );
+
+
+  scoreArea
+    .classList
+    .remove("hidden");
+
+
+  scoreArea.innerHTML = `
+
+    <div class="score-box">
+
+      <div class="muted">
+        本組得分
+      </div>
+
+
+      <div class="score-big mt-8">
+        ${totalScore} / 15
+      </div>
+
+
+      <div class="score-grid mt-16">
+
+        <div class="score-card">
+
+          <strong>
+            Alien A
+          </strong>
+
+          <div>
+            ${detail.A} / 5
+          </div>
+
+        </div>
+
+
+        <div class="score-card">
+
+          <strong>
+            Alien B
+          </strong>
+
+          <div>
+            ${detail.B} / 5
+          </div>
+
+        </div>
+
+
+        <div class="score-card">
+
+          <strong>
+            Alien C
+          </strong>
+
+          <div>
+            ${detail.C} / 5
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <p
+        class="mt-16"
+        style="margin-bottom:0">
+
+        <strong>
+          計分方式：
+        </strong>
+
+        每隻 Alien 有 5 個特徵；
+        每答對 1 個特徵得 1 分，
+        三隻合計滿分 15 分。
+
+      </p>
+
+    </div>
+
+  `;
 
 }
 
-
-/* =====================================================
-   重新開始
-===================================================== */
-
-document
-  .getElementById(
-    "restart"
-  )
-  .addEventListener(
-    "click",
-    () => {
-
-      window
-        .location
-        .reload();
-
-    }
-  );
 
 })();
 </script>
