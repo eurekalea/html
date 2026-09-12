@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>貝果外帶｜演算法挑戰</title>
+<style>
+  :root{
+    --bg:#f7f2e8;--panel:#fffdf8;--text:#2f2a24;--muted:#746a60;--line:#dccdbb;
+    --accent:#a24f2f;--accent2:#2f6f74;--danger:#b63d3d;--ok:#2f7a4c;--hint:#d38a2c;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--text)}
+  .wrap{max-width:1180px;margin:0 auto;padding:24px}
+  header{display:flex;gap:18px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:18px}
+  .title h1{margin:0;font-size:clamp(28px,4vw,44px);letter-spacing:.04em}.title p{margin:6px 0 0;color:var(--muted);font-size:16px}
+  .controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.control-group{display:flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:8px 10px}
+  label{font-weight:700}select,button{font:inherit}select{border:1px solid var(--line);border-radius:10px;background:white;padding:9px 12px;min-width:76px}
+  button{border:none;border-radius:12px;padding:10px 16px;font-weight:800;cursor:pointer;min-height:44px}button.primary{background:var(--accent2);color:#fff}button.secondary{background:#ece2d5;color:var(--text)}button.hint-btn{background:#f5d7a8;color:#5e3812}button.play{background:#e8f2f2;color:#174f53;border:1px solid #bfd6d8}
+  button:disabled{opacity:.45;cursor:not-allowed}button:focus-visible,select:focus-visible,.tower:focus-visible{outline:3px solid #e7a65f;outline-offset:2px}
+  .instruction{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px 20px;margin-bottom:16px}.instruction h2{margin:0 0 8px;font-size:20px}.instruction p{margin:5px 0;line-height:1.7}.rule{color:var(--accent);font-weight:800}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}.stat{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px;text-align:center}.stat .k{color:var(--muted);font-size:14px;font-weight:700}.stat .v{font-size:27px;font-weight:900;margin-top:4px}.stat small{display:block;color:var(--muted);margin-top:3px}
+  .game{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:18px 14px 16px}.message{min-height:28px;text-align:center;font-weight:800;margin-bottom:6px}.message.bad{color:var(--danger)}.message.ok{color:var(--ok)}
+  .board{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;align-items:end;min-height:395px}.tower{position:relative;height:350px;border-radius:18px;background:#fffaf2;border:3px solid transparent;display:flex;align-items:flex-end;justify-content:center;padding:0 10px 38px;cursor:pointer;user-select:none;transition:.18s}
+  .tower:hover{background:#fff7e8}.tower.selected{border-color:var(--accent2);background:#eef8f8}.tower.hint-from{border-color:#d5523b;background:#fff1ee;box-shadow:0 0 0 4px rgba(213,82,59,.12)}.tower.hint-to{border-color:#2f8a5d;background:#eff9f3;box-shadow:0 0 0 4px rgba(47,138,93,.12)}
+  .tower.hint-from::before,.tower.hint-to::before{position:absolute;top:10px;left:50%;transform:translateX(-50%);z-index:8;padding:5px 10px;border-radius:999px;font-weight:900;font-size:14px;color:white;white-space:nowrap}.tower.hint-from::before{content:"要移動";background:#d5523b}.tower.hint-to::before{content:"要移到";background:#2f8a5d}
+  .peg{position:absolute;bottom:40px;width:14px;height:248px;border-radius:8px 8px 2px 2px;background:linear-gradient(#b57d45,#8f5c33);left:50%;transform:translateX(-50%)}.base{position:absolute;bottom:30px;width:88%;height:18px;border-radius:10px;background:linear-gradient(#9a6438,#744527)}
+  .stack{position:relative;z-index:2;width:100%;display:flex;flex-direction:column-reverse;align-items:center;justify-content:flex-start}
+  .bagel{position:relative;height:46px;border-radius:999px;border:2px solid rgba(105,63,29,.30);box-shadow:inset 0 7px 0 rgba(255,255,255,.30), inset 0 -7px 0 rgba(123,71,31,.10), 0 3px 5px rgba(0,0,0,.14);margin-top:-3px;display:flex;align-items:center;justify-content:center;overflow:hidden;transform:scaleY(1.06)}
+  .bagel::before{content:"";width:22px;height:13px;border-radius:50%;background:#7a4827;border:2px solid rgba(255,255,255,.20);box-shadow:inset 0 2px 3px rgba(0,0,0,.22),0 0 0 3px rgba(255,225,183,.18)}
+  .bagel::after{content:"●   ●   ●";position:absolute;top:6px;left:50%;transform:translateX(-50%);font-size:8px;color:rgba(120,69,30,.62);letter-spacing:5px;white-space:nowrap;text-shadow:0 13px 0 rgba(255,244,213,.55)}
+  .tower-label{position:absolute;bottom:3px;font-weight:900;color:var(--muted)}
+  .package-box{position:absolute;left:6%;right:6%;top:18px;bottom:20px;border:4px solid #b6793f;border-radius:28px;pointer-events:none;opacity:0}.tower[data-tower="2"] .package-box{opacity:1}.tower[data-tower="2"]{background:#fffaf4}
+  .helper-row{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:12px}.hint-text{min-height:26px;text-align:center;font-weight:800;color:#7a4b13;margin-top:8px}.hint-lock{font-size:13px;color:var(--muted);text-align:center;margin-top:4px}
+  .steps-panel{margin-top:16px;background:#fbf8f2;border:1px solid var(--line);border-radius:18px;padding:16px}.steps-panel h3{margin:0 0 10px}.steps-list{margin:0;padding-left:24px;max-height:190px;overflow:auto;line-height:1.8}.empty{color:var(--muted);font-style:italic}
+  .compare{margin-top:16px;background:#eef7f6;border:1px solid #bfd7d5;border-radius:20px;padding:18px;display:none}.compare.show{display:block}.compare h3{margin:0 0 8px}.compare-intro{margin:0 0 14px;color:#36585a}.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.sequence-card{background:white;border:1px solid #c9dddd;border-radius:16px;padding:14px;min-width:0}.sequence-card h4{margin:0 0 8px}.sequence-meta{color:var(--muted);font-size:14px;margin-bottom:9px}.sequence-list{max-height:220px;overflow:auto;margin:10px 0 0;padding-left:22px;line-height:1.75}.sequence-list li.active{font-weight:900;color:var(--accent2);background:#eaf5f5;border-radius:7px;padding-left:4px}.playback-note{margin-top:10px;color:var(--muted);font-size:14px}.reflection{margin-top:14px;padding:12px 14px;background:#fffdf8;border-radius:12px;border:1px dashed #d4b98d;line-height:1.7}
+  @media(max-width:760px){.wrap{padding:14px}.stats{grid-template-columns:repeat(2,1fr)}.board{gap:5px;min-height:315px}.tower{height:290px;padding-left:3px;padding-right:3px}.peg{height:205px}.bagel{height:31px}.controls{width:100%}.compare-grid{grid-template-columns:1fr}.package-box{height:245px}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header>
+    <div class="title"><h1>🥯 貝果外帶</h1><p>把所有貝果送進外帶盒，試著找出一套可重複使用的方法。</p></div>
+    <div class="controls">
+      <div class="control-group"><label for="diskCount">貝果數量</label><select id="diskCount" aria-label="選擇貝果數量"><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option></select></div>
+      <button id="undoBtn" class="secondary" type="button">↶ 復原一步</button>
+      <button id="resetBtn" class="primary" type="button">重新開始</button>
+    </div>
+  </header>
+
+  <section class="instruction" aria-labelledby="instructionTitle">
+    <h2 id="instructionTitle">題目說明</h2>
+    <p>早餐店準備打烊了！請把左邊「備餐區」的所有貝果，完整移到右邊「外帶區」的包裝盒中。</p>
+    <p class="rule">規則：一次只能移動最上面 1 個貝果，而且大貝果不能放在小貝果上。</p>
+    <p>先點選要拿貝果的區域，再點選要放置的區域。若卡住，可以使用一次提示看看「下一步」怎麼走。</p>
+  </section>
+
+  <section class="stats" aria-label="遊戲資訊">
+    <div class="stat"><div class="k">移動次數</div><div class="v" id="moves">0</div></div>
+    <div class="stat"><div class="k">貝果數量</div><div class="v" id="disksStat">3</div></div>
+    <div class="stat"><div class="k">個人最佳</div><div class="v" id="best">—</div><small>完成後才會留下紀錄</small></div>
+    <div class="stat"><div class="k">時間</div><div class="v" id="time">00:00</div></div>
+  </section>
+
+  <section class="game" aria-label="貝果外帶遊戲區">
+    <div id="message" class="message" aria-live="polite">請先從「備餐區」拿一個貝果。</div>
+    <div class="board" id="board">
+      <div class="tower" role="button" tabindex="0" data-tower="0" aria-label="備餐區"><div class="peg"></div><div class="base"></div><div class="stack"></div><div class="tower-label">備餐區</div></div>
+      <div class="tower" role="button" tabindex="0" data-tower="1" aria-label="暫放區"><div class="peg"></div><div class="base"></div><div class="stack"></div><div class="tower-label">暫放區</div></div>
+      <div class="tower" role="button" tabindex="0" data-tower="2" aria-label="外帶區"><div class="package-box" aria-hidden="true"></div><div class="peg"></div><div class="base"></div><div class="stack"></div><div class="tower-label">外帶區</div></div>
+    </div>
+    <div class="helper-row"><button id="hintBtn" class="hint-btn" type="button" disabled>💡 提示</button></div>
+    <div id="hintLock" class="hint-lock">提示將在「比最佳步數多 10 步以上」或「超過 3 分鐘」後解鎖。</div>
+    <div id="hintText" class="hint-text" aria-live="polite"></div>
+
+    <section class="steps-panel" aria-labelledby="myStepsTitle"><h3 id="myStepsTitle">我的步驟</h3><ol id="mySteps" class="steps-list"><li class="empty">尚未移動任何貝果。</li></ol></section>
+  </section>
+
+  <section id="comparePanel" class="compare" aria-live="polite">
+    <h3>🔓 第一輪完成：解鎖比較</h3>
+    <p id="completionSummary" class="compare-intro"></p>
+    <div class="compare-grid">
+      <article class="sequence-card"><h4>我的移動步驟</h4><div id="userMeta" class="sequence-meta"></div><button id="playUser" class="play" type="button">▶ 播放我的步驟</button><ol id="userSequence" class="sequence-list"></ol></article>
+      <article class="sequence-card"><h4>最佳移動步驟</h4><div id="optimalMeta" class="sequence-meta"></div><button id="playOptimal" class="play" type="button">▶ 播放最佳步驟</button><ol id="optimalSequence" class="sequence-list"></ol></article>
+    </div>
+    <div class="playback-note">播放時會暫時鎖定操作；播放結束後會回到你原本完成的盤面。</div>
+    <div class="reflection"><strong>比較看看：</strong>你的方法和最佳方法，從哪一步開始不同？如果再多 1 個貝果，哪一段步驟看起來可以重複使用？</div>
+  </section>
+</main>
+<script>
+(() => {
+  const $ = (id)=>document.getElementById(id);
+  const diskSelect=$('diskCount'),movesEl=$('moves'),disksStatEl=$('disksStat'),bestEl=$('best'),timeEl=$('time'),messageEl=$('message'),undoBtn=$('undoBtn'),resetBtn=$('resetBtn'),hintBtn=$('hintBtn'),hintLock=$('hintLock'),hintText=$('hintText'),myStepsEl=$('mySteps'),comparePanel=$('comparePanel'),completionSummary=$('completionSummary'),userMeta=$('userMeta'),optimalMeta=$('optimalMeta'),userSequence=$('userSequence'),optimalSequence=$('optimalSequence'),playUser=$('playUser'),playOptimal=$('playOptimal');
+  const towerEls=[...document.querySelectorAll('.tower')];
+  const colors=['#f2c879','#e7a85f','#dc8851','#cf6f45','#bf5c3d','#a94c35','#8f3f30'];
+  let n=3,towers=[[],[],[]],selected=null,moves=0,history=[],startedAt=null,elapsedBefore=0,timer=null,finished=false,playing=false;
+  let completedSteps=[],completedTime=0;
+
+  function bestKey(){return `bagel-hanoi-best-v2-${n}`}
+  function runKey(){return `bagel-hanoi-last-run-v2-${n}`}
+  function getBest(){const v=localStorage.getItem(bestKey());return v?Number(v):null}
+  function setBest(v){localStorage.setItem(bestKey(),String(v))}
+  function formatTime(sec){const m=Math.floor(sec/60).toString().padStart(2,'0'),s=Math.floor(sec%60).toString().padStart(2,'0');return `${m}:${s}`}
+  function currentSeconds(){return startedAt?elapsedBefore+Math.floor((Date.now()-startedAt)/1000):elapsedBefore}
+  function startTimer(){if(startedAt||finished||playing)return;startedAt=Date.now();timer=setInterval(()=>{timeEl.textContent=formatTime(currentSeconds());updateHintAvailability()},500)}
+  function stopTimer(){if(timer)clearInterval(timer);timer=null;if(startedAt)elapsedBefore=currentSeconds();startedAt=null;timeEl.textContent=formatTime(elapsedBefore)}
+  function towerName(i){return ['備餐區','暫放區','外帶區'][i]}
+  function clearHint(){towerEls.forEach(el=>el.classList.remove('hint-from','hint-to'));hintText.textContent=''}
+  function optimalCount(){return Math.pow(2,n)-1}
+  function hintUnlocked(){return moves>optimalCount()+10 || currentSeconds()>180}
+  function updateHintAvailability(){
+    const unlocked=hintUnlocked() && !finished && !playing;
+    hintBtn.disabled=!unlocked;
+    if(finished||playing){hintLock.textContent='';return}
+    if(unlocked){
+      hintLock.textContent='提示已解鎖：你可以查看下一步建議。';
+    }else{
+      const moveNeed=Math.max(0,optimalCount()+11-moves);
+      const timeNeed=Math.max(0,181-currentSeconds());
+      hintLock.textContent=`提示尚未解鎖：再多 ${moveNeed} 步，或再經過 ${Math.floor(timeNeed/60)}:${String(timeNeed%60).padStart(2,'0')}。`;
+    }
+  }
+  function showMessage(text,bad=false){messageEl.textContent=text;messageEl.className=bad?'message bad':'message'}
+
+  function resetGame(){
+    stopTimer();playing=false;n=Math.min(7,Math.max(2,Number(diskSelect.value)||3));towers=[[],[],[]];for(let s=n;s>=1;s--)towers[0].push(s);
+    selected=null;moves=0;history=[];elapsedBefore=0;finished=false;completedSteps=[];completedTime=0;comparePanel.classList.remove('show');clearHint();
+    showMessage('請先從「備餐區」拿一個貝果。');render();
+  }
+
+  function render(){
+    towerEls.forEach((towerEl,idx)=>{towerEl.classList.toggle('selected',selected===idx);const stack=towerEl.querySelector('.stack');stack.innerHTML='';towers[idx].forEach(size=>{const d=document.createElement('div');d.className='bagel';const minW=36,maxW=92,width=minW+((size-1)/(Math.max(1,n-1)))*(maxW-minW);d.style.width=width+'%';d.style.background=`radial-gradient(ellipse at 50% 45%, ${colors[(size-1)%colors.length]} 0 56%, #c17a38 100%)`;d.setAttribute('aria-label',`第 ${size} 號貝果`);stack.appendChild(d)})});
+    movesEl.textContent=moves;disksStatEl.textContent=n;const b=getBest();bestEl.textContent=b==null?'—':b;timeEl.textContent=formatTime(currentSeconds());undoBtn.disabled=history.length===0||finished||playing;updateHintAvailability();resetBtn.disabled=playing;diskSelect.disabled=playing;towerEls.forEach(el=>el.setAttribute('aria-disabled',playing?'true':'false'));renderMySteps();
+  }
+
+  function renderMySteps(){myStepsEl.innerHTML='';if(!history.length){const li=document.createElement('li');li.className='empty';li.textContent='尚未移動任何貝果。';myStepsEl.appendChild(li);return}history.forEach((m,i)=>{const li=document.createElement('li');li.textContent=`${towerName(m.from)} → ${towerName(m.to)}`;myStepsEl.appendChild(li)})}
+
+  function chooseTower(idx){
+    if(finished||playing)return;clearHint();
+    if(selected===null){if(!towers[idx].length){showMessage('這裡沒有貝果可以拿。',true);return}selected=idx;showMessage(`已選擇「${towerName(idx)}」，再選擇要放到哪一區。`);render();return}
+    if(selected===idx){selected=null;showMessage('已取消選擇。');render();return}
+    const from=selected,to=idx,disk=towers[from][towers[from].length-1],targetTop=towers[to][towers[to].length-1];
+    if(targetTop!==undefined&&disk>targetTop){showMessage('不行喔！大貝果不能放在小貝果上。',true);selected=null;render();return}
+    startTimer();history.push({from,to,disk});towers[from].pop();towers[to].push(disk);moves++;selected=null;showMessage(`移動成功：${towerName(from)} → ${towerName(to)}`);render();checkWin();
+  }
+
+  function undo(){if(!history.length||finished||playing)return;clearHint();const last=history.pop();const d=towers[last.to].pop();towers[last.from].push(d);moves=Math.max(0,moves-1);selected=null;showMessage('已復原上一步。');if(moves===0){stopTimer();elapsedBefore=0;timeEl.textContent='00:00'}render()}
+
+  function stateCode(ts){const pos=Array(n+1).fill(0);for(let p=0;p<3;p++)for(const d of ts[p])pos[d]=p;return pos.slice(1).join('')}
+  function towersFromCode(code){const ts=[[],[],[]];for(let disk=n;disk>=1;disk--){const p=Number(code[disk-1]);ts[p].push(disk)}return ts}
+  function legalMovesFromCode(code){const ts=towersFromCode(code),tops=ts.map(t=>t.length?t[t.length-1]:Infinity),out=[];for(let a=0;a<3;a++){if(tops[a]===Infinity)continue;for(let b=0;b<3;b++){if(a===b)continue;if(tops[a]<tops[b]){const chars=code.split('');chars[tops[a]-1]=String(b);out.push({code:chars.join(''),move:{from:a,to:b,disk:tops[a]}})}}}return out}
+  function shortestPathFromCurrent(){
+    const start=stateCode(towers),goal='2'.repeat(n);if(start===goal)return[];const q=[start],prev=new Map([[start,null]]),via=new Map();for(let qi=0;qi<q.length;qi++){const cur=q[qi];for(const nxt of legalMovesFromCode(cur)){if(prev.has(nxt.code))continue;prev.set(nxt.code,cur);via.set(nxt.code,nxt.move);if(nxt.code===goal){const path=[];let x=goal;while(x!==start){path.push(via.get(x));x=prev.get(x)}return path.reverse()}q.push(nxt.code)}}return[]
+  }
+  function showHint(){if(finished||playing||!hintUnlocked())return;clearHint();const path=shortestPathFromCurrent();if(!path.length){hintText.textContent='目前已經完成，不需要提示。';return}const m=path[0];towerEls[m.from].classList.add('hint-from');towerEls[m.to].classList.add('hint-to');hintText.textContent=`建議下一步：把最上面的貝果從「${towerName(m.from)}」移到「${towerName(m.to)}」。`}
+
+  function optimalMoves(count,from=0,to=2,aux=1,out=[]){if(count===1){out.push({from,to,disk:1});return out}optimalMoves(count-1,from,aux,to,out);out.push({from,to,disk:count});optimalMoves(count-1,aux,to,from,out);return out}
+  function moveText(m,i){return `${towerName(m.from)} → ${towerName(m.to)}`}
+  function fillList(el,seq){el.innerHTML='';seq.forEach((m,i)=>{const li=document.createElement('li');li.textContent=moveText(m,i);el.appendChild(li)})}
+  function saveRun(){localStorage.setItem(runKey(),JSON.stringify({steps:completedSteps,time:completedTime}))}
+
+  function checkWin(){
+    if(towers[2].length!==n)return;finished=true;stopTimer();completedSteps=history.map(x=>({...x}));completedTime=elapsedBefore;const oldBest=getBest();let newBest=false;if(oldBest==null||moves<oldBest){setBest(moves);newBest=true}saveRun();
+    showMessage('外帶完成！現在解鎖「我的方法 vs 最佳方法」比較。');messageEl.classList.add('ok');
+    const optSeq=optimalMoves(n);completionSummary.textContent=`你用 ${moves} 步、${formatTime(completedTime)} 完成${newBest?'，並刷新個人最佳！':'。'} 現在先不要急著重玩，觀察兩套步驟從哪裡開始不同。`;
+    userMeta.textContent=`共 ${completedSteps.length} 步｜時間 ${formatTime(completedTime)}`;optimalMeta.textContent=`共 ${optSeq.length} 步｜這是一套最少步數的解法`;
+    fillList(userSequence,completedSteps);fillList(optimalSequence,optSeq);comparePanel.classList.add('show');render();
+  }
+
+  function sleep(ms){return new Promise(r=>setTimeout(r,ms))}
+  async function playSequence(seq,listEl){
+    if(playing)return;playing=true;stopTimer();const saved={towers:towers.map(t=>[...t]),moves,selected,history:history.map(x=>({...x})),finished,elapsedBefore};selected=null;clearHint();towers=[[],[],[]];for(let s=n;s>=1;s--)towers[0].push(s);moves=0;history=[];finished=false;render();
+    const lis=[...listEl.querySelectorAll('li')];for(let i=0;i<seq.length;i++){lis.forEach(li=>li.classList.remove('active'));if(lis[i]){lis[i].classList.add('active');lis[i].scrollIntoView({block:'nearest',behavior:'smooth'})}const m=seq[i];await sleep(450);const d=towers[m.from].pop();towers[m.to].push(d);moves++;render();await sleep(430)}
+    await sleep(650);lis.forEach(li=>li.classList.remove('active'));towers=saved.towers;moves=saved.moves;selected=saved.selected;history=saved.history;finished=saved.finished;elapsedBefore=saved.elapsedBefore;playing=false;render();showMessage('播放完成，已回到你的完成盤面。');
+  }
+
+  towerEls.forEach((el,idx)=>{el.addEventListener('click',()=>chooseTower(idx));el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();chooseTower(idx)}})});
+  undoBtn.addEventListener('click',undo);resetBtn.addEventListener('click',resetGame);diskSelect.addEventListener('change',resetGame);hintBtn.addEventListener('click',showHint);
+  playUser.addEventListener('click',()=>playSequence(completedSteps,userSequence));playOptimal.addEventListener('click',()=>playSequence(optimalMoves(n),optimalSequence));
+  resetGame();
+})();
+</script>
+</body>
+</html>
