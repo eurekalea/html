@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MIDI → Scratch 清單轉換器</title>
+<style>
+:root{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC",sans-serif}
+body{margin:0;background:#f6f7fb;color:#172033}
+.wrap{max-width:960px;margin:40px auto;padding:0 20px}
+h1{font-size:32px;margin:0 0 8px}
+.sub{color:#596579;margin-bottom:24px}
+.card{background:#fff;border:1px solid #dfe4ee;border-radius:18px;padding:22px;box-shadow:0 8px 24px rgba(30,45,70,.06);margin-bottom:18px}
+.drop{border:2px dashed #9aa8bd;border-radius:16px;padding:42px 20px;text-align:center;cursor:pointer;background:#fafbfe}
+.drop.drag{border-color:#4d73ff;background:#f0f4ff}
+button,.btn{border:0;border-radius:10px;padding:11px 16px;font-size:16px;cursor:pointer;background:#315efb;color:#fff}
+button.secondary{background:#e9edf6;color:#1b2a45}
+button:disabled{opacity:.5;cursor:not-allowed}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+label{font-weight:600}
+select,input[type=number]{font-size:16px;padding:9px;border:1px solid #ccd4e0;border-radius:9px;background:white}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+textarea{width:100%;height:280px;box-sizing:border-box;border:1px solid #d7deea;border-radius:12px;padding:12px;font-family:ui-monospace,Consolas,monospace;font-size:14px;resize:vertical}
+.small{font-size:14px;color:#667085}
+.badge{display:inline-block;padding:4px 9px;border-radius:999px;background:#eef2ff;color:#304fb5;font-size:13px}
+.warn{background:#fff7e6;border-left:4px solid #f3a712;padding:12px 14px;border-radius:8px}
+.ok{background:#edf9f0;border-left:4px solid #3ca66b;padding:12px 14px;border-radius:8px}
+.hidden{display:none}
+@media(max-width:760px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>MIDI → Scratch 清單轉換器</h1>
+  <div class="sub">把單旋律 MIDI 轉成 Scratch 可匯入的「音高清單.txt」與「拍數清單.txt」。全部在瀏覽器本機處理，不上傳檔案。</div>
+
+  <div class="card">
+    <div id="drop" class="drop">
+      <strong>拖拉 .mid / .midi 到這裡</strong><br>
+      <span class="small">或點一下選擇檔案</span>
+      <input id="file" type="file" accept=".mid,.midi,audio/midi,audio/x-midi" hidden>
+    </div>
+  </div>
+
+  <div id="controls" class="card hidden">
+    <div class="row">
+      <span class="badge" id="meta"></span>
+      <label for="track">旋律音軌</label>
+      <select id="track"></select>
+      <label for="quant">量化</label>
+      <select id="quant">
+        <option value="0.25">1/4 拍</option>
+        <option value="0.5">1/2 拍</option>
+        <option value="1">1 拍</option>
+      </select>
+      <button id="convert">重新轉換</button>
+    </div>
+    <p class="small">自動模式會優先挑「非鼓組、音符較多、同時多音較少」的音軌。若結果不像主旋律，可手動切換音軌。</p>
+  </div>
+
+  <div id="result" class="card hidden">
+    <div id="status" class="ok"></div>
+    <div class="grid" style="margin-top:16px">
+      <div>
+        <h3>音高清單 <span class="small">（0 = 休止符）</span></h3>
+        <textarea id="pitches" readonly></textarea>
+        <div class="row">
+          <button id="dlPitch">下載「音高清單.txt」</button>
+          <button class="secondary" data-copy="pitches">複製</button>
+        </div>
+      </div>
+      <div>
+        <h3>拍數清單</h3>
+        <textarea id="durations" readonly></textarea>
+        <div class="row">
+          <button id="dlDur">下載「拍數清單.txt」</button>
+          <button class="secondary" data-copy="durations">複製</button>
+        </div>
+      </div>
+    </div>
+    <div class="warn" style="margin-top:18px">
+      <strong>Scratch 播放規則：</strong>若第 i 項音高 = 0，就「休息第 i 項拍數」；否則「演奏第 i 項音高，持續第 i 項拍數」。這樣歌曲中的空拍不會消失。
+    </div>
+  </div>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+const drop = $('#drop'), fileInput = $('#file');
+let midi = null, currentName = '';
+
+drop.onclick = () => fileInput.click();
+drop.ondragover = e => { e.preventDefault(); drop.classList.add('drag'); };
+drop.ondragleave = () => drop.classList.remove('drag');
+drop.ondrop = e => {
+  e.preventDefault(); drop.classList.remove('drag');
+  if (e.dataTransfer.files[0]) loadFile(e.dataTransfer.files[0]);
+};
+fileInput.onchange = () => fileInput.files[0] && loadFile(fileInput.files[0]);
+
+function u16(d,o){ return (d[o]<<8)|d[o+1] }
+function u32(d,o){ return ((d[o]<<24)>>>0)|(d[o+1]<<16)|(d[o+2]<<8)|d[o+3] }
+function ascii(d,o,n){ return String.fromCharCode(...d.slice(o,o+n)) }
+function vlq(d, pos){
+  let v=0,b;
+  do { b=d[pos.i++]; v=(v<<7)|(b&0x7f); } while(b&0x80);
+  return v;
+}
+
+function parseMidi(buf){
+  const d = new Uint8Array(buf); let p=0;
+  if(ascii(d,0,4)!=='MThd') throw new Error('不是標準 MIDI 檔案');
+  const hlen=u32(d,4), format=u16(d,8), ntrks=u16(d,10), div=u16(d,12);
+  if(div & 0x8000) throw new Error('目前不支援 SMPTE time division 的 MIDI');
+  const ppq=div; p=8+hlen;
+  const tracks=[];
+  for(let ti=0; ti<ntrks; ti++){
+    if(ascii(d,p,4)!=='MTrk') throw new Error('MIDI 音軌格式錯誤');
+    const len=u32(d,p+4), end=p+8+len; p+=8;
+    let tick=0, running=0, name='', notes=[], open=new Map(), tempos=[];
+    while(p<end){
+      const pos={i:p}; tick += vlq(d,pos); p=pos.i;
+      let st=d[p++];
+      if(st<0x80){ p--; st=running; } else if(st<0xf0) running=st;
+
+      if(st===0xff){
+        const type=d[p++], q={i:p}, l=vlq(d,q); p=q.i;
+        if(type===0x03) name=new TextDecoder().decode(d.slice(p,p+l));
+        if(type===0x51 && l===3){
+          const us=(d[p]<<16)|(d[p+1]<<8)|d[p+2];
+          tempos.push({tick, us});
+        }
+        p+=l; continue;
+      }
+      if(st===0xf0 || st===0xf7){
+        const q={i:p}, l=vlq(d,q); p=q.i+l; continue;
+      }
+      const type=st&0xf0, ch=st&0x0f;
+      if(type===0x80 || type===0x90){
+        const pitch=d[p++], vel=d[p++];
+        const key=ch+':'+pitch;
+        if(type===0x90 && vel>0){
+          if(!open.has(key)) open.set(key,[]);
+          open.get(key).push({tick, pitch, ch, vel});
+        } else {
+          const arr=open.get(key);
+          if(arr && arr.length){
+            const on=arr.shift();
+            if(ch!==9 && tick>on.tick) notes.push({start:on.tick,end:tick,pitch,ch,vel:on.vel});
+          }
+        }
+      } else if(type===0xc0 || type===0xd0){ p+=1; }
+      else if(type>=0x80 && type<=0xe0){ p+=2; }
+      else { throw new Error('遇到不支援的 MIDI 事件'); }
+    }
+    tracks.push({name:name||`Track ${ti+1}`, notes, tempos});
+    p=end;
+  }
+  return {format,ntrks,ppq,tracks};
+}
+
+function overlapRatio(notes){
+  if(notes.length<2) return 0;
+  const s=[...notes].sort((a,b)=>a.start-b.start||b.pitch-a.pitch);
+  let overlaps=0;
+  for(let i=1;i<s.length;i++) if(s[i].start < s[i-1].end) overlaps++;
+  return overlaps/(s.length-1);
+}
+
+function scoreTrack(t){
+  if(!t.notes.length) return -1e9;
+  const ov=overlapRatio(t.notes);
+  const avg=t.notes.reduce((a,n)=>a+n.pitch,0)/t.notes.length;
+  const rangeBonus=(avg>=48&&avg<=84)?25:0;
+  return Math.log2(t.notes.length+1)*25 + rangeBonus - ov*120;
+}
+
+function chooseTrack(){
+  let best=0, bs=-1e9;
+  midi.tracks.forEach((t,i)=>{const s=scoreTrack(t); if(s>bs){bs=s;best=i}});
+  return best;
+}
+
+function q(v, step){
+  const x=Math.round(v/step)*step;
+  return Math.max(step, +x.toFixed(4));
+}
+
+function monophonize(notes){
+  const sorted=[...notes].sort((a,b)=>a.start-b.start||b.pitch-a.pitch);
+  const grouped=[];
+  for(const n of sorted){
+    const g=grouped[grouped.length-1];
+    if(g && g.start===n.start){
+      if(n.pitch>g.pitch) grouped[grouped.length-1]=n; // 同時起音取最高音，較接近旋律線
+    } else grouped.push({...n});
+  }
+  return grouped;
+}
+
+function convert(){
+  const ti=+$('#track').value, step=+$('#quant').value, ppq=midi.ppq;
+  let ns=monophonize(midi.tracks[ti].notes);
+  const P=[], D=[];
+  let cursor=ns.length?ns[0].start:0;
+  for(const n of ns){
+    if(n.start > cursor){
+      const rest=(n.start-cursor)/ppq;
+      if(rest >= step/2){ P.push(0); D.push(q(rest,step)); }
+    }
+    let dur=(n.end-n.start)/ppq;
+    P.push(n.pitch);
+    D.push(q(dur,step));
+    cursor=Math.max(cursor,n.end);
+  }
+  $('#pitches').value=P.join('\n');
+  $('#durations').value=D.join('\n');
+  $('#status').textContent=`已轉換 ${P.length} 筆資料；使用「${midi.tracks[ti].name}」；PPQ=${ppq}；量化單位=${step} 拍。`;
+  $('#result').classList.remove('hidden');
+}
+
+async function loadFile(f){
+  try{
+    currentName=f.name;
+    midi=parseMidi(await f.arrayBuffer());
+    $('#controls').classList.remove('hidden');
+    $('#meta').textContent=`${f.name}｜Type ${midi.format}｜${midi.tracks.length} tracks`;
+    const sel=$('#track'); sel.innerHTML='';
+    midi.tracks.forEach((t,i)=>{
+      const o=document.createElement('option');
+      o.value=i;
+      const ov=Math.round(overlapRatio(t.notes)*100);
+      o.textContent=`${i+1}. ${t.name}（${t.notes.length} notes，多音重疊約 ${ov}%）`;
+      sel.appendChild(o);
+    });
+    sel.value=chooseTrack();
+    convert();
+  }catch(e){
+    alert('讀取失敗：'+e.message);
+  }
+}
+$('#convert').onclick=convert;
+$('#track').onchange=convert;
+$('#quant').onchange=convert;
+
+function downloadText(name,text){
+  const blob=new Blob([text+'\n'],{type:'text/plain;charset=utf-8'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
+$('#dlPitch').onclick=()=>downloadText('音高清單.txt',$('#pitches').value);
+$('#dlDur').onclick=()=>downloadText('拍數清單.txt',$('#durations').value);
+document.querySelectorAll('[data-copy]').forEach(b=>b.onclick=async()=>{
+  await navigator.clipboard.writeText($('#'+b.dataset.copy).value);
+  const old=b.textContent; b.textContent='已複製'; setTimeout(()=>b.textContent=old,900);
+});
+</script>
+</body>
+</html>
