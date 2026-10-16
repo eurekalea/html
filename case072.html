@@ -20,7 +20,7 @@
 /* The banana misinformation image is a full poster: keep the headline visible. */
 .asset-preview img[data-asset="img_banana"],.article img[data-asset="img_banana"]{aspect-ratio:auto!important;height:auto!important;max-height:none!important;object-fit:contain!important;object-position:center!important}
 .home-date{display:flex;align-items:center;justify-content:space-between;gap:9px}.home-reset{font-size:11px;color:#346579;border:1px solid #ffffffc9;border-radius:12px;background:#ffffffb8;padding:10px 12px;min-height:40px;font-weight:700;white-space:nowrap}.home-reset:hover,.home-reset:focus-visible{background:#fff}
-/* CASE072 v5.3.1 additive accessibility and narrative refinements */
+/* CASE072 v5.3.2 additive accessibility and narrative refinements */
 .toast{animation:notice-bounce .55s cubic-bezier(.16,1.45,.35,1) both;transform-origin:top center;}
 .lock-notice{animation:notice-bounce .68s cubic-bezier(.16,1.45,.35,1) .12s both;transform-origin:top center;}
 @keyframes notice-bounce{0%{opacity:0;transform:translateY(-65px) scale(.9)}65%{opacity:1;transform:translateY(4px) scale(1.025)}100%{opacity:1;transform:translateY(0) scale(1)}}
@@ -28,7 +28,7 @@
 .multi-choice .radio{border-radius:5px!important}.multi-choice.selected .radio:after{content:'✓';font-size:13px;font-weight:900;position:relative;left:2px;top:-2px;color:#167d70}.sound-control{display:flex;justify-content:flex-end;margin:8px 2px -8px}.sound-control button{border:1px solid #ffffff91;background:#ffffff96;border-radius:18px;padding:5px 10px;color:#395466;font-size:10px;font-weight:650}
 @media (prefers-reduced-motion:reduce){.toast,.lock-notice{animation:none!important}}
 
-/* CASE 072 v5.3.1: local player profile (input remains inside the simulated handset) */
+/* CASE 072 v5.3.2: local player profile (input remains inside the simulated handset) */
 .intro{justify-content:flex-start;overflow-y:auto;padding:40px 17px 20px}
 .intro-scroll{width:100%;max-width:310px;display:flex;flex-direction:column;align-items:center;gap:9px;margin:auto 0}
 .intro .number{font-size:66px;line-height:.85}
@@ -44,7 +44,7 @@
 .profile-error{font-size:11px;color:#ffd5c7;min-height:16px;padding-top:3px}
 @media(max-height:675px){.intro{padding-top:37px}.intro-scroll{gap:5px}.intro h2{margin:3px 0}.profile-form{padding:10px 14px}.intro .number{font-size:47px}}
 
-/* CASE 072 v5.3.1 — cinematic after-story player */
+/* CASE 072 v5.3.2 — cinematic after-story player */
 .cinema-app{background:#080e15;color:#eaf5f3}
 .cinema-header{flex:0 0 auto;height:54px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:#0d151c;border-bottom:1px solid #ffffff17}
 .cinema-header .name{font-size:14px;font-weight:800;color:#e5f3ef}
@@ -103,7 +103,7 @@
 @media (prefers-reduced-motion:reduce){.cinema-scene,.cinema-imagebox img{animation:none!important}.cinema-veil{transition:none!important}}
 @media(max-height:690px){.cinema-panel{padding:8px 12px 10px;gap:7px}.cinema-actions button{min-height:38px}.cinema-toolbar button{height:33px}.cinema-imagebox{aspect-ratio:1.6}.cinema-narration p{font-size:12px;line-height:1.74}}
 
-/* v5.3.1: a genuine fade-through-black that does not destroy the next route. */
+/* v5.3.2: a genuine fade-through-black that does not destroy the next route. */
 .story-transition{background:linear-gradient(135deg,#060c12 0%,#172731 100%);animation:case072SceneIn .76s ease-out both}
 .story-transition::before{content:"";position:absolute;inset:0;background:#000;z-index:0;pointer-events:none;animation:case072BlackReveal .88s ease-in-out both}
 .story-transition .day,.story-transition .title,.story-transition .line,.story-transition small{position:relative;z-index:1}
@@ -140,7 +140,7 @@
 .teacher-menu-header{display:flex;align-items:center;gap:11px}
 .teacher-menu-header .teacher-mark{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:#1e5361;color:#fff;font-size:18px;font-weight:800}
 
-/* v5.3.1 responsive layout: respect mobile safe areas and avoid device-dependent clipping. */
+/* v5.3.2 responsive layout: respect mobile safe areas and avoid device-dependent clipping. */
 html,body,#root{min-width:0;max-width:100%;width:100%;height:100%;height:100dvh}
 .phone,.screen,.app-surface,.scroll{min-width:0;min-height:0}
 .app-surface{overflow:hidden}
@@ -165,7 +165,7 @@ button,textarea,input,.bubble,.soft-card,.task-choice,.source-link{min-width:0;o
 @media (orientation:landscape) and (max-height:550px) and (pointer:coarse){.app-surface{padding-top:calc(36px + env(safe-area-inset-top,0px))}.phone{height:100dvh}.scroll{scrollbar-width:thin}}
 .notebook-nudge{display:block;width:calc(100% - 20px);margin:6px 10px 10px;border:1px solid #84aea9;border-radius:12px;background:#e6f7f1;color:#235a51;padding:11px 12px;text-align:left;font-size:12px;font-weight:700;line-height:1.6;box-shadow:0 3px 10px #143c2720}
 
-/* v5.3.1: accessible image search and source-date inputs */
+/* v5.3.2: accessible image search and source-date inputs */
 .camera-icon{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex:none}
 .image-search-camera{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;flex-shrink:0}
 .result-date{font-size:11px;line-height:1.6;color:#6c7885;margin-top:7px}
@@ -174,7 +174,7 @@ button,textarea,input,.bubble,.soft-card,.task-choice,.source-link{min-width:0;o
 .date-audit .action-row .outline{white-space:normal}
 
 
-/* 5.3.0: assessment and agency panels. Respect narrow/mobile viewports. */
+/* 5.3.1: assessment and agency panels. Respect narrow/mobile viewports. */
 .learning-score{background:#e8f3f1;border:1px solid #bdd8d1;border-radius:16px;padding:14px 16px;margin:14px 0;color:#214941;display:flex;gap:14px;align-items:center}
 .learning-score>div{flex-shrink:0}.learning-score span{display:block;font-size:11px;font-weight:750}.learning-score strong{display:block;font-size:30px;line-height:1.15;margin-top:4px}.learning-score small{font-size:12px;font-weight:500}.learning-score p{font-size:11px!important;line-height:1.7!important;margin:0!important;color:#45615d!important}
 .learning-score.compact{padding:11px 13px}.learning-score.compact strong{font-size:25px}
@@ -194,53 +194,251 @@ button,textarea,input,.bubble,.soft-card,.task-choice,.source-link{min-width:0;o
 .teacher-preview-bar.in-flow{position:relative;inset:auto;left:auto;right:auto;top:auto;margin:6px 10px;flex:0 0 auto;box-shadow:0 2px 10px #10253333}
 
 
-/* v5.3.1: IG action controls, source capture, and navigation feedback. */
-.insta-surface{background:#fff!important;color:#202020}
-.insta-surface .header{background:#fff;color:#171717}
-.ig-svg{display:block;width:26px;height:26px;flex:none;overflow:visible;pointer-events:none}
-.ig-control{display:inline-flex;align-items:center;justify-content:center;flex:none;width:44px;min-width:44px;height:44px;border:0;padding:9px;background:transparent;color:#1b1b1b;border-radius:10px;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
-.ig-control:hover{background:#f5f5f5}.ig-control:active{transform:scale(.93)}
-.ig-control[aria-pressed=true].ig-heart{color:#f02c54}
-.insta-surface .post{background:#fff;border:0;border-bottom:1px solid #e9e9e9;border-radius:0;margin:0 0 12px;padding-bottom:12px;overflow:hidden}
-.insta-surface .post-head{padding:10px 14px;min-height:66px;gap:11px}
-.insta-surface .ig-avatar{width:35px;height:35px;background:#243843;color:#fff;border:2px solid #fff;outline:2px solid #b74884;flex:none}
-.insta-surface .post-head .account{font-size:13px;line-height:1.5;font-weight:700;flex:1}
-.insta-surface .post-head .tiny{font-size:11px;font-weight:400;color:#727272}
-.insta-surface .post-head>.ig-control{margin-left:auto}
-.insta-surface .post>.asset-preview,.insta-surface .post>.ig-media{margin:0}
-.insta-surface .post-img{width:100%;border-radius:0;max-height:none;object-fit:cover}
-.insta-surface .asset-preview{display:block;line-height:0;margin:0}
-.insta-surface .asset-preview img{border-radius:0}
-.insta-surface .post-actions{display:flex;align-items:center;gap:1px;padding:5px 7px 0;margin:0;min-height:50px}
-.insta-surface .post-actions button{font-size:inherit;width:44px;min-width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;padding:9px;border:0;background:transparent;line-height:1;color:#1b1b1b}
-.insta-surface .post-actions button.ig-heart[aria-pressed=true]{color:#f02c54}
-.insta-surface .post-actions .ig-bookmark{margin-left:auto}
-.insta-surface .post-likes{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;margin:2px 16px 9px;color:#202020}
-.ig-correction-label{font-size:10px;border-radius:5px;padding:2px 6px;color:#216a57;background:#eaf5ee}
-.insta-surface .post-caption{font-size:13px;line-height:1.8;padding:0 16px;color:#292929}
-.insta-surface .post-comment{font-size:12px;color:#484848;line-height:1.7}
-.insta-surface .post-foot{padding:8px 16px;font-size:10px;color:#737373}
-.ig-brand{font-size:24px;font-weight:780;letter-spacing:-1px;font-family:Georgia,'Times New Roman',serif;line-height:1.3}
-.ig-topbar{display:flex;justify-content:space-between;align-items:center;min-height:56px;padding:2px 10px 2px 16px;flex:none;border-bottom:1px solid #eee;background:#fff}
-.ig-topbar-right{display:flex;align-items:center;gap:2px}
-.ig-nav{display:flex;justify-content:space-around;align-items:center;flex:none;min-height:55px;border-top:1px solid #e9e9e9;background:#fff}
-.ig-nav .ig-control .ig-svg{width:25px;height:25px}
-.ig-noop{cursor:default}.insta-surface .insta-profile{border-bottom:1px solid #eee;background:#fff}
-.source-excerpts{border-top:1px solid #dae3e8;margin-top:20px;padding-top:14px}
-.source-excerpts summary{font-size:12px;font-weight:650;color:#526873;cursor:pointer;padding:5px 0;line-height:1.7}
-.source-excerpt{border-left:2px solid #ccdadf;padding:6px 12px;margin:12px 0}
-.source-excerpt b{font-size:12px;color:#435a65}.article .source-excerpt p{font-size:12px!important;line-height:1.8!important;color:#64747d!important;margin:4px 0!important}
-.source-save-panel{border-top:1px solid #dae3e8;margin-top:22px;padding:20px 0 6px}
-.source-save-button{width:100%;display:flex;align-items:center;justify-content:center;gap:9px;min-height:48px;line-height:1.5}
-.source-save-button .ig-svg{width:20px;height:20px}
-.source-save-button.is-saved:disabled{opacity:1;background:#e5f3ed;color:#25614d;border:1px solid #b7d8c8;box-shadow:none;cursor:default}
-.source-save-status{font-size:11px!important;line-height:1.7!important;color:#61737c!important;margin:9px 0 7px!important}
-.source-return-link{display:flex;align-items:center;gap:6px;text-align:left;min-height:44px;max-width:100%;font-size:12px;background:none;border:0;padding:6px 0;color:#296778;overflow-wrap:anywhere}
-.source-return-link .ig-svg{width:17px;height:17px}
-.recall-link{display:flex;align-items:center;gap:5px}.recall-link .ig-svg{width:16px;height:16px}
-.chat-message.is-recalled .bubble{outline:2px solid #cc9342;outline-offset:4px;box-shadow:0 0 0 6px #fff4d485}
-@media(max-width:350px){.insta-surface .post-head{padding:8px 12px}.insta-surface .post-caption{font-size:12px}.source-save-button{font-size:12px;padding:10px}}
-@media(prefers-reduced-motion:reduce){.ig-control:active{transform:none}}
+/* v5.3.2: crisp social actions, touch targets, and one source-save area. */
+.ig-line-icon{display:block;width:24px;height:24px;flex:0 0 24px}
+.insta-surface{background:#fff;color:#161616}
+.ig-app-header{min-height:55px;padding:8px 16px}
+.ig-wordmark{font-family:Georgia,"Times New Roman",serif;font-style:italic;font-weight:700;font-size:28px;letter-spacing:-1.1px;line-height:1.2}
+.insta-profile{padding:13px 16px;border-bottom:1px solid #ededed}
+.ig-avatar{background:linear-gradient(135deg,#d8496d,#923eca);border:2px solid #fff;box-shadow:0 0 0 1.5px #ba477e;color:#fff}
+.insta-surface .post{border:0;border-bottom:7px solid #f5f5f5;border-radius:0;margin:0;background:#fff}
+.insta-surface .post-head{min-height:64px;padding:12px 16px;gap:11px}
+.insta-surface .post-head .ig-avatar{height:34px;width:34px;flex:0 0 34px;font-size:11px}
+.insta-surface .post-head .account{font-size:13px;font-weight:700;line-height:1.45}
+.insta-surface .post-head .tiny{font-size:11px;color:#737373;font-weight:400}
+.insta-surface .post-img,.insta-surface .asset-preview{border-radius:0!important;margin:0}
+.insta-surface .post-img{display:block;width:100%;height:auto;max-height:none;object-fit:contain}
+.post-actions.ig-action-bar{display:flex;align-items:center;gap:2px;min-height:54px;padding:4px 9px;margin:0;background:#fff}
+.insta-surface .ig-action,.ig-action-bar .ig-action{border:0;background:transparent;color:#171717;display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;width:44px;height:44px;padding:9px;border-radius:10px;flex-shrink:0;cursor:pointer}
+.ig-action:hover{background:#f6f6f6}
+.ig-action:active{transform:scale(.95)}
+.ig-action .ig-line-icon{width:26px;height:26px;flex-basis:26px}
+.ig-action-bar .push{margin-left:auto}
+.ig-action-bar .is-liked{color:#ed4956}
+.ig-action-bar .is-bookmarked{color:#171717}
+.insta-surface .post-likes{font-size:13px;line-height:1.5;margin:0 16px 7px;font-weight:750}
+.insta-surface .post-caption{padding:0 16px;font-size:13px;line-height:1.65;color:#242424}
+.insta-surface .post-comment{margin:9px 16px;color:#333;font-size:12px;line-height:1.75}
+.insta-surface .post-foot{padding:10px 16px 14px;color:#737373;font-size:10px;letter-spacing:.02em}
+.ig-bottom-nav{min-height:54px;height:54px;border-color:#e6e6e6}
+.ig-bottom-nav button{color:#111;width:44px;min-width:44px;height:44px;padding:9px;display:flex;align-items:center;justify-content:center}
+.source-evidence-card{border:1px solid #dae5e7;border-radius:14px;background:#fff;padding:15px;margin:10px 0}
+.source-evidence-title{display:flex;gap:10px;align-items:flex-start;justify-content:space-between}
+.source-evidence-title b{line-height:1.6;font-size:13px;flex:1}
+.source-evidence-status{font-size:11px;white-space:nowrap;color:#83949b;font-weight:650;line-height:1.9}
+.source-evidence-status.saved{color:#247965}
+.source-evidence-card p{font-size:13px;line-height:1.85;margin:9px 0 0!important}
+.source-save-area{border-top:1px solid #dfe8eb;margin-top:20px;padding:18px 0 4px}
+.source-save-button{width:100%;min-height:48px;border:0;border-radius:14px;padding:13px 16px;display:flex;align-items:center;justify-content:center;gap:10px;background:#214f60;color:#fff;font-size:13px;font-weight:750}
+.source-save-button.is-saved,.source-save-button:disabled{background:#e5f3ed;color:#28715d;opacity:1;cursor:default}
+.source-save-button .ig-line-icon{height:20px;width:20px;flex-basis:20px}
+.source-save-status{min-height:38px!important;color:#6e8289!important;font-size:11px!important;line-height:1.65!important;margin:9px 2px!important}
+.source-return{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:10px 8px;min-height:42px;border:1px solid #cfdae0;border-radius:12px;background:white;color:#345362;font-size:12px;font-weight:650;line-height:1.65}
+.source-return span{overflow-wrap:anywhere}
+.source-return .ig-line-icon{width:18px;height:18px;flex-basis:18px}
+.context-message-link{display:flex;align-items:center;gap:6px}
+.chat-message.context-highlight .bubble{outline:2px solid #498b99;outline-offset:3px;box-shadow:0 0 0 7px #eaf9fc66}
+@media(max-width:350px){.insta-surface .post-head{padding-inline:12px}.ig-action .ig-line-icon{width:24px;height:24px;flex-basis:24px}.source-evidence-title{gap:6px}.source-save-button{font-size:12px}}
+@media(prefers-reduced-motion:reduce){.ig-action:active{transform:none}}
+
+/* v5.3.2 HOME ONLY: independent grid tracks, no scroll-to-find apps. */
+html.case-home-fit #root{height:var(--case-visible-height,100dvh)}
+html.case-home-fit .phone{height:min(844px,calc(var(--case-visible-height,100dvh) - 20px))}
+@media (max-width:600px),(pointer:coarse) and (max-width:900px){
+ html.case-home-fit .phone{height:var(--case-visible-height,100dvh);max-height:var(--case-visible-height,100dvh)}
+}
+.home-bg.home-fit{
+ --home-icon:56px;--home-heading:100px;--home-widget:164px;--home-app:85px;--home-dock:94px;
+ --home-gap:12px;--home-x:18px;--home-y:10px;--home-clock-size:56px;
+ --home-title-size:16px;--home-widget-pad:14px;
+ display:flex;flex-direction:column;overflow:hidden;
+ padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px);
+ background:linear-gradient(164deg,#a7bdcf 0%,#c2cbcc 49%,#e6dccf 100%);
+ -webkit-text-size-adjust:100%;text-size-adjust:100%;
+}
+.home-fit::before{background:radial-gradient(ellipse at 80% 12%,#f0f5f933,transparent 58%);z-index:0}
+.home-fit .home-main{
+ position:relative;z-index:1;display:grid;width:100%;max-width:620px;margin:0 auto;
+ flex:1 1 0;min-height:0;overflow:visible;padding:var(--home-y) var(--home-x) 0;
+ grid-template-columns:minmax(0,1fr);
+ grid-template-rows:var(--home-heading) var(--home-widget) var(--home-app);
+ row-gap:var(--home-gap);align-content:start;
+}
+.home-fit .home-heading{display:grid;grid-template-columns:46px minmax(0,1fr) 46px;gap:6px;align-items:center;min-width:0}
+.home-fit .home-clock-block{min-width:0;align-self:center;text-align:center;color:#f8fbfe}
+.home-fit .home-time.home-teacher-clock-trigger{
+ font-size:var(--home-clock-size);line-height:1.05;font-weight:330;letter-spacing:-.065em;
+ color:#fff;width:100%;margin:0;padding:0;text-align:center;min-height:44px;border-radius:10px;
+ text-shadow:0 2px 18px #25394c12;
+}
+.home-fit .home-date{display:block;font-size:12px;font-weight:600;line-height:1.4;letter-spacing:.025em;color:#314e61;margin:3px 0 0;white-space:nowrap}
+.home-fit .home-owner{font-size:11px;color:#3f5b6c;line-height:1.5;margin:2px 0 0;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}
+.home-fit .home-utility{
+ display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+ width:46px;min-width:44px;min-height:48px;padding:6px 3px;margin:0;
+ border:1px solid #ffffff70;background:#ffffff42;border-radius:15px;color:#365464;
+ box-shadow:none;font-size:10px;font-weight:600;line-height:1.2;white-space:nowrap;touch-action:manipulation;
+}
+.home-fit .home-utility svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.home-fit .home-utility:hover{background:#ffffff90}
+.home-fit .home-widgets{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;min-height:0;min-width:0}
+.home-fit .home-widget-button{
+ border:1px solid #ffffff80;background:#f8fbfde6;border-radius:23px;padding:0;min-width:0;min-height:0;
+ text-align:left;color:#294656;box-shadow:0 6px 18px #30465813;overflow:hidden;position:relative;cursor:pointer;
+}
+.home-fit .home-case-widget{display:flex;flex-direction:column;padding:var(--home-widget-pad);height:100%;gap:6px}
+.home-fit .home-case-head{display:flex;justify-content:space-between;gap:6px;align-items:center;color:#507d86;font-size:11px;font-weight:750;line-height:1.3;white-space:nowrap}
+.home-fit .home-chapter-tag{background:#dcebe9;color:#366a67;border-radius:6px;padding:3px 5px;font-size:10px;font-weight:700}
+.home-fit .home-case-widget h2{font-size:var(--home-title-size);line-height:1.35;letter-spacing:-.02em;margin:0;color:#213e4f;font-weight:780;overflow-wrap:anywhere}
+.home-fit .home-case-question{font-size:11px;line-height:1.45;color:#607985;margin:0;overflow-wrap:anywhere}
+.home-fit .home-case-link{margin-top:auto;font-size:11px;line-height:1.35;font-weight:750;display:flex;justify-content:space-between;color:#37727d;gap:5px}
+.home-fit .home-photo-widget img{width:100%;height:100%;max-height:none;display:block;object-fit:cover;border:0;border-radius:0;aspect-ratio:auto}
+.home-fit .home-photo-caption{position:absolute;inset:auto 0 0;padding:22px 11px 11px;background:linear-gradient(transparent,#102d3ec4);color:#fff;text-shadow:0 1px 4px #0004}
+.home-fit .home-photo-caption strong{display:block;font-size:12px;line-height:1.5;font-weight:650}
+.home-fit .home-photo-caption small{display:block;font-size:10px;line-height:1.45;color:#f0f8fc}
+.home-fit .app-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));column-gap:8px;row-gap:0;margin:0;padding:6px 0 0;align-items:start;min-width:0;min-height:0}
+.home-fit .app-tile{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:6px;padding:0;margin:0;min-width:0;min-height:44px;color:#304b5e;font-size:11px;line-height:1.4;touch-action:manipulation;text-shadow:0 1px 3px #fff5;white-space:nowrap;overflow:visible}
+.home-fit .home-icon-wrap{display:block;position:relative;width:var(--home-icon);height:var(--home-icon);flex:none}
+.home-fit .app-icon,.home-fit .dock .app-icon{width:var(--home-icon);height:var(--home-icon);border-radius:calc(var(--home-icon) * .255);box-shadow:0 5px 12px #2d3b4e24}
+.home-fit .app-tile .badge-count{position:absolute;top:-5px;right:-6px;z-index:3;min-width:19px;height:19px;border:1px solid #ffffff65;border-radius:12px;padding:1px 5px;box-shadow:0 2px 4px #442c3033;font-size:10px;line-height:15px}
+.home-fit .home-app-label{display:block;text-align:center;max-width:100%;color:inherit;white-space:nowrap;overflow:visible;font-size:11px;line-height:16px}
+.home-fit .dock{
+ z-index:1;flex:0 0 var(--home-dock);height:var(--home-dock);min-height:0;
+ display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;align-items:center;
+ width:calc(100% - var(--home-x) * 2);max-width:584px;margin:var(--home-gap) auto 7px;
+ padding:8px 10px;border:1px solid #ffffff80;border-radius:27px;background:#ffffffe0;
+ background:linear-gradient(160deg,#ffffff94,#ffffff65);box-shadow:0 5px 28px #4653660a;
+ backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+}
+.home-fit .home-widget-button:focus-visible,.home-fit .app-tile:focus-visible,.home-fit .home-utility:focus-visible{outline:3px solid #197b98;outline-offset:3px}
+.home-fit[data-home-density="compact"] .home-case-question{display:none}
+.home-fit[data-home-density="compact"] .home-case-widget{gap:5px}
+.home-fit[data-home-density="compact"] .home-owner{font-size:10px;margin-top:0}
+.home-fit[data-home-density="compact"] .home-date{margin-top:0;font-size:11px}
+.home-fit[data-home-density="compact"] .home-photo-caption{padding:17px 9px 8px}
+.home-fit[data-home-density="compact"] .home-widgets{gap:9px}
+.home-fit[data-home-density="compact"] .home-widget-button{border-radius:18px}
+.home-fit[data-home-layout="wide"] .home-main{max-width:960px;grid-template-columns:minmax(0,1.08fr) minmax(0,1fr);grid-template-rows:var(--home-heading) var(--home-widget);column-gap:26px}
+.home-fit[data-home-layout="wide"] .home-heading{grid-column:1;grid-row:1}
+.home-fit[data-home-layout="wide"] .home-widgets{grid-column:1;grid-row:2}
+.home-fit[data-home-layout="wide"] .app-grid{grid-column:2;grid-row:1 / 3;grid-template-columns:repeat(2,minmax(0,1fr));height:100%;align-content:space-evenly;align-items:center;gap:10px 14px}
+.home-fit[data-home-layout="wide"] .dock{max-width:840px}
+/* A last-resort accessible scroll fallback is preferable to clipped controls at extreme zoom. */
+.home-fit[data-home-density="accessibility"] .home-main{overflow-y:auto;padding-bottom:14px}
+
+.home-fit .home-case-widget h2{text-wrap:balance}
+.home-fit[data-home-density="accessibility"] .home-case-question{display:none}
+@media (max-width:600px),(pointer:coarse) and (max-width:900px),(pointer:coarse) and (orientation:landscape) and (max-height:600px){
+ html.case-home-fit #root{align-items:stretch;justify-content:center}
+ html.case-home-fit .phone{width:100vw;max-width:100vw;height:var(--case-visible-height,100dvh);max-height:var(--case-visible-height,100dvh);border:0;border-radius:0;box-shadow:none}
+ html.case-home-fit .screen{border-radius:0}
+ html.case-home-fit .desktop-title,html.case-home-fit .desktop-foot{display:none}
+}
+
+
+/* CASE 072 v5.3.3 — original investigation-desk home layout */
+.home-fit.home-v533{
+ --home-icon:55px;--home-top:78px;--home-hero:176px;--home-clue:86px;--home-app:78px;--home-dock:88px;
+ --home-gap:9px;--home-x:18px;--home-y:7px;--home-hero-title:32px;
+ display:flex;flex-direction:column;overflow:hidden;color:#f4f0e9;
+ padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px);
+ background:
+  radial-gradient(circle at 83% 8%,rgba(230,156,96,.22),transparent 27%),
+  radial-gradient(circle at 12% 66%,rgba(98,49,32,.32),transparent 36%),
+  linear-gradient(150deg,#1b2630 0%,#2b2726 43%,#614332 100%);
+ -webkit-text-size-adjust:100%;text-size-adjust:100%;
+}
+.home-fit.home-v533::before{
+ content:'';position:absolute;inset:0;pointer-events:none;opacity:.72;
+ background:
+  linear-gradient(110deg,transparent 0 44%,rgba(255,255,255,.035) 44.3% 44.8%,transparent 45.1%),
+  radial-gradient(ellipse at 50% 100%,rgba(240,196,148,.12),transparent 52%);
+}
+.home-v533 .home-main{
+ position:relative;z-index:1;display:grid;width:100%;max-width:620px;margin:0 auto;
+ flex:1 1 0;min-height:0;overflow:hidden;padding:var(--home-y) var(--home-x) 0;
+ grid-template-columns:minmax(0,1fr);
+ grid-template-rows:var(--home-top) var(--home-hero) var(--home-clue) var(--home-app);
+ row-gap:var(--home-gap);align-content:start;
+}
+.home-v533 .case-home-top{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:10px;min-width:0}
+.home-v533 .case-home-date{font-size:14px;line-height:1.4;font-weight:720;letter-spacing:.04em;color:#f5efe8;white-space:nowrap}
+.home-v533 .case-home-owner{font-size:10px;line-height:1.45;color:#c7bbb1;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.home-v533 .case-home-tagline{font-size:13px;line-height:1.55;color:#e7ddd5;margin-top:6px;max-width:235px}
+.home-v533 .case-home-tagline::before{content:'';display:inline-block;width:22px;height:2px;background:#e18a68;vertical-align:middle;margin:0 8px 3px 0;border-radius:2px}
+.home-v533 .case-home-tools{display:flex;gap:6px;align-items:center;justify-content:flex-end}
+.home-v533 .case-tool{
+ border:1px solid #ffffff20;background:#ffffff12;color:#f4ede8;border-radius:13px;min-width:39px;height:39px;padding:0 8px;
+ display:grid;place-items:center;font-size:10px;font-weight:700;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)
+}
+.home-v533 .case-tool svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.home-v533 .case-clock{font-size:13px;letter-spacing:.02em;min-width:54px}
+.home-v533 .case-hero{
+ position:relative;overflow:hidden;border:1px solid #ffffff22;border-radius:24px;padding:0;text-align:left;color:#fff;
+ background:linear-gradient(145deg,#0e1216 0%,#171719 55%,#2b2020 100%);box-shadow:0 17px 38px #0b0d1180;
+ min-height:0;cursor:pointer
+}
+.home-v533 .case-hero::before{
+ content:'';position:absolute;inset:0;opacity:.48;pointer-events:none;
+ background:repeating-linear-gradient(7deg,#ffffff05 0 1px,transparent 1px 10px),linear-gradient(100deg,transparent 0 58%,#8f322c33 58% 59%,transparent 59%);
+}
+.home-v533 .case-hero::after{content:'';position:absolute;width:180px;height:2px;background:#b53c38;right:-27px;top:53%;transform:rotate(-25deg);box-shadow:0 0 0 1px #4c1717aa;opacity:.9}
+.home-v533 .case-hero-copy{position:relative;z-index:2;width:69%;height:100%;padding:16px 16px 13px;display:flex;flex-direction:column}
+.home-v533 .case-eyebrow{font-size:9px;letter-spacing:.23em;color:#d0b7a9;font-weight:800}
+.home-v533 .case-hero h1{font-family:Georgia,'Times New Roman','Noto Serif TC',serif;font-size:var(--home-hero-title);line-height:.95;margin:7px 0 2px;letter-spacing:.015em;font-weight:800;color:#eee6dc;text-shadow:0 1px 0 #000}
+.home-v533 .case-hero h1 b{color:#c84343;font-weight:800}
+.home-v533 .case-hero h2{font-size:15px;line-height:1.35;margin:4px 0;color:#fff;font-weight:780;overflow-wrap:anywhere}
+.home-v533 .case-hero p{font-size:10.5px;line-height:1.45;color:#cfc7c2;margin:0;max-width:220px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.home-v533 .case-hero-bottom{margin-top:auto;display:flex;align-items:flex-end;gap:7px;flex-wrap:wrap}
+.home-v533 .case-hero-cta{display:inline-flex;align-items:center;gap:8px;border-radius:999px;background:linear-gradient(135deg,#a4212f,#d64943);padding:8px 12px;color:#fff;font-size:11px;font-weight:800;box-shadow:0 5px 14px #650d1d66}
+.home-v533 .case-hero-stats{display:flex;gap:5px;align-items:center;color:#d6cac2;font-size:9px;white-space:nowrap}
+.home-v533 .case-hero-stats span{border:1px solid #ffffff1c;background:#ffffff0b;border-radius:999px;padding:4px 6px}
+.home-v533 .case-evidence-stack{position:absolute;z-index:1;right:7px;top:13px;width:34%;height:calc(100% - 26px);transform:rotate(2deg);border-radius:10px;overflow:hidden;border:1px solid #ffffff20;background:#332b27;box-shadow:-8px 10px 22px #0008}
+.home-v533 .case-evidence-stack img{width:100%;height:100%;object-fit:cover;filter:saturate(.65) contrast(1.05) brightness(.68)}
+.home-v533 .case-evidence-stack::before{content:'EVIDENCE';position:absolute;z-index:2;right:6px;top:7px;font-size:7px;letter-spacing:.16em;color:#f0ded1;background:#201a17bb;border:1px solid #ffffff1c;padding:4px 5px;border-radius:4px}
+.home-v533 .case-evidence-stack::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,#0b0b0d55,transparent 40%)}
+.home-v533 .clue-card{
+ border:1px solid #ffffff20;border-radius:20px;overflow:hidden;padding:0;background:#1a1513bd;color:#fff;box-shadow:0 8px 22px #10111555;
+ display:grid;grid-template-columns:34% minmax(0,1fr);text-align:left;min-height:0;position:relative
+}
+.home-v533 .clue-card img{width:100%;height:100%;object-fit:cover;filter:saturate(.72) brightness(.72)}
+.home-v533 .clue-copy{padding:10px 12px;min-width:0;display:flex;flex-direction:column;justify-content:center}
+.home-v533 .clue-kicker{font-size:9px;letter-spacing:.15em;color:#d77870;font-weight:800;margin-bottom:4px}
+.home-v533 .clue-copy strong{font-size:13px;line-height:1.35;color:#f5ede7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.home-v533 .clue-copy small{font-size:10px;line-height:1.45;color:#baaaa0;margin-top:3px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.home-v533 .clue-arrow{position:absolute;right:9px;top:50%;transform:translateY(-50%);width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#ffffff13;border:1px solid #ffffff20;color:#eee}
+.home-v533 .app-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px 7px;margin:0;padding:2px 0 0;align-items:start;min-height:0}
+.home-v533 .app-tile{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:5px;padding:0;margin:0;min-width:0;color:#f1e8e1;font-size:10px;line-height:1.3;text-shadow:0 2px 4px #0007;white-space:nowrap}
+.home-v533 .home-icon-wrap{display:block;position:relative;width:var(--home-icon);height:var(--home-icon);flex:none}
+.home-v533 .app-icon,.home-v533 .dock .app-icon{width:var(--home-icon);height:var(--home-icon);border-radius:calc(var(--home-icon)*.25);box-shadow:0 7px 16px #0c0d106e,0 0 0 1px #ffffff12}
+.home-v533 .home-app-label{font-size:10px;color:#f3e9e2;text-align:center;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.home-v533 .app-tile .badge-count{position:absolute;top:-5px;right:-6px;z-index:3;background:#f04449;color:#fff;min-width:19px;height:19px;border:2px solid #49352f;border-radius:12px;padding:0 4px;font-size:9px;line-height:15px;text-align:center;box-shadow:0 3px 6px #0005}
+.home-v533 .dock{
+ position:relative;z-index:2;flex:0 0 var(--home-dock);height:var(--home-dock);min-height:0;
+ display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;align-items:center;
+ width:calc(100% - var(--home-x)*2);max-width:584px;margin:var(--home-gap) auto 7px;padding:8px 10px 7px;
+ border:1px solid #ffffff20;border-radius:28px;background:linear-gradient(155deg,#ffffff22,#ffffff0c);box-shadow:0 10px 30px #0005;
+ backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)
+}
+.home-v533 .dock .app-tile{color:#fff}.home-v533 .dock .home-app-label{color:#f4ece7}
+.home-v533 .case-hero:focus-visible,.home-v533 .clue-card:focus-visible,.home-v533 .app-tile:focus-visible,.home-v533 .case-tool:focus-visible{outline:3px solid #f0a184;outline-offset:3px}
+.home-v533[data-home-density="compact"] .case-home-tagline{font-size:11px;margin-top:3px}
+.home-v533[data-home-density="compact"] .case-hero p{display:none}
+.home-v533[data-home-density="compact"] .case-hero-copy{padding:11px 12px 10px}
+.home-v533[data-home-density="compact"] .case-hero h2{font-size:13px;margin:2px 0}
+.home-v533[data-home-density="compact"] .case-hero-stats{display:none}
+.home-v533[data-home-density="compact"] .clue-copy{padding:7px 10px}
+.home-v533[data-home-density="compact"] .clue-copy small{-webkit-line-clamp:1}
+.home-v533[data-home-density="compact"] .case-tool{height:34px;min-width:34px;border-radius:11px;padding:0 6px}
+.home-v533[data-home-density="accessibility"] .home-main{overflow-y:auto;padding-bottom:12px}
+.home-v533[data-home-layout="wide"] .home-main{
+ max-width:960px;grid-template-columns:minmax(0,1.15fr) minmax(250px,.85fr);grid-template-rows:var(--home-top) minmax(0,1fr);column-gap:12px
+}
+.home-v533[data-home-layout="wide"] .case-home-top{grid-column:1 / 3;grid-row:1}
+.home-v533[data-home-layout="wide"] .case-hero{grid-column:1;grid-row:2;height:100%}
+.home-v533[data-home-layout="wide"] .clue-card{grid-column:2;grid-row:2;align-self:start;height:46%}
+.home-v533[data-home-layout="wide"] .app-grid{grid-column:2;grid-row:2;align-self:end;height:46%;grid-template-columns:repeat(4,minmax(0,1fr));align-content:center}
+.home-v533[data-home-layout="wide"] .dock{max-width:820px}
 
 </style></head><body><main id="root"></main><script>
 'use strict';
@@ -362,7 +560,7 @@ const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const attr=x=>esc(x);
 const dedupe=a=>[...new Set(a)];
 function seededOrder(items,seed){let a=items.slice(),k=seed|0;for(let i=a.length-1;i>0;i--){k=(1664525*k+1013904223)|0;let j=(k>>>0)%(i+1);[a[i],a[j]]=[a[j],a[i]]}return a}
-function newState(){const seed=Math.floor(Math.random()*2000000000);return {schemaVersion:6,contentVersion:'5.3.1',learning:createLearningState(),profile:{nickname:'',className:''},profileCompleted:false,runId:makeId(),runSeed:seed,revision:0,stageId:'S00_LOCK',chapterId:'CH01',storyDate:'2026-09-29',flags:{clue72Unlocked:false,consentToShareSafety:false,identityRevealed:false,draftSubmitted:false,sourcesShared:false,correctionPublished:false,correctionViewed:false,mainCompleted:false},visitedPageIds:[],collectedEvidence:{},solvedTaskIds:[],taskAttempts:{},taskDrafts:{K08:{cards:[],order:seededOrder(SENTENCES.map(x=>x[0]),seed)}},initialShareChoice:null,initialShareCorrected:false,offeredSideQuests:[],scripts:{},messages:[],nextSeq:1,processedEventIds:[],pendingEvents:[],chatReadCursors:{group803:0,ziqing:0,yuchen:0,friend_demo:0},chatDrafts:{},scrollAnchors:{},savedAssetIds:[],assetSaveLog:[],posts:{},pageRevisions:{},notificationQueue:[],notes:[{id:'initial',title:'STOP 查核框架',body:'Stop 想轉傳前先暫停\nTrigger 想想自己產生什麼情緒(怒、怕、爽、新奇..?)\nOriginal 查訊息來源\nProof 找其它證據',date:'2026-09-29'}],readNoteIds:[],sos:{points:100,unlockedHintIds:[],transactions:[]},ai:{messages:[{id:'welcome',sender:'assistant',text:'我可以協助描述圖片、整理搜尋方向，但可能出錯，需要你打開來源確認。'}],lastSentAssetId:null,draftAssetId:null,pendingRequest:null},ending:{view:null,elapsedMs:0,historySeen:false},navigation:{currentRoute:{app:'intro'},appStack:[],browsers:{chrome:{entries:[],index:-1},google:{entries:[],index:-1}},browserReturn:{chrome:null,google:null},lastRoutes:{}} ,meta:{enteredStages:[],viewedIntroComments:false,postViewed:[],postLikes:[],postBookmarked:[],igSeenPosts:[],dmStep:0,verifiedReply:false,ghostReply:false,xrayReply:false,ruinsReply:false,chainReply:0,recordReply:0,sourceReply:false,correctionRequested:false,correctionPostRead:false,bananaStarted:false,resetNoticeShown:false}}}
+function newState(){const seed=Math.floor(Math.random()*2000000000);return {schemaVersion:6,contentVersion:'5.3.3',learning:createLearningState(),profile:{nickname:'',className:''},profileCompleted:false,runId:makeId(),runSeed:seed,revision:0,stageId:'S00_LOCK',chapterId:'CH01',storyDate:'2026-09-29',flags:{clue72Unlocked:false,consentToShareSafety:false,identityRevealed:false,draftSubmitted:false,sourcesShared:false,correctionPublished:false,correctionViewed:false,mainCompleted:false},visitedPageIds:[],collectedEvidence:{},solvedTaskIds:[],taskAttempts:{},taskDrafts:{K08:{cards:[],order:seededOrder(SENTENCES.map(x=>x[0]),seed)}},initialShareChoice:null,initialShareCorrected:false,offeredSideQuests:[],scripts:{},messages:[],nextSeq:1,processedEventIds:[],pendingEvents:[],chatReadCursors:{group803:0,ziqing:0,yuchen:0,friend_demo:0},chatDrafts:{},scrollAnchors:{},savedAssetIds:[],assetSaveLog:[],posts:{},pageRevisions:{},notificationQueue:[],notes:[{id:'initial',title:'STOP 查核框架',body:'Stop 想轉傳前先暫停\nTrigger 想想自己產生什麼情緒(怒、怕、爽、新奇..?)\nOriginal 查訊息來源\nProof 找其它證據',date:'2026-09-29'}],readNoteIds:[],sos:{points:100,unlockedHintIds:[],transactions:[]},ai:{messages:[{id:'welcome',sender:'assistant',text:'我可以協助描述圖片、整理搜尋方向，但可能出錯，需要你打開來源確認。'}],lastSentAssetId:null,draftAssetId:null,pendingRequest:null},ending:{view:null,elapsedMs:0,historySeen:false},navigation:{currentRoute:{app:'intro'},appStack:[],browsers:{chrome:{entries:[],index:-1},google:{entries:[],index:-1}},browserReturn:{chrome:null,google:null},lastRoutes:{}} ,meta:{enteredStages:[],viewedIntroComments:false,postViewed:[],postLikes:[],postBookmarked:[],igSeenPosts:[],dmStep:0,verifiedReply:false,ghostReply:false,xrayReply:false,ruinsReply:false,chainReply:0,recordReply:0,sourceReply:false,correctionRequested:false,correctionPostRead:false,bananaStarted:false,resetNoticeShown:false}}}
 function restore(){try{const raw=localStorage.getItem(SAVE_KEY);if(!raw)return null;const v=JSON.parse(raw);if(v.schemaVersion!==6||!STAGES[v.stageId]||!Array.isArray(v.messages)||!v.navigation?.browsers||!v.meta||!v.flags||!v.sos||!v.taskDrafts)throw Error('Invalid v6 save');return v}catch(e){try{let raw=localStorage.getItem(SAVE_KEY);if(raw)localStorage.setItem('case072:v5:backup',raw)}catch(_){}return null}}
 let S=restore()||newState();
 if(!S.profile||typeof S.profile.nickname!=='string'||typeof S.profile.className!=='string'){
@@ -705,7 +903,6 @@ if(id==='school_notice')return isStageAtLeast('S02_CONTEXT');return true}
 function legacyCanSeePost(id){if(id==='post_correction')return S.flags.correctionPublished;if(id==='post_intro')return isStageAtLeast('S02_POST')&&!!messageAt('igintro:0');if(id==='post_ghost')return isStageAtLeast('S03_GHOST')&&!!messageAt('ghost:0');if(id==='post_xray')return isStageAtLeast('S03_XRAY')&&!!messageAt('xray_open:0');if(id==='post_ruins')return isStageAtLeast('S03_RUINS')&&!!messageAt('ruins:0');return false}
 function legacyTaskAvailable(id){switch(id){case 'K01':return isStageAtLeast('S01_CHECK');case 'K02':return hasTask('K02')||(S.offeredSideQuests.includes('K02')&&isReadTail('banana',CHAT_SCRIPTS.banana.length));case 'K03':return isStageAtLeast('S03_GHOST')&&isReadTail('ghost',CHAT_SCRIPTS.ghost.length);case 'K04':return isStageAtLeast('S03_XRAY')&&isReadTail('xray_open',CHAT_SCRIPTS.xray_open.length);case 'K05':return isStageAtLeast('S03_RUINS')&&isReadTail('ruins',CHAT_SCRIPTS.ruins.length);case 'K06':case 'K07':return S.flags.clue72Unlocked;case 'K08':return isStageAtLeast('S05_DM');default:return false}}
 function taskDraft(id){return S.taskDrafts[id]||(S.taskDrafts[id]={})}
-function collectEvidence(id,pageId){const p=PAGES[pageId],ev=p?.evidence?.find(x=>x[0]===id);if(!ev||!S.visitedPageIds.includes(pageId)||!canAccessPage(pageId))return toast('請先開啟對應來源頁，核對證據。');if(!hasEv(id)){S.collectedEvidence[id]={id,sourcePageId:pageId,blockId:id,assetId:p.asset||null,observedText:ev[2],collectedAtSeq:S.nextSeq++,provenanceType:p.external?'source_summary':'fictional'};toast('已保存：「'+ev[1]+'」。請在調查簿確認狀態。',{app:'notebook'});}else toast('這項證據已經保存，不需重複操作。');persistRender()}
 function saveAsset(id,source='manual'){if(!ASSET_META[id])return;if(!S.savedAssetIds.includes(id)){S.savedAssetIds.push(id);S.assetSaveLog.push({id,source,storyDate:S.storyDate});toast('圖片已保存到遊戲內相簿。',{app:'photos'})}else toast('這張圖片已在相簿中，不會重複保存。',{app:'photos'});persistRender()}
 function norm(v){return String(v||'').normalize('NFKC').trim().toLowerCase().replace(/[‐‑‒–—－]/g,'-').replace(/\s+/g,' ')}
 function searchIndex(query){const q=norm(query),raw=q.replace(/[ -]/g,'');if(!q)return [];const siteMap={'真相觀察站':'home_truth','怪談wiki':'home_wiki','城市焦點新聞':'home_news','甲里學生論壇':'home_forum','truth-observer.com':'home_truth','ghost-wiki.org':'home_wiki','cityfocus.news':'home_news','jiali-forum.net':'home_forum'};
@@ -722,7 +919,78 @@ if(/^(072|72|72號|072號|學生72號|學生072)$/.test(raw))return S.flags.clue
 const url=q.replace(/^https?:\/\//,'').replace(/^www\./,'').split('/')[0];if(url.endsWith('.example')||url.endsWith('.com')||url.endsWith('.news')||url.endsWith('.org')){const exact=Object.keys(SITE).find(id=>SITE[id][1]===url);if(exact)return [exact]}
 return Object.values(PAGES).filter(p=>canAccessPage(p.id)&&(norm(p.title).includes(q)&&q.length>=2)).map(p=>p.id).slice(0,9)}
 function getBrowser(app){return S.navigation.browsers[app]}
-function unusedV530Navigate(route){const last=currentRoute();if(last.app==='line'&&last.view==='chat'&&(route.app!=='line'||route.view!=='chat'||route.chatId!==last.chatId))stopPending();if(last.app!=='home'&&last.app!==route.app&&last.app!=='intro'&&last.app!=='lock'){S.navigation.appStack.push(structuredClone(last));if(S.navigation.appStack.length>15)S.navigation.appStack.shift()}
+
+/* v5.3.2: persisted, run-local navigation positions. No browser-history API is needed. */
+function nav531State(){
+ const n=S.navigation;if(!n.viewPositions)n.viewPositions={};return n;
+}
+function nav531Key(route=currentRoute()){
+ if(['chrome','google'].includes(route.app)){
+  const b=getBrowser(route.app),e=b?.entries?.[b.index]||{};
+  return JSON.stringify([route.app,b?.index,e.view,e.pageId||'',e.query||'']);
+ }
+ return JSON.stringify([route.app,route.view||'',route.taskId||'',route.postId||'',route.noteId||'',route.assetId||'']);
+}
+function nav531ScrollNode(){
+ return document.querySelector('#article-scroll')||document.querySelector('.phone .app-surface .scroll')||document.querySelector('.phone .home-main');
+}
+function nav531Capture(){
+ const r=currentRoute();if(r.app==='line'||r.app==='ending')return;
+ const sc=nav531ScrollNode();if(!sc)return;
+ const n=nav531State(),top=Math.max(0,sc.scrollTop);
+ n.viewPositions[nav531Key()]=top;
+ const keys=Object.keys(n.viewPositions);if(keys.length>120)delete n.viewPositions[keys[0]];
+ if(['chrome','google'].includes(r.app)){
+  const b=getBrowser(r.app),entry=b?.entries?.[b.index];if(entry)entry.scrollTop=top;
+ }
+ if(r.app==='notebook')n.lastNotebookView={route:structuredClone(r),scrollTop:top};
+}
+function nav531Leave(route){
+ nav531Capture();
+ if(currentRoute().app==='notebook'&&route.app!=='notebook'){
+  const n=nav531State();
+  n.notebookOrigin={route:structuredClone(currentRoute()),scrollTop:n.viewPositions[nav531Key()]||0,destination:structuredClone(route)};
+ }
+}
+function nav531Restore(){
+ const r=currentRoute();if(['line','ending'].includes(r.app))return;
+ const sc=nav531ScrollNode();if(!sc)return;
+ const n=nav531State(),key=nav531Key(),run=S.runId;
+ let top=n.viewPositions[key]||0;
+ if(['chrome','google'].includes(r.app)){
+  const b=getBrowser(r.app);top=b?.entries?.[b.index]?.scrollTop||0;
+ }
+ const restore=()=>{if(S.runId===run&&nav531Key()===key&&sc.isConnected)sc.scrollTop=top;};
+ restore();requestAnimationFrame(restore);
+}
+function notebookReturnTarget(){
+ const n=nav531State(),browser=['chrome','google'].includes(currentRoute().app)?n.browserReturn[currentRoute().app]:null;
+ if(n.notebookOrigin?.route?.app==='notebook')return n.notebookOrigin;
+ if(browser?.app==='notebook')return {route:browser,scrollTop:n.viewPositions[nav531Key(browser)]||0};
+ return n.lastNotebookView?.route?.app==='notebook'?n.lastNotebookView:{route:{app:'notebook',view:'chapter'},scrollTop:0};
+}
+function notebookReturnLabel(){
+ const target=notebookReturnTarget().route;
+ return target.taskId&&TASK_INFO[target.taskId]?'返回 '+target.taskId+' · '+TASK_INFO[target.taskId][0]:'返回原調查簿位置';
+}
+function returnToNotebook(){
+ const n=nav531State(),target=structuredClone(notebookReturnTarget());
+ nav531Capture();
+ n.viewPositions[nav531Key(target.route)]=target.scrollTop||0;
+ n.notebookOrigin=null;
+ navigate(target.route);
+}
+function browserBack(app){
+ nav531Capture();const b=getBrowser(app);
+ if(b.index>0){b.index--;save();render();return;}
+ const r=S.navigation.browserReturn[app];
+ if(r){
+  if(r.app==='notebook'){returnToNotebook();return;}
+  S.navigation.browserReturn[app]=null;navigate(structuredClone(r));
+ }else if(S.navigation.notebookOrigin)returnToNotebook();else home();
+}
+
+function navigate(route){nav531Leave(route);const last=currentRoute();if(last.app==='line'&&last.view==='chat'&&(route.app!=='line'||route.view!=='chat'||route.chatId!==last.chatId))stopPending();if(last.app!=='home'&&last.app!==route.app&&last.app!=='intro'&&last.app!=='lock'){S.navigation.appStack.push(structuredClone(last));if(S.navigation.appStack.length>15)S.navigation.appStack.shift()}
 S.navigation.currentRoute=structuredClone(route);save();render();afterNav(route)}
 function observeVisibleIGPosts(){
  if(ui.igObserver){ui.igObserver.disconnect();ui.igObserver=null;}
@@ -745,14 +1013,13 @@ function legacyAfterNav(r){
  if(r.app==='notes'&&r.view==='detail'&&r.noteId){if(!S.readNoteIds.includes(r.noteId))S.readNoteIds.push(r.noteId);save();}
  if(r.app==='line'&&r.view==='chat'&&r.chatId==='group803'&&S.stageId==='S05_CORRECTION'&&S.flags.correctionViewed)setStage('S05_CLOSE');
 }
-function v530Home(){if(S.stageId==='S06_HISTORY'){S.ending.cinemaPaused=true;pauseHistory();stopEndingMusic()}stopPending();S.navigation.currentRoute={app:'home'};ui.sheet=null;ui.photoPicker=null;save();render()}
-function v530Launch(app){if(app==='notebook')return navigate({app:'notebook',view:'chapter'});if(app==='line')return navigate({app:'line',view:'list'});if(app==='ig')return navigate({app:'ig',view:'feed'});if(app==='photos')return navigate({app:'photos',view:'grid'});if(app==='notes')return navigate({app:'notes',view:'list'});if(app==='ai')return navigate({app:'ai'});if(app==='chrome'||app==='google'){S.navigation.browserReturn[app]=currentRoute();const b=getBrowser(app);if(b.entries.length&&b.index>=0)return navigate({app,view:'browser'});b.entries=[{view:'home'}];b.index=0;return navigate({app,view:'browser'})}home()}
-function v530OpenBrowserPage(id,app='chrome'){if(!canAccessPage(id)){toast('目前沒有可開啟的頁面。',{app:'chrome'});return}const r=currentRoute();if(r.app!==app){S.navigation.browserReturn[app]=structuredClone(r);const b=getBrowser(app);b.entries=[];b.index=-1}pushBrowser(app,{view:'page',pageId:id})}
+function home(){nav531Capture();if(S.stageId==='S06_HISTORY'){S.ending.cinemaPaused=true;pauseHistory();stopEndingMusic()}stopPending();S.navigation.currentRoute={app:'home'};ui.sheet=null;ui.photoPicker=null;save();render()}
+function launch(app){if(app==='notebook')return navigate({app:'notebook',view:'chapter'});if(app==='line')return navigate({app:'line',view:'list'});if(app==='ig')return navigate({app:'ig',view:'feed'});if(app==='photos')return navigate({app:'photos',view:'grid'});if(app==='notes')return navigate({app:'notes',view:'list'});if(app==='ai')return navigate({app:'ai'});if(app==='chrome'||app==='google'){nav531Leave({app,view:'browser'});S.navigation.browserReturn[app]=structuredClone(currentRoute());const b=getBrowser(app);if(b.entries.length&&b.index>=0)return navigate({app,view:'browser'});b.entries=[{view:'home'}];b.index=0;return navigate({app,view:'browser'})}home()}
+function openBrowserPage(id,app='chrome'){if(!canAccessPage(id)){toast('目前沒有可開啟的頁面。',{app:'chrome'});return}const r=currentRoute();nav531Leave({app,view:'browser'});if(r.app!==app){S.navigation.browserReturn[app]=structuredClone(r);const b=getBrowser(app);b.entries=[];b.index=-1}pushBrowser(app,{view:'page',pageId:id})}
 function legacyPushBrowser(app,entry){const b=getBrowser(app);b.entries=b.entries.slice(0,b.index+1);b.entries.push(entry);b.index=b.entries.length-1;S.navigation.currentRoute={app,view:'browser'};if(entry.view==='page'&&canAccessPage(entry.pageId)){if(!S.visitedPageIds.includes(entry.pageId))S.visitedPageIds.push(entry.pageId);if(entry.pageId==='F0'&&S.flags.correctionPublished){}if(entry.pageId==='T'&&S.flags.clue72Unlocked&&!S.notes.some(n=>n.id==='chain')){S.notes.push({id:'chain',title:'這些資訊哪裡來的？',body:'把看到的四篇文章，各自文末引用的資料整理出來。多個網站是不是多個獨立證據？',date:S.storyDate})}}save();render();maybeAutoAdvance()}
 function submitSearch(app,query){const q=String(query||'').trim();if(!q)return toast('先輸入想查的關鍵字。',{app});let direct=null;if(/^https?:\/\//i.test(q)||/\.com|\.news|\.org|\.example/i.test(q)){const host=q.replace(/^https?:\/\//i,'').replace(/^www\./,'').split('/')[0].toLowerCase();let p=Object.keys(PAGES).find(id=>SITE[id]?.[1]===host&&PAGES[id]?.home)||Object.keys(PAGES).find(id=>SITE[id]?.[1]===host);if(p&&canAccessPage(p)){openBrowserPage(p,app);return}else if(p){toast('目前沒有可開啟的頁面。',{app});return}}
 const ids=searchIndex(q).filter(canAccessPage);ui.busySearch=true;const run=S.runId;render();setTimeout(()=>{if(run!==S.runId)return;ui.busySearch=false;pushBrowser(app,{view:'results',query:q,ids})},820)}
-function v530BrowserBack(app){const b=getBrowser(app);if(b.index>0){b.index--;save();render()}else{const r=S.navigation.browserReturn[app];if(r){S.navigation.currentRoute=r;S.navigation.browserReturn[app]=null;save();render();afterNav(r)}else home()}}
-function back(){if(ui.sheet)return hideSheet();if(ui.photoPicker){ui.photoPicker=null;return render()}if(ui.lightbox){ui.lightbox=null;return render()};const r=currentRoute();if(['chrome','google'].includes(r.app))return browserBack(r.app);if(r.app==='line'&&r.view==='chat')return navigate({app:'line',view:'list'});if(r.app==='ig'&&r.view==='post')return navigate({app:'ig',view:'feed'});if(r.app==='photos'&&r.view==='full')return navigate({app:'photos',view:'grid'});if(r.app==='notes'&&r.view==='detail')return navigate({app:'notes',view:'list'});if(r.app==='notebook'&&r.view==='task')return navigate({app:'notebook',view:'chapter'});home()}
+function back(){if(ui.sheet)return hideSheet();if(ui.photoPicker){ui.photoPicker=null;return render()}if(ui.lightbox){ui.lightbox=null;return render()};const r=currentRoute();if(['chrome','google'].includes(r.app))return browserBack(r.app);const origin=S.navigation.notebookOrigin;if(origin?.destination&&nav531Key(origin.destination)===nav531Key(r)&&r.app!=='notebook')return returnToNotebook();if(r.app==='line'&&r.view==='chat')return navigate({app:'line',view:'list'});if(r.app==='ig'&&r.view==='post')return navigate({app:'ig',view:'feed'});if(r.app==='photos'&&r.view==='full')return navigate({app:'photos',view:'grid'});if(r.app==='notes'&&r.view==='detail')return navigate({app:'notes',view:'list'});if(r.app==='notebook'&&r.view==='task')return navigate({app:'notebook',view:'chapter'});home()}
 function maybePostResult(){/* fixed LINE replies are player choices, not automatic sends */}
 function legacyMaybeAutoAdvance(){if(teacher.active)return;switch(S.stageId){
 case 'S02_CONTEXT':if(S.visitedPageIds.includes('school_notice')&&isReadTail('context',CHAT_SCRIPTS.context.length))setStage('S02_POST');break;
@@ -887,10 +1154,45 @@ function button(action,text,value='',cls='primary',extra=''){return `<button cla
 function header(title,sub='',right=''){return `<div class="header"><div class="header-left">${iconButton('back','','‹')}<div><div class="header-title">${title}</div>${sub?`<div class="header-sub">${sub}</div>`:''}</div></div><div class="header-actions">${right}</div></div>`}
 function taskBadge(id){return hasTask(id)?'<span class="check-pill">已整理</span>':'<span class="pill warn">待查</span>'}
 function releaseMissing(){return CONFIG.contentMode==='release'?['img_xray','img_ruins'].filter(id=>ASSET_META[id]?.status!=='ready'):[]}
-function renderIntro(){return `<div class="app-surface intro"><div class="intro-scroll"><div class="toplabel">AN INTERACTIVE FACT-CHECK MYSTERY</div><div class="number">072</div><h2>一則訊息，<br>從班群開始。</h2><div class="profile-form"><div class="profile-title">設定你的遊戲身分</div><label for="profileNick">暱稱</label><input id="profileNick" maxlength="12" autocomplete="off" placeholder="例如：小十" value="${attr(S.profile.nickname||'')}"><label for="profileClass">班級</label><input id="profileClass" maxlength="16" autocomplete="off" placeholder="例如：803" value="${attr(S.profile.className||'')}"><div class="profile-note">班群使用你輸入的班級；資料只留在本機。查核從100分開始，每次送出錯誤答案扣2分；漏填與找資料不扣分，每題第一層提示免費。</div><div class="profile-error" role="alert">${esc(ui.profileError||'')}</div></div>${releaseMissing().length?`<div class="task-error">正式模式缺少核實的歷史與實景素材：${releaseMissing().join('、')}。</div>`:button('start','開始調查','','outline')}<small>互動原型 v5.3.1 · 全部人物與校史均屬遊戲設定<br>部分歷史與地點照片仍待正式來源及授權核實。</small></div></div>`}
+function renderIntro(){return `<div class="app-surface intro"><div class="intro-scroll"><div class="toplabel">AN INTERACTIVE FACT-CHECK MYSTERY</div><div class="number">072</div><h2>一則訊息，<br>從班群開始。</h2><div class="profile-form"><div class="profile-title">設定你的遊戲身分</div><label for="profileNick">暱稱</label><input id="profileNick" maxlength="12" autocomplete="off" placeholder="例如：小十" value="${attr(S.profile.nickname||'')}"><label for="profileClass">班級</label><input id="profileClass" maxlength="16" autocomplete="off" placeholder="例如：803" value="${attr(S.profile.className||'')}"><div class="profile-note">班群使用你輸入的班級；資料只留在本機。查核從100分開始，每次送出錯誤答案扣2分；漏填與找資料不扣分，每題第一層提示免費。</div><div class="profile-error" role="alert">${esc(ui.profileError||'')}</div></div>${releaseMissing().length?`<div class="task-error">正式模式缺少核實的歷史與實景素材：${releaseMissing().join('、')}。</div>`:button('start','開始調查','','outline')}<small>互動原型 v5.3.2 · 全部人物與校史均屬遊戲設定<br>部分歷史與地點照片仍待正式來源及授權核實。</small></div></div>`}
 function renderLock(){return `<div class="app-surface lock-bg"><div class="lock-content"><div class="lock-date">${labelDate()}</div><div class="lock-time" data-clock="1">${currentFullClock()}</div></div><div class="lock-notice"><b>LINE　·　${esc(groupName())}</b><p>阿哲：明天資訊作業要交哪個？</p><div class="tiny" style="color:#eef9fb">你有幾則尚未閱讀的訊息</div></div><div class="lock-bottom">${button('unlock','向上滑動或點此解鎖','','outline')}<small>你的手機 · 不是李宇辰的手機</small></div></div>`}
-function homeAppTile(id,label){const count=id==='line'?unreadTotal():id==='ig'?igUnread():id==='notes'?noteUnread():0;return `<button class="app-tile" data-a="launch" data-v="${id}"><div class="app-icon">${appIcon(id)}</div>${count?`<span class="badge-count">${count>99?'99+':count}</span>`:''}<span>${label}</span></button>`}
-function renderHome(){const p=S.savedAssetIds.filter(v=>v.startsWith('img_')).slice(-1)[0]||'landscape_01';const chapter=ch();return `<div class="app-surface home-bg"><div class="home-main"><div class="home-date">${labelDate()} · ${esc(playerName())}<button type="button" class="home-reset" data-a="ask-reset" aria-label="遊戲重頭開始" title="遊戲重頭開始">↻ 重頭開始</button></div><button type="button" class="home-time home-teacher-clock-trigger" data-a="teacher-clock" data-clock="1" title="時間">${currentFullClock()}</button><button style="width:100%;text-align:left;border:0;background:none;padding:0" data-a="launch" data-v="notebook"><div class="widget"><div class="widget-head"><span>◈ CASE 072 · 調查簿</span><span>${S.chapterId.replace('CH','')}</span></div><div class="widget-title">${esc(chapter.name)}</div><p>${esc(chapter.question)}</p><div class="cta">開啟調查簿　→</div></div></button><button style="width:100%;border:0;background:none;padding:0;text-align:left" data-a="launch" data-v="photos"><div class="widget photo-widget">${img(p,'',false)}<div><div class="desc">最近保存的照片</div><div class="tiny">${S.savedAssetIds.length?ASSET_META[p].name:'相簿裡還沒有事件照片'}</div></div></div></button><div class="sound-control"><button data-a="sound-toggle" title="切換通知音效" aria-label="切換通知音效">${ui.soundEnabled?'♪ 訊息音效：開':'♩ 訊息音效：關'}</button></div><div class="app-grid">${homeAppTile('notes','備忘錄')}${homeAppTile('ig','Instagram')}${homeAppTile('google','Google')}</div></div><div class="dock">${homeAppTile('line','LINE')}${homeAppTile('chrome','Chrome')}${homeAppTile('photos','相簿')}${homeAppTile('ai','AI助理')}</div></div>`}
+function homeAppTile(id,label){
+ const count=id==='line'?unreadTotal():id==='ig'?igUnread():id==='notes'?noteUnread():0;
+ const book='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="15" fill="#37596c"/><rect x="17" y="11" width="34" height="43" rx="5" fill="#f0ece2"/><path d="M23 11v43" stroke="#bfad8b" stroke-width="3"/><path d="M31 22h13M31 29h13M31 36h8" stroke="#617f85" stroke-width="2.5" stroke-linecap="round"/><circle cx="45" cy="47" r="9" fill="#78b4a5"/><path d="m41 47 3 3 5-6" fill="none" stroke="white" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+ return `<button class="app-tile" data-a="launch" data-v="${attr(id)}" aria-label="${attr(label)}${count?'，'+count+'則未讀':''}"><span class="home-icon-wrap"><span class="app-icon">${id==='notebook'?book:appIcon(id)}</span>${count?`<span class="badge-count">${count>99?'99+':count}</span>`:''}</span><span class="home-app-label">${esc(label)}</span></button>`;
+}
+function renderHome(){
+ const p=S.savedAssetIds.filter(v=>v.startsWith('img_')).slice(-1)[0]||'landscape_01';
+ const chapter=ch(),number=S.chapterId.replace('CH','');
+ const learning=typeof ensureLearningState==='function'?ensureLearningState():null;
+ const score=learning?.score?.points??100;
+ const lineCount=unreadTotal(),igCount=igUnread();
+ let clueApp='photos',clueTitle='最近保存的照片',clueSub=S.savedAssetIds.length?(ASSET_META[p]?.name||'已保存的事件照片'):'相簿裡還沒有事件照片';
+ if(lineCount>0){clueApp='line';clueTitle='班群有新訊息';clueSub=`${lineCount} 則未讀 · 先看看同學剛剛說了什麼`;}
+ else if(igCount>0){clueApp='ig';clueTitle='Instagram 有新貼文';clueSub=`${igCount} 則未讀 · 新線索可能藏在貼文裡`;}
+ const sound=ui.soundEnabled?'<path d="M3 9v6h4l5 4V5L7 9H3Z"/><path d="M16 8a6 6 0 0 1 0 8M19 5a10 10 0 0 1 0 14"/>':'<path d="M3 9v6h4l5 4V5L7 9H3Z"/><path d="m16 9 6 6m0-6-6 6"/>';
+ return `<div class="app-surface home-bg home-fit home-v533">
+  <div class="home-main">
+   <section class="case-home-top" aria-label="案件首頁資訊">
+    <div><div class="case-home-date">${esc(labelDate())}</div><div class="case-home-owner">${esc(playerName())} · ${esc(groupName())}</div><div class="case-home-tagline">有些真相，藏在看似平常的對話裡。</div></div>
+    <div class="case-home-tools">
+     <button class="case-tool" data-a="sound-toggle" aria-label="${ui.soundEnabled?'關閉':'開啟'}訊息音效" title="訊息音效"><svg viewBox="0 0 24 24" aria-hidden="true">${sound}</svg></button>
+     <button class="case-tool case-clock home-teacher-clock-trigger" data-a="teacher-clock" data-clock="1" aria-label="模擬手機時間" title="時間">${currentFullClock()}</button>
+     <button class="case-tool" data-a="ask-reset" aria-label="遊戲重頭開始" title="遊戲重頭開始"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7v5h5"/><path d="M4.5 11a8 8 0 1 1 1.8 7.3"/></svg></button>
+    </div>
+   </section>
+   <button class="case-hero" data-a="launch" data-v="notebook" aria-label="開啟 CASE 072 調查簿：${attr(chapter.name)}">
+    <div class="case-hero-copy"><div class="case-eyebrow">CASE FILE · CH${esc(number)}</div><h1>CASE <b>072</b></h1><h2>${esc(chapter.name)}</h2><p>${esc(chapter.question)}</p><div class="case-hero-bottom"><span class="case-hero-cta">開始調查　→</span><span class="case-hero-stats"><span>查核 ${score}</span><span>SOS ${S.sos.points}</span></span></div></div>
+    <span class="case-evidence-stack" aria-hidden="true"><img src="${assetSrc(p)}" alt="" draggable="false"></span>
+   </button>
+   <button class="clue-card" data-a="launch" data-v="${attr(clueApp)}" aria-label="${attr(clueTitle)}">
+    <img src="${assetSrc(p)}" alt="${attr(ASSET_META[p]?.neutral||'最新線索')}" draggable="false"><span class="clue-copy"><span class="clue-kicker">● 最新線索</span><strong>${esc(clueTitle)}</strong><small>${esc(clueSub)}</small></span><span class="clue-arrow" aria-hidden="true">›</span>
+   </button>
+   <div class="app-grid" aria-label="應用程式">${homeAppTile('ig','Instagram')}${homeAppTile('notes','備忘錄')}${homeAppTile('google','Google')}${homeAppTile('ai','AI助理')}</div>
+  </div>
+  <div class="dock" aria-label="常用應用程式">${homeAppTile('line','LINE')}${homeAppTile('chrome','Chrome')}${homeAppTile('photos','相簿')}${homeAppTile('notebook','調查簿')}</div>
+ </div>`;
+}
 function legacyGetQuickActions(chatId){const stage=S.stageId;const q=[];const push=(id,text)=>q.push([id,text]);if(chatId==='group803'){
 if(stage==='S01_OPEN'&&isReadTail('open',CHAT_SCRIPTS.open.length)){push('initial_share','轉傳給朋友');push('initial_open','開啟看看');push('initial_wait','先不傳')}
 if(stage==='S01_WRAP'&&!S.meta.verifiedReply)push('verified','找到原作品了，說明來源');
@@ -908,19 +1210,106 @@ if(S.initialShareChoice==='forward'&&stage==='S01_WRAP'&&!S.initialShareCorrecte
 if(chatId==='ziqing'&&stage==='S04_RECORD'&&hasTask('K07')){const x=S.meta.recordReply;if(x<4&&(x===0||x===1||x===3||isReadTail('record_result',1,'ziqing')))q.push([['record_one','record_two','record_three','record_four'][x],['有這個編號，但寫的是通知複查。','沒有寫被帶走或人體實驗。','回顧三張被誤用的圖片','可是宇辰怎麼沒回？'][x]])}
 if(chatId==='yuchen'&&stage==='S05_DM'&&S.meta.dmStep<4){const x=S.meta.dmStep;const last=x===0||isReadTail('dmanswer'+(x-1),[2,2,1,1][x-1]||1,'yuchen');if(last)q.push([['dm_zero','dm_one','dm_two','dm_three'][x],['你去哪了？怎麼沒來上學？','班群大家都在問，你怎麼不回？','那你請假的原因呢？','好。那我可以先跟大家說你沒事嗎？'][x]])}
 return q}
-function messageBubble(m){if(m.sender==='system')return `<div class="system-msg" data-message-id="${attr(m.id)}">${esc(m.text)}</div>`;let who=m.sender==='zhiming'&&S.flags.identityRevealed?'志明（原072）':PEOPLE[m.sender]?.[0]||m.sender;const mine=m.sender==='player';let attachment='';if(m.attachment){const [type,id]=m.attachment.split(':');if(type==='message'){const targetId=m.attachment.slice(8),target=messageAt(targetId);if(target&&target.chatId===m.chatId)attachment=`<button class="chat-link recall-link" data-a="recall-message" data-v="${attr(targetId)}">${igIcon('back')} 看一下之前的訊息</button>`;}if(type==='link'&&PAGES[id])attachment=`<button class="chat-link" data-a="page" data-v="${attr(id)}">🔗 ${esc(PAGES[id].title)}　›</button>`;if(type==='post'&&canSeePost(id))attachment=`<button class="chat-link" data-a="igpost" data-v="${id}">▣ Instagram　查看貼文 ›</button>`;if(type==='img'&&ASSET_META[id])attachment=`<button style="border:0;padding:0;background:none;width:100%" data-a="viewasset" data-v="${id}">${img(id,'chat-img',true)}</button>`}
+function messageBubble(m){if(m.sender==='system')return `<div class="system-msg" data-message-id="${attr(m.id)}">${esc(m.text)}</div>`;let who=m.sender==='zhiming'&&S.flags.identityRevealed?'志明（原072）':PEOPLE[m.sender]?.[0]||m.sender;const mine=m.sender==='player';let attachment='';if(m.attachment){const [type,id]=m.attachment.split(':');
+ if(type==='message'){const ref=m.attachment.slice(8),target=messageAt(ref);if(target&&target.chatId===m.chatId)attachment=`<button type="button" class="chat-link context-message-link" data-a="chat-context-jump" data-v="${attr(ref)}">${igIcon('back')}看一下之前的訊息</button>`;}
+ if(type==='link'&&PAGES[id])attachment=`<button class="chat-link" data-a="page" data-v="${attr(id)}">🔗 ${esc(PAGES[id].title)}　›</button>`;if(type==='post'&&canSeePost(id))attachment=`<button class="chat-link" data-a="igpost" data-v="${id}">▣ Instagram　查看貼文 ›</button>`;if(type==='img'&&ASSET_META[id])attachment=`<button style="border:0;padding:0;background:none;width:100%" data-a="viewasset" data-v="${id}">${img(id,'chat-img',true)}</button>`}
 return `<div data-message-id="${attr(m.id)}" class="chat-message ${mine?'mine':''}">${!mine?`<div class="avatar" style="background:${PEOPLE[m.sender]?.[1]||'#758895'}">${esc(who.slice(0,1))}</div>`:''}<div class="bubble-wrap">${!mine?`<div class="bubble-name">${esc(who)}</div>`:''}<div class="bubble">${esc(m.text)}${attachment}</div><div class="bubble-time">${mine?'已讀 · ':''}${esc(m.clock||'')}</div></div></div>`}
 function renderLine(){const r=currentRoute();if(r.view!=='chat'){
 const entries=['group803','ziqing','yuchen',...(S.meta.friendVisible?['friend_demo']:[])].filter(c=>c==='group803'||S.messages.some(m=>m.chatId===c)||S.pendingEvents.some(m=>m.chatId===c));return `<div class="app-surface" style="background:#fff">${header('LINE','聊天',iconButton('launch','home','⌂'))}<div class="scroll">${entries.map(c=>{const arr=S.messages.filter(m=>m.chatId===c),last=arr[arr.length-1];return `<button class="chat-list-item" data-a="chat" data-v="${c}"><div class="avatar" style="background:${c==='group803'?'#59ae85':PEOPLE[c==='ziqing'?'ziqing':c==='yuchen'?'yuchen':'friend_demo'][1]}">${c==='group803'?esc(groupAvatar()):CHATS[c][0]}</div><div style="min-width:0;flex:1"><div class="name">${CHATS[c]}</div><p>${last?esc(last.sender==='player'?'你：'+last.text:last.text):'尚無訊息'}</p></div>${unread(c)?`<span class="count">${unread(c)}</span>`:`<span class="last">${last?.clock||''}</span>`}</button>`}).join('')}</div><div class="bottom-bar"><button class="active" data-a="line-tab"><span>▢</span>聊天</button><button data-a="line-tab"><span>♧</span>好友</button><button data-a="line-tab"><span>⊞</span>更多</button></div></div>`}
 const chat=r.chatId||'group803',msgs=S.messages.filter(m=>m.chatId===chat).sort((a,b)=>a.seq-b.seq);const typing=S.pendingEvents.some(p=>p.chatId===chat);const quick=getQuickActions(chat);return `<div class="app-surface" style="background:#b6c6d2">${header(esc(CHATS[chat]||chat),chat==='group803'?`${CONFIG.groupMemberCount+(S.meta.memberJoined?1:0)} 位成員 · 訊息僅在遊戲內顯示`:chat==='yuchen'?'私人訊息':'私人對話',iconButton('chat-info',chat,'⋯'))}<div class="scroll chat-area" id="chat-scroll"><div class="chat-date"><span>${esc(labelDate())}</span></div>${msgs.map(messageBubble).join('')}${typing?'<div class="system-msg" data-chat-typing="1">對方正在輸入…</div>':''}<div id="chat-end" style="height:4px"></div></div>${ui.unreadBelow?`<button class="unread-jump" data-a="chat-bottom">↓ 新訊息 · 點擊查看</button>`:''}${quick.length?`<div class="quick-guidance">請先選擇下面的劇情回覆，完成這段對話後才能自由輸入。</div><div class="quick-bar">${quick.map(([id,text])=>`<button data-a="quick" data-v="${id}">${esc(text)}</button>`).join('')}</div>`:''}<form class="chat-compose" id="chat-form"><button type="button" data-a="attach-chat" style="background:#f0f2f4;color:#5f8592" ${quick.length?'disabled':''}>＋</button><textarea id="chatInput" aria-label="輸入LINE訊息" rows="1" placeholder="${quick.length?'請先使用上方劇情回覆':'傳送訊息…'}" ${quick.length?'disabled':''}>${esc(S.chatDrafts[chat]||'')}</textarea><button type="submit" title="送出" ${quick.length?'disabled':''}>↑</button></form></div>`}
 function postCaption(id){const p=POST_DATA[id],corrected=S.posts[id]?.correctionStatus==='corrected';return corrected?`<span class="corrected">已更正 · 原說法撤回</span><div style="margin-top:9px">這篇貼文的推論已撤回。請閱讀置頂更正、可查核來源與原文紀錄。</div><button class="text-link" data-a="toggle-revision" data-v="${id}">查看原本的說法　⌄</button>${ui.revisions?.[id]?`<div class="revision">${esc(p.caption)}</div>`:''}`:esc(p.caption)}
-function legacySinglePost(id,full=false){const p=POST_DATA[id],liked=S.meta.postLikes.includes(id),bookmark=S.meta.postBookmarked.includes(id);const commentExpanded=ui.comments?.[id];return `<article class="post" data-post-id="${id}"><div class="post-head"><div class="ig-avatar">tt</div><div class="account">truth_teller<br><span class="tiny">甲里國中地下討論區</span></div>${igControl('igmenu',id,'more','貼文選單')}</div>${p.asset?`<button style="display:block;width:100%;padding:0;border:0;background:none" data-a="igimage" data-v="${id}">${img(p.asset,'post-img',true)}</button>`:`<div style="min-height:195px;padding:28px;background:linear-gradient(160deg,#252834,#596e7d);color:#eef1f3;display:flex;flex-direction:column;justify-content:center"><div style="font-size:10px;letter-spacing:.25em;color:#b7bdc6">UNKNOWN / 甲里國中</div><div style="font-size:23px;line-height:1.7;margin-top:18px">有些紀錄，<br>只剩下一個編號。</div></div>`}${igActionBar(id,liked,bookmark)}<div class="post-likes">${(p.likes+(liked?1:0)).toLocaleString('en-US')} 個讚${id==='post_correction'?'<span class="ig-correction-label">置頂更正</span>':''}</div><div class="post-caption"><b>truth_teller</b> ${postCaption(id)}</div><button class="text-link" data-a="comments" data-v="${id}" style="margin-left:15px;color:#9ca5ad">${commentExpanded?'收合留言':'查看全部 '+p.comments.length+' 則留言'}</button>${commentExpanded?p.comments.map(c=>`<div class="post-comment">${esc(c)}</div>`).join(''):''}<div class="post-foot">${p.date} </div>${id==='post_intro'&&S.stageId==='S02_POST'?`<div class="ig-investigation"><b>調查簿 · 第一次判讀</b><p>這篇匿名貼文把「有人缺席」和「健康檢查」連在一起。從目前看到的班群與公告，能支持哪個說法？</p>${[['intro_known','只能確定有人缺席，還不能證明與健康檢查有因果關係。'],['intro_notice','學校發過公告，就證明有人被帶走。'],['intro_account','匿名帳號講得很詳細，所以一定是事實。']].map(([value,label])=>`<button class="task-choice ${S.meta.introEvaluated&&value==='intro_known'?'selected':''}" data-a="intro-boundary" data-v="${value}">${label}</button>`).join('')}${ui.introError?`<p class="tiny" style="color:#ac6a37">${esc(ui.introError)}</p>`:''}${S.meta.introEvaluated?`<p class="task-success">已記下目前能支持的範圍。請回班群閱讀同學訊息，下一段將自動展開。</p>`:''}</div>`:''}${id==='post_correction'?`<div style="margin:13px;padding:12px;border-top:1px solid #e5eaed"><div class="section-head">公開更正附上的來源</div>${[['ghost_original','鬼照片原作品'],['xray_archive','學校檢查典藏'],['ruins_original','軍艦島照片來源'],['F0','匿名原帖及更正'],['history_order','完整公文與名冊']].map(([pid,text])=>`<button class="source-link" data-a="page" data-v="${pid}">↗ ${text}</button>`).join('')}${button('read-correction',S.flags.correctionViewed?'已讀完這則更正':'我已閱讀完更正與來源','','primary wide')}</div>`:''}${id!=='post_correction'?`<div style="padding:0 15px 8px;display:flex;gap:8px">${button('ig-source','到 Chrome 查來源',id,'outline')}${p.asset?button('igmenu','⋯ 儲存圖片',id,'outline'):''}</div>`:''}</article>`}
-function v530RenderIG(){const r=currentRoute(),posts=['post_correction','post_ruins','post_xray','post_ghost','post_intro'].filter(canSeePost);if(r.view==='post'){return `<div class="app-surface insta-surface">${header('貼文','甲里國中地下討論區')}<div class="scroll" id="ig-scroll">${singlePost(r.postId,true)}</div><div class="bottom-bar"><button data-a="igfeed"><span>⌂</span>首頁</button><button type="button" aria-label="搜尋（目前無功能）"><span>⌕</span>搜尋</button><button data-a="igfeed"><span>▢</span>個人</button></div></div>`}
-return `<div class="app-surface insta-surface">${header('Instagram','甲里國中地下討論區',iconButton('igprofile','','◉'))}<div class="insta-profile"><div class="ig-avatar">甲</div><div><div class="ig-name">甲里國中地下討論區</div><div class="ig-site">匿名投稿 · 社群貼文</div></div></div><div class="scroll" id="ig-scroll">${posts.length?posts.map(id=>singlePost(id)).join(''):`<div class="content-pad"><div class="soft-card"><div class="pill">校園日常</div><h3>早安，甲里。</h3><p>今天也有作業要交。</p></div></div>`}</div><div class="bottom-bar"><button class="active" data-a="igfeed"><span>⌂</span>首頁</button><button type="button" aria-label="搜尋（目前無功能）"><span>⌕</span>搜尋</button><button type="button" aria-label="通知（目前無功能）"><span>♡</span>通知</button><button data-a="igprofile"><span>◎</span>個人</button></div></div>`}
+function legacySinglePost(id,full=false){const p=POST_DATA[id],liked=S.meta.postLikes.includes(id),bookmark=S.meta.postBookmarked.includes(id);const commentExpanded=ui.comments?.[id];return `<article class="post" data-post-id="${id}"><div class="post-head"><div class="ig-avatar">tt</div><div class="account">truth_teller<br><span class="tiny">甲里國中地下討論區</span></div>${button('igmenu',igIcon('more'),id,'ig-action','aria-label="貼文選單"')}</div>${p.asset?`<button style="display:block;width:100%;padding:0;border:0;background:none" data-a="igimage" data-v="${id}">${img(p.asset,'post-img',true)}</button>`:`<div style="min-height:195px;padding:28px;background:linear-gradient(160deg,#252834,#596e7d);color:#eef1f3;display:flex;flex-direction:column;justify-content:center"><div style="font-size:10px;letter-spacing:.25em;color:#b7bdc6">UNKNOWN / 甲里國中</div><div style="font-size:23px;line-height:1.7;margin-top:18px">有些紀錄，<br>只剩下一個編號。</div></div>`}${igActionBar(id)}<div class="post-likes">${p.likes+(liked?1:0)} 個讚　${id==='post_correction'?'· 置頂更正':''}</div><div class="post-caption"><b>truth_teller</b> ${postCaption(id)}</div><button class="text-link" data-a="comments" data-v="${id}" style="margin-left:15px;color:#9ca5ad">${commentExpanded?'收合留言':'查看全部 '+p.comments.length+' 則留言'}</button>${commentExpanded?p.comments.map(c=>`<div class="post-comment">${esc(c)}</div>`).join(''):''}<div class="post-foot">${p.date} </div>${id==='post_intro'&&S.stageId==='S02_POST'?`<div class="ig-investigation"><b>調查簿 · 第一次判讀</b><p>這篇匿名貼文把「有人缺席」和「健康檢查」連在一起。從目前看到的班群與公告，能支持哪個說法？</p>${[['intro_known','只能確定有人缺席，還不能證明與健康檢查有因果關係。'],['intro_notice','學校發過公告，就證明有人被帶走。'],['intro_account','匿名帳號講得很詳細，所以一定是事實。']].map(([value,label])=>`<button class="task-choice ${S.meta.introEvaluated&&value==='intro_known'?'selected':''}" data-a="intro-boundary" data-v="${value}">${label}</button>`).join('')}${ui.introError?`<p class="tiny" style="color:#ac6a37">${esc(ui.introError)}</p>`:''}${S.meta.introEvaluated?`<p class="task-success">已記下目前能支持的範圍。請回班群閱讀同學訊息，下一段將自動展開。</p>`:''}</div>`:''}${id==='post_correction'?`<div style="margin:13px;padding:12px;border-top:1px solid #e5eaed"><div class="section-head">公開更正附上的來源</div>${[['ghost_original','鬼照片原作品'],['xray_archive','學校檢查典藏'],['ruins_original','軍艦島照片來源'],['F0','匿名原帖及更正'],['history_order','完整公文與名冊']].map(([pid,text])=>`<button class="source-link" data-a="page" data-v="${pid}">↗ ${text}</button>`).join('')}${button('read-correction',S.flags.correctionViewed?'已讀完這則更正':'我已閱讀完更正與來源','','primary wide')}</div>`:''}${id!=='post_correction'?`<div style="padding:0 15px 8px;display:flex;gap:8px">${button('ig-source','到 Chrome 查來源',id,'outline')}${p.asset?button('igmenu','⋯ 儲存圖片',id,'outline'):''}</div>`:''}</article>`}
 function renderPhotos(){const r=currentRoute(),all=['landscape_01','landscape_02','landscape_03',...S.savedAssetIds],favorites=S.meta.photoFavorites||[];const tab=ui.photoTab||'all';const shown=tab==='fav'?all.filter(id=>favorites.includes(id)):all;if(r.view==='full'&&all.includes(r.assetId)){const id=r.assetId;return `<div class="app-surface" style="background:#0c121a;color:#fff">${header('照片',ASSET_META[id]?.name||'',iconButton('photo-info',id,'ⓘ'))}<div class="photo-full scroll">${img(id,'',true)}<div class="caption">${esc(ASSET_META[id]?.neutral||'')}</div><div class="action-row">${button('photo-info','查看圖片資訊',id,'outline')}${button('photo-fav',favorites.includes(id)?'♥ 已設最愛':'♡ 設為最愛',id,'outline')}</div></div></div>`}
 return `<div class="app-surface" style="background:#fff">${header('相簿',`${S.savedAssetIds.length+3} 張照片`,iconButton('photo-info','','ⓘ'))}<div class="scroll"><div class="content-pad" style="padding-bottom:5px"><h2 style="font-size:25px;margin:2px 0 6px">${tab==='fav'?'最愛照片':tab==='month'?'依月份檢視':'所有照片'}</h2><div class="muted">圖片都保存在這個遊戲裡，沒有存進裝置的真實相簿。</div></div>${tab==='month'?`<div class="section-head" style="padding:4px 14px">原型相簿 · 故事進度日期</div>`:''}<div class="photos-grid">${shown.map(id=>`<button data-a="photo-full" data-v="${id}" title="${attr(ASSET_META[id]?.neutral||'照片')}"><img src="${assetSrc(id)}" alt="${attr(ASSET_META[id]?.neutral||'照片')}"></button>`).join('')}</div>${!shown.length?'<div class="content-pad muted">尚未將任何照片設為最愛。</div>':''}</div><div class="bottom-bar"><button class="${tab==='all'?'active':''}" data-a="photos-tab" data-v="all"><span>▦</span>所有照片</button><button class="${tab==='month'?'active':''}" data-a="photos-tab" data-v="month"><span>▤</span>月份</button><button class="${tab==='fav'?'active':''}" data-a="photos-tab" data-v="fav"><span>♡</span>最愛</button></div></div>`}
 function legacyRenderNotes(){const r=currentRoute(),note=S.notes.find(x=>x.id===r.noteId);if(r.view==='detail'&&note)return `<div class="app-surface" style="background:#fff">${header('備忘錄',note.date)}<div class="scroll content-pad"><h2 style="font-size:23px;line-height:1.4;margin-top:15px">${esc(note.title)}</h2><div class="tiny">${esc(note.date)}</div><div style="font-size:15px;line-height:1.95;white-space:pre-wrap;margin-top:24px">${esc(note.body)}</div></div></div>`;
 return `<div class="app-surface" style="background:#fff">${header('備忘錄',`${S.notes.length} 則備忘`)}<div class="scroll"><div class="content-pad" style="padding-bottom:0"><h2 style="font-size:27px;margin:4px 0 18px">備忘錄</h2><div class="sos-box"><div class="muted">SOS · 已取得提示</div><div class="points">${S.sos.points}<small style="font-size:12px"> 點剩餘</small></div><div class="tiny">每題第一層提示免費，後兩層各10點；重看不扣點。SOS與查核分數分開。</div></div></div>${S.notes.slice().reverse().map(n=>`<button class="note-row" data-a="note" data-v="${attr(n.id)}"><span class="note-dot" style="background:${S.readNoteIds.includes(n.id)?'#cbd0d2':'#e3a827'}"></span><div><div class="note-text">${esc(n.title)}</div><div class="note-excerpt">${esc(n.body).slice(0,55)}…</div><div class="tiny">${n.date}</div></div></button>`).join('')}</div><div class="bottom-bar"><button class="active" data-a="launch" data-v="notes"><span>▤</span>備忘</button><button data-a="launch" data-v="notebook"><span>◈</span>調查簿</button></div></div>`}
+
+
+/* v5.3.2: one source-save transaction; presentation never grades an answer. */
+function sourcePageSaved(id){
+ const p=PAGES[id];
+ return !!p&&(S.meta.bookmarks||[]).includes(id)&&(p.evidence||[]).every(([eid])=>hasEv(eid));
+}
+function currentBrowserPageId(){
+ const r=currentRoute();if(!['chrome','google'].includes(r.app))return null;
+ const b=getBrowser(r.app);return b?.entries?.[b.index]?.pageId||null;
+}
+function saveSourcePage(id){
+ const p=PAGES[id];
+ if(!p||currentBrowserPageId()!==id||!canAccessPage(id)||!S.visitedPageIds.includes(id)){
+  toast('請先開啟這份來源，再保存到調查簿。');return false;
+ }
+ if(sourcePageSaved(id))return true;
+ const bookmarks=S.meta.bookmarks||(S.meta.bookmarks=[]);
+ if(!bookmarks.includes(id))bookmarks.push(id);
+ let added=0;
+ for(const [eid,title,description] of p.evidence||[]){
+  if(hasEv(eid))continue;
+  S.collectedEvidence[eid]={id:eid,sourcePageId:id,blockId:eid,assetId:p.asset||null,
+   observedText:description,collectedAtSeq:S.nextSeq++,
+   provenanceType:p.external?'source_summary':'fictional'};
+  added++;
+ }
+ // Exactly one save, no task-completion flags and no point changes.
+ save();render();
+ const status=document.querySelector('[data-source-save-status]');
+ if(status)status.textContent=added?'已保存本頁與 '+(p.evidence||[]).length+' 項證據。回調查簿後再整理判斷。':'來源頁已保存，可回調查簿繼續。';
+ return true;
+}
+function sourceSaveArea(id){
+ const p=PAGES[id],saved=sourcePageSaved(id),count=(p.evidence||[]).length;
+ return `<section class="source-save-area" aria-label="保存來源">
+ <button type="button" class="source-save-button ${saved?'is-saved':''}" data-a="save-page" data-v="${attr(id)}" ${saved?'disabled':''}>
+ ${igIcon(saved?'check':'bookmark')}<span>${saved?'已保存到調查簿':count?'一次保存本頁與 '+count+' 項證據':'保存本頁到調查簿'}</span></button>
+ <p class="source-save-status" data-source-save-status role="status" aria-live="polite">${saved?(count?'本頁與 '+count+' 項證據已同步保存。':'來源頁已保存。'):'按一次即可，不必逐項重複保存。'}保存不等於完成判斷。</p>
+ <button type="button" class="source-return" data-a="return-notebook">${igIcon('back')}<span>${esc(notebookReturnLabel())}</span></button>
+ </section>`;
+}
+function collectEvidence(id,pageId){
+ if(!PAGES[pageId]?.evidence?.some(e=>e[0]===id))return;
+ // Backward-compatible entry point for older UI/tests; the same transaction is used.
+ return saveSourcePage(pageId);
+}
+/* v5.3.2: icon geometry is independent of font/OS glyph rendering. */
+function igIcon(name,filled=false){
+ const paths={
+ heart:'<path d="M20.9 4.6a5.4 5.4 0 0 0-7.6 0L12 5.9l-1.3-1.3a5.4 5.4 0 0 0-7.6 7.6L12 21l8.9-8.8a5.4 5.4 0 0 0 0-7.6Z"/>',
+ comment:'<path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5 9.4 9.4 0 0 1-4.1-.9L3 21l1.8-5.3a8.6 8.6 0 1 1 16.2-4.2Z"/>',
+ share:'<path d="m22 2-7 20-4-9-9-4 20-7Z"/><path d="m11 13 7-7"/>',
+ bookmark:'<path d="M5 3.5h14V22l-7-4.5L5 22V3.5Z"/>',
+ more:'<circle cx="5" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="19" cy="12" r="1" fill="currentColor"/>',
+ home:'<path d="m3 10 9-8 9 8v11h-6v-7H9v7H3V10Z"/>',
+ search:'<circle cx="10.6" cy="10.6" r="7.3"/><path d="m16 16 5.5 5.5"/>',
+ profile:'<circle cx="12" cy="8" r="4"/><path d="M4 21v-2a8 8 0 0 1 16 0v2"/>',
+ back:'<path d="m14 5-7 7 7 7"/>',
+ check:'<path d="m5 12 4.5 4.5L19 7"/>'
+ };
+ return `<svg class="ig-line-icon" viewBox="0 0 24 24" fill="${filled?'currentColor':'none'}" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${paths[name]||paths.more}</svg>`;
+}
+function igActionBar(id){
+ const liked=S.meta.postLikes.includes(id),book=S.meta.postBookmarked.includes(id),expanded=!!ui.comments?.[id];
+ return `<div class="post-actions ig-action-bar">
+ <button type="button" class="ig-action ${liked?'is-liked':''}" data-a="iglike" data-v="${attr(id)}" aria-label="${liked?'取消按讚':'按讚'}" aria-pressed="${liked}">${igIcon('heart',liked)}</button>
+ <button type="button" class="ig-action" data-a="comments" data-v="${attr(id)}" aria-label="查看留言" aria-expanded="${expanded}">${igIcon('comment')}</button>
+ <button type="button" class="ig-action" data-a="ig-share" data-v="${attr(id)}" aria-label="分享貼文">${igIcon('share')}</button>
+ <button type="button" class="ig-action push ${book?'is-bookmarked':''}" data-a="igbook" data-v="${attr(id)}" aria-label="${book?'取消收藏貼文':'收藏貼文'}" aria-pressed="${book}">${igIcon('bookmark',book)}</button>
+ </div>`;
+}
+function igBottomNav(){
+ return `<nav class="bottom-bar ig-bottom-nav" aria-label="Instagram 導覽">
+ <button type="button" data-a="igfeed" aria-label="Instagram 首頁">${igIcon('home',currentRoute().view!=='post')}</button>
+ <button type="button" aria-label="搜尋（未開放）">${igIcon('search')}</button>
+ <button type="button" aria-label="通知（未開放）">${igIcon('heart')}</button>
+ <button type="button" data-a="igprofile" aria-label="Instagram 個人資料">${igIcon('profile')}</button></nav>`;
+}
+function renderIG(){
+ const r=currentRoute(),posts=['post_correction','post_ruins','post_xray','post_ghost','post_intro'].filter(canSeePost);
+ const head=r.view==='post'?header('貼文','甲里國中地下討論區'):
+ `<div class="header ig-app-header"><div><div class="ig-wordmark">Instagram</div></div><div class="header-actions"><button type="button" class="ig-action" data-a="igprofile" aria-label="帳號資訊">${igIcon('profile')}</button></div></div>`;
+ const profile=r.view==='post'?'':`<div class="insta-profile"><div class="ig-avatar">甲</div><div><div class="ig-name">甲里國中地下討論區</div><div class="ig-site">匿名投稿 · 社群貼文</div></div></div>`;
+ const content=r.view==='post'?singlePost(r.postId,true):posts.length?posts.map(id=>singlePost(id)).join(''):`<div class="content-pad"><div class="soft-card"><div class="pill">校園日常</div><h3>早安，甲里。</h3><p>今天也有作業要交。</p></div></div>`;
+ return `<div class="app-surface insta-surface">${head}${profile}<div class="scroll" id="ig-scroll">${content}</div>${igBottomNav()}</div>`;
+}
 
 function cameraButton(app,cls='icon-btn'){
  return `<button type="button" class="${cls} image-search-camera" data-a="camera" data-v="${attr(app)}" title="以圖搜圖：開啟相簿" aria-label="以圖搜圖：開啟相簿"><svg class="camera-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 6.5h4l1.5-2h7l1.5 2h4v13H3z"/><circle cx="12" cy="12.5" r="3.6"/><path d="M18 9h1"/></svg></button>`;
@@ -948,13 +1337,18 @@ if(p.asset){out+=img(p.asset,'',id!=='sky_rumor');if(id==='sky_rumor')out+=`<div
 if(p.secondaryAsset)out+=img(p.secondaryAsset,'',true);
 for(const paragraph of p.body)out+=id==='sky_rumor'&&paragraph.startsWith('這張圖真的出自')?`<p class="news-source-footnote">${esc(paragraph)}</p>`:`<p>${esc(paragraph)}</p>`;
 if(p.home){const [name,slogan,g,core]=HOMES[p.home],list=[p.home+'_g1',p.home+'_g2',p.home+'_g3',...(S.flags.clue72Unlocked?[core]:[p.home+'_g4'])];out+=`<div class="section-head">本站近期文章</div>${list.map(pid=>`<button class="list-button" data-a="page" data-v="${pid}"><span><b>${esc(PAGES[pid].title)}</b><br><small class="tiny">${esc(PAGES[pid].date)}　閱讀全文</small></span>›</button>`).join('')}${p.home==='forum'&&S.flags.clue72Unlocked?`<div class="section-head">論壇原討論串</div><button class="list-button" data-a="page" data-v="F0"><span>匿名072：S51-072，有沒有人知道他後來去哪？</span>›</button>`:''}`}
-if(p.evidence?.length){out+=`<details class="source-excerpts"><summary>本頁的 ${p.evidence.length} 個來源片段</summary><p class="muted">下方保存按鈕會一次保留整頁與所有片段，不需逐項點選。</p>${p.evidence.map(([eid,title,desc])=>`<div class="source-excerpt"><b>${esc(title)}</b><p>${esc(desc)}</p></div>`).join('')}</details>`;}
+if(p.evidence?.length){
+ out+=`<div class="section-head">來源片段</div><p class="muted">確認原文後，使用下方按鈕一次保存整頁與全部片段。</p>`;
+ p.evidence.forEach(([eid,title,desc])=>{
+ out+=`<div class="source-evidence-card"><div class="source-evidence-title"><b>${esc(title)}</b><span class="source-evidence-status ${hasEv(eid)?'saved':''}">${hasEv(eid)?'✓ 已收錄':'尚未保存'}</span></div><p>${esc(desc)}</p></div>`;
+ });
+}
 if(p.links?.length){out+=`<div class="section-head">消息來源與引用</div>${p.links.map(([pid,label])=>`<button class="source-link" data-a="page" data-v="${pid}">↗ <span>${esc(label)}</span></button>`).join('')}`}
 if(p.external)out+=`<div class="section-head">真實資料出處</div><p class="muted">本頁提供內嵌摘要，以下連結僅供額外核對；離線時仍可操作遊戲。</p>${button('external','↗ 在新分頁查看原始來源',p.external,'outline wide')}`;
 if(p.comments?.length)out+=`<div class="section-head">留言</div>${p.comments.map(c=>`<div class="post-comment" style="margin:9px 0;padding:8px;background:#f5f7f9;border-radius:8px">${esc(c)}</div>`).join('')}`;
 if(p.related?.length){out+=`<div class="section-head">更多文章</div>${p.related.filter(canAccessPage).map(pid=>`<button class="source-link" data-a="page" data-v="${pid}">› ${esc(PAGES[pid].title)}</button>`).join('')}`}
 if(homeId)out+=`<button class="text-link" data-a="page" data-v="home_${homeId}">← 回到${esc(site[0])}首頁</button>`;
-out+=`${renderSourceSave(id)}${id==='sky_rumor'?'</div>':''}</div>`;return out}
+out+=sourceSaveArea(id)+(id==='sky_rumor'?'</div>':'')+'</div>';return out}
 function aiAssetResponse(id){const templates={img_ghost:'我看到低光源建築、幾扇窗戶，以及一個模糊形狀。僅從外觀，無法確認它是不是某個真人、也不能斷定圖片是否由AI生成。若要進一步了解，應尋找較早的相同圖片及原始發布說明。',img_xray:'圖片呈現一輛車和排隊人群，整體帶有年代感。但我無法只靠畫面判斷車輛用途、人物身分，或與目前學校事件是否相關。可以查找照片的典藏資訊。',img_ruins:'畫面可見混凝土階梯、殘破外牆與窗口。單看這些特徵不足以確定地點。請打開候選來源，核對圖說、建築細節與地點記錄。',img_sky:'畫面是一座架在雲與岩壁間的懸浮建築。看起來可能是概念設計，也可能是影像處理；僅憑外觀不足以確認真實位置。'};return templates[id]||'我只能看到一般風景，缺少足夠線索判斷這是否與事件有關。'}
 function aiCandidates(asset){return ({img_ghost:['ghost_repost','ghost_original','ghost_collection'],img_xray:['xray_rumor','xray_archive'],img_ruins:['ruins_rumor','ruins_original','hashima_reference'],img_sky:['sky_rumor','sky_original','noise_sky']})[asset]||[]}
 function renderAI(){const ai=S.ai;return `<div class="app-surface ai-surface">${header('AI 助理','模擬角色 · 回答仍需要查證',iconButton('ai-info','','ⓘ'))}<div class="scroll ai-chat" id="ai-scroll">${ai.messages.map(m=>`<div class="ai-bubble ${m.sender==='user'?'mine':''}">${m.asset?`<img src="${assetSrc(m.asset)}" alt="${attr(ASSET_META[m.asset]?.neutral||'')}"/>`:''}${esc(m.text)}${m.candidates?.length?`<div style="margin-top:10px">${m.candidates.map(pid=>`<button class="source-link" data-a="page" data-v="${pid}">↗ ${esc(sourcePreview(pid).title)}</button>`).join('')}</div>`:''}${m.canSearch?`<div style="margin-top:10px">${button('ai-find-source','請幫我搜尋圖片來源','','outline wide')}</div>`:''}</div>`).join('')}${ai.pendingRequest?'<div class="app-loading" style="min-height:60px">正在整理已提交的資訊…</div>':''}</div>${ai.draftAssetId?`<div style="background:#fff;padding:7px 12px;display:flex;align-items:center;gap:8px"><img src="${assetSrc(ai.draftAssetId)}" style="height:45px;width:53px;object-fit:cover;border-radius:8px"><span class="tiny" style="flex:1">即將上傳的圖片</span><button class="icon-btn" data-a="ai-remove">×</button></div>`:''}<form id="ai-form" class="ai-compose"><button type="button" class="attach" data-a="picker" data-v="ai">＋</button><textarea rows="1" id="aiInput" placeholder="輸入問題…">${esc(S.ai.draftText||'')}</textarea><button type="submit">↑</button></form></div>`}
@@ -1008,9 +1402,9 @@ else if(sh.type==='info'){inside=`<h3>關於 CASE 072</h3><p>手機介面及聊�
 else inside=`<h3>目前無法使用</h3><p>此處沒有設定獨立功能。你可以隨時返回原App。</p>${button('close-sheet','返回','','sheet-cancel')}`;
 return `<div class="overlay" data-a="close-overlay"><div class="sheet" role="dialog" aria-modal="true" data-stop="1">${inside}</div></div>`}
 function legacyRender(){const root=document.getElementById('root');if(!root)return;const oldFocus=document.activeElement,focusId=oldFocus?.id,oldSelection=(oldFocus instanceof HTMLInputElement||oldFocus instanceof HTMLTextAreaElement)?[oldFocus.selectionStart,oldFocus.selectionEnd]:null;
-const oldRouteKey=root.dataset.routeKey||'',routeKey=JSON.stringify(currentRoute())+(['chrome','google'].includes(currentRoute().app)?':'+(getBrowser(currentRoute().app).index):''),preserveScroll=oldRouteKey===routeKey;const articleNode=preserveScroll?document.querySelector('#article-scroll'):null,oldScrollTop=articleNode?.scrollTop??null,oldGeneral=preserveScroll?document.querySelector('.phone .scroll')?.scrollTop:null;
+const oldRouteKey=root.dataset.routeKey||'',routeKey=nav531Key(),preserveScroll=oldRouteKey===routeKey;const articleNode=preserveScroll?document.querySelector('#article-scroll'):null,oldScrollTop=articleNode?.scrollTop??null,oldGeneral=preserveScroll?document.querySelector('.phone .scroll')?.scrollTop:null;
 const r=currentRoute(),dark=['intro','lock','ending'].includes(r.app),isFinal=['S06_TITLE','S06_REVIEW','S06_HISTORY','S06_CARD'].includes(S.stageId)&&r.app==='ending';let page='';switch(r.app){case 'intro':page=renderIntro();break;case 'lock':page=renderLock();break;case 'home':page=renderHome();break;case 'line':page=renderLine();break;case 'ig':page=renderIG();break;case 'photos':page=renderPhotos();break;case 'notes':page=renderNotes();break;case 'chrome':case 'google':page=renderBrowser();break;case 'ai':page=renderAI();break;case 'notebook':page=renderNotebook();break;case 'ending':page=renderEnding();break;default:page=renderHome()}
-root.innerHTML=`<div class="backdrop"></div><aside class="desktop-title"><div class="eyebrow">A DIGITAL INVESTIGATION EXPERIENCE</div><h1>CASE <span>072</span></h1><p>一張照片，一個編號，四個網站。<br>當線索越來越多，真相卻未必更清楚。</p><div class="line"></div><p>沉浸式媒體查證解謎 · 六章故事</p></aside><div class="phone"><div class="screen">${page}<div class="status ${dark?'white':''}"><button type="button" class="teacher-clock-trigger" data-a="teacher-clock" data-clock="1" title="時間">${currentFullClock()}</button><span class="status-icons"><span class="bars"><i></i><i></i><i></i><i></i></span><span style="font-size:12px">◔</span><span class="battery"><b></b></span></span></div><div class="island"></div>${r.app!=='intro'&&r.app!=='lock'?`<button class="home-pill ${dark?'light':''}" data-a="home" aria-label="回到手機桌面" title="回到手機桌面"></button>`:''}${ui.toast?`<button class="toast" data-a="toast"><span class="toast-icon">072</span><span><strong>${esc(ui.toast.title)}</strong><small>${esc(ui.toast.body)}</small></span><span>›</span></button>`:''}${teacher.active?`<div class="teacher-preview-bar" role="status"><b>教師示範｜${esc(ui.teacherTitle||S.chapterId)}</b><button data-a="teacher-menu">換關</button><button data-a="teacher-exit">退出</button></div>`:''}${renderSheet()}${renderTransition()}</div></div><div class="desktop-foot">CASE072 · INTERACTIVE PROTOTYPE · v5.3.1</div>`;
+root.innerHTML=`<div class="backdrop"></div><aside class="desktop-title"><div class="eyebrow">A DIGITAL INVESTIGATION EXPERIENCE</div><h1>CASE <span>072</span></h1><p>一張照片，一個編號，四個網站。<br>當線索越來越多，真相卻未必更清楚。</p><div class="line"></div><p>沉浸式媒體查證解謎 · 六章故事</p></aside><div class="phone"><div class="screen">${page}<div class="status ${dark?'white':''}"><button type="button" class="teacher-clock-trigger" data-a="teacher-clock" data-clock="1" title="時間">${currentFullClock()}</button><span class="status-icons"><span class="bars"><i></i><i></i><i></i><i></i></span><span style="font-size:12px">◔</span><span class="battery"><b></b></span></span></div><div class="island"></div>${r.app!=='intro'&&r.app!=='lock'?`<button class="home-pill ${dark?'light':''}" data-a="home" aria-label="回到手機桌面" title="回到手機桌面"></button>`:''}${ui.toast?`<button class="toast" data-a="toast"><span class="toast-icon">072</span><span><strong>${esc(ui.toast.title)}</strong><small>${esc(ui.toast.body)}</small></span><span>›</span></button>`:''}${teacher.active?`<div class="teacher-preview-bar" role="status"><b>教師示範｜${esc(ui.teacherTitle||S.chapterId)}</b><button data-a="teacher-menu">換關</button><button data-a="teacher-exit">退出</button></div>`:''}${renderSheet()}${renderTransition()}</div></div><div class="desktop-foot">CASE072 · INTERACTIVE PROTOTYPE · v5.3.2</div>`;
 root.dataset.routeKey=routeKey;if(preserveScroll&&r.app!=='line'){const now=document.querySelector('#article-scroll')||document.querySelector('.phone .scroll');if(now&&oldGeneral!==null)now.scrollTop=oldScrollTop??oldGeneral;}if(focusId){const f=document.getElementById(focusId);if(f&&f===document.activeElement)return;if(f&&oldFocus&&['INPUT','TEXTAREA'].includes(f.tagName)){f.focus({preventScroll:true});try{if(oldSelection?.[0]!=null)f.setSelectionRange(...oldSelection)}catch(e){}}}
 if(r.app==='line'&&r.view==='chat')renderChatScroll(false);if(r.app==='ig')requestAnimationFrame(observeVisibleIGPosts);if(r.app==='ai'){const a=document.querySelector('#ai-scroll');if(a)a.scrollTop=a.scrollHeight;}if(ui.toast){} }
 let imageHold=null,imageStart=null;
@@ -1036,7 +1430,7 @@ case 'chat':navigate({app:'line',view:'chat',chatId:v||'group803'});break;
 case 'note':navigate({app:'notes',view:'detail',noteId:v});break;
 case 'task':if(v==='K02'&&!taskAvailable('K02')){toast('請先到'+groupName()+'讀完小宇傳的香蕉消息，再開啟這項選做查核。',{app:'line',view:'chat',chatId:'group803'});break;}navigate({app:'notebook',view:'task',taskId:v});break;
 case 'page':openBrowserPage(v,['chrome','google'].includes(currentRoute().app)?currentRoute().app:'chrome');break;
-case 'return-notebook':{const route=S.navigation.browserReturn[currentRoute().app];if(route?.app==='notebook'&&route.view==='task')navigate(route);else launch('notebook');break}
+case 'return-notebook':returnToNotebook();break;
 case 'igpost':if(!canSeePost(v))return toast('這篇貼文目前尚未公開。');navigate({app:'ig',view:'post',postId:v});break;
 case 'igfeed':navigate({app:'ig',view:'feed'});break;
 case 'igmenu':showSheet('igmenu',{postId:v});break;
@@ -1079,10 +1473,10 @@ case 'sentence-label':e.preventDefault();selectSentence(v);break;
 case 'sentence-up':moveSentence(v,-1);break;
 case 'sentence-down':moveSentence(v,1);break;
 case 'browser-back':browserBack(currentRoute().app);break;
-case 'browser-forward':{let b=getBrowser(currentRoute().app);if(b.index<b.entries.length-1){b.index++;persistRender()}else toast('已經是目前最新的頁面。');break;}
+case 'browser-forward':{nav531Capture();let b=getBrowser(currentRoute().app);if(b.index<b.entries.length-1){b.index++;persistRender()}else toast('已經是目前最新的頁面。');break;}
 case 'browser-home':pushBrowser(currentRoute().app,{view:'home'});break;
 case 'browser-search':{const app=currentRoute().app,term=document.querySelector('#browserSearch')?.value||'';ui.searchDraft[app]=term;submitSearch(app,term);break;}
-case 'browser-bookmark':{const b=getBrowser(currentRoute().app),en=b.entries[b.index];if(en?.view!=='page'){toast('請先打開想收藏的來源頁。');break}S.meta.bookmarks=dedupe([...(S.meta.bookmarks||[]),en.pageId]);toast('此網頁已加入模擬瀏覽器書籤。');save();break}
+case 'browser-bookmark':{const id=currentBrowserPageId();if(id)saveSourcePage(id);else toast('請先開啟要保存的來源頁。');break;}
 case 'browser-tabs':showSheet('info');break;
 case 'search-correct':submitSearch(currentRoute().app,v);break;
 case 'camera':showSheet('picker',{target:v||currentRoute().app});break;
@@ -1093,8 +1487,8 @@ case 'picker-cancel':case 'close-sheet':case 'close-overlay':ui.lightbox=null;hi
 case 'ai-remove':S.ai.draftAssetId=null;persistRender();break;
 case 'ai-find-source':aiAsk('請幫我搜尋圖片來源',true);break;
 case 'ai-info':showSheet('info');break;
-case 'save-page':savePageOnce(v);break;
-case 'collect':savePageOnce(el.dataset.id);break;
+case 'save-page':saveSourcePage(v);break;
+case 'collect':collectEvidence(v,el.dataset.id);break;
 case 'external':if(/^https:\/\//.test(v))window.open(v,'_blank','noopener,noreferrer');break;
 case 'read-correction':markCorrectionRead();break;
 case 'ending-history':pauseHistory();clearCinemaTransition();S.ending.cinemaIndex=0;S.ending.cinemaRemainingMs=cinemaDuration(0);S.ending.cinemaPaused=false;ui.historyStatic=false;setStage('S06_HISTORY');navigate({app:'ending'});playEndingMusic();startHistoryTimer();break;
@@ -1107,6 +1501,7 @@ case 'cinema-next':if((S.ending.cinemaIndex||0)>=CINEMA_DURATIONS.length-1)cinem
 case 'cinema-playpause':cinemaTogglePause();break;
 case 'cinema-music':cinemaToggleMusic();break;
 case 'ending-view':if(S.flags.mainCompleted){S.stageId='S06_REVIEW';save();navigate({app:'ending'})}else navigate({app:'ending'});break;
+case 'chat-context-jump':jumpToChatMessage(v);break;
 case 'nudge-notebook':ui.notebookNudge=null;navigate({app:'notebook',view:'chapter'});break;
 case 'ask-reset':if(teacher.active){ui.sheet={type:'teacher-menu'};render()}else{if(S.stageId==='S06_HISTORY'){S.ending.cinemaPaused=true;pauseHistory();pauseEndingMusic();save();updateCinemaControls()}showSheet('reset')}break;
 case 'sound-toggle':ui.soundEnabled=!ui.soundEnabled;if(ui.soundEnabled)armNotificationSound();render();break;
@@ -1455,7 +1850,7 @@ function sendChat(){
 function handleSubmit(e){if(e.target.id==='chat-form'){e.preventDefault();if(!ui.composing)sendChat()}else if(e.target.id==='searchForm'){e.preventDefault();if(!ui.composing){const input=document.getElementById('searchInput');submitSearch(currentRoute().app,input?.value||'')}}else if(e.target.id==='ai-form'){e.preventDefault();if(!ui.composing)aiAsk(document.getElementById('aiInput')?.value||'')}}
 function handleKey(e){if((e.isComposing||ui.composing||e.keyCode===229))return;if(e.key==='Enter'&&!e.shiftKey){if(e.target.id==='chatInput'){e.preventDefault();sendChat()}else if(e.target.id==='aiInput'){e.preventDefault();aiAsk(document.getElementById('aiInput')?.value||'')}else if(e.target.id==='browserSearch'){e.preventDefault();submitSearch(currentRoute().app,e.target.value)}}}
 
-/* CASE072 v5.3.1 learning loop.
+/* CASE072 v5.3.2 learning loop.
    Assessment, tentative claims, publication effects, and telemetry are separate.
    No remote service, AI API, or student free-text export is introduced. */
 function createLearningState(){
@@ -1944,7 +2339,7 @@ function renderEnding(){
 }
 function exportLearningReport(){
  learningTick();const state=teacher.active?teacher.student:S,l=state.learning||createLearningState();
- const report={format:'case072-local-playtest-v1',contentVersion:'5.3.1',runId:state.runId,stage:state.stageId,
+ const report={format:'case072-local-playtest-v1',contentVersion:'5.3.3',runId:state.runId,stage:state.stageId,
  score:l.score.points,errors:l.score.errors,solvedTasks:state.solvedTaskIds,
  branchOrder:l.branchOrder,impacts:l.impacts,transferComplete:l.transfer.done,
  hintTransactions:state.sos.transactions,firstHintFree:l.firstHintFree,metrics:l.metrics,
@@ -1993,7 +2388,7 @@ function teacherBuildState(target){
  }
  if(target.taskId==='K08')S.learning.draftFocus='ghost';
 }
-function v530HandleClick(e){
+function handleClick(e){
  const el=e.target.closest('[data-a]');if(!el||el.disabled)return;
  const a=el.dataset.a,v=el.dataset.v||'',l=ensureLearningState();
  const handled=['grade-intro','intro-boundary','record-extra-toggle','grade-record-extra','draft-focus','draft-all','branch-task','transfer-choice','grade-transfer','learning-report'];
@@ -2027,10 +2422,17 @@ function handleChange(e){
  }
  legacyHandleChange(e);
 }
-function v530Boot(){
+function boot(){
  ensureLearningState();
+ if(!S.meta.sourceSaveVersion){
+  const bookmarks=S.meta.bookmarks||(S.meta.bookmarks=[]);
+  for(const [id,p] of Object.entries(PAGES)){
+   if(p.evidence?.length&&p.evidence.every(([eid])=>S.collectedEvidence[eid]?.sourcePageId===id)&&!bookmarks.includes(id))bookmarks.push(id);
+  }
+  S.meta.sourceSaveVersion=1;
+ }
  // Same schema/save key; add features without clearing completed tasks or charging past attempts.
- S.contentVersion='5.3.1';
+ S.contentVersion='5.3.2';
  if(!S.learning.migrated){
   S.learning.migrated=true;
   if(S.meta.introEvaluated)S.learning.introChoice='intro_known';
@@ -2041,7 +2443,7 @@ function v530Boot(){
  if(S.stageId==='S04_SOURCES'&&S.meta.chainReply>=2&&!messageAt('chain_result:1')){
   queueScript('chain_result','group803',CHAT_SCRIPTS.chain_result);
  }
- S.contentVersion='5.3.1';save();
+ S.contentVersion='5.3.2';save();
  learningClock={run:S.runId,at:Date.now()};
  setInterval(()=>{learningTick();},1000);
  document.addEventListener('visibilitychange',()=>{learningTick();if(!teacher.active)save();});
@@ -2050,14 +2452,17 @@ function v530Boot(){
  queueMicrotask(()=>{maybeAutoAdvance();maybeAutoTransition();});
 }
 
-function v530PushBrowser(app,entry){
+function pushBrowser(app,entry){
+ nav531Capture();entry={...entry,scrollTop:entry.scrollTop||0};
  if(entry.view==='results'&&String(entry.query||'').startsWith('以圖搜圖：')&&ui.learningPickedImage==='img_ghost'&&S.savedAssetIds.includes('img_ghost')){
   ensureLearningState().imageSearchPracticed=true;ui.learningPickedImage=null;
   learningMetric('image_search_practice',{asset:'img_ghost'});
  }
  legacyPushBrowser(app,entry);
 }
-function v530Render(){
+function render(){
+ const viewKey=S.runId+'|'+nav531Key(),changed=ui.nav531RenderedKey!==viewKey;
+ const priorTop=!changed?nav531ScrollNode()?.scrollTop:null;
  legacyRender();
  if(teacher.active){
   const surface=document.querySelector('.app-surface'),bar=document.querySelector('.teacher-preview-bar');
@@ -2067,6 +2472,11 @@ function v530Render(){
    bar.classList.add('in-flow');
   }
  }
+ if(changed){ui.nav531RenderedKey=viewKey;nav531Restore();}
+ else if(priorTop!==null&&priorTop!==undefined&&currentRoute().app!=='line'&&currentRoute().app!=='ending'){
+  const sc=nav531ScrollNode();if(sc)sc.scrollTop=priorTop;
+ }
+ HomeLayout532.request();
 }
 
 
@@ -2092,228 +2502,170 @@ CHAT_SCRIPTS.branch_bridge=[
  ['guanting','一份舊名冊。他說想自己進來講。'],
  ['ziqing','可以看資料，但不要把誰說得很肯定當成證據。']
 ];
+
+/* v5.3.2: short-turn context and already-delivered clues.
+   This module never grades, marks a task complete, or publishes an identity. */
+const ContextDialogue={
+ topics:[
+  {id:'roster',label:'名冊編號',re:/s\s*51\s*[-‐‑‒–—－]?\s*0?72|名冊|複查編號|那個編號/i,attachments:['history_order','history_roster','history_home','F0']},
+  {id:'notice',label:'健康中心公告',re:/公告|健康中心|篩檢|複檢|補檢|檢疫|防疫/,attachments:['school_notice']},
+  {id:'chain',label:'文章的引用來源',re:/四個網站|四站|來源鏈|原帖|原貼文|引用|新聞都報了/,attachments:['T','W','N','F1','F0']},
+  {id:'ghost',label:'鬼影照片',re:/鬼圖|鬼影|鬼照|人影|窗邊|地下室/,attachments:['img_ghost','post_ghost','ghost_original','ghost_repost','ghost_collection']},
+  {id:'xray',label:'舊車照片',re:/舊車|車照|那台車|巡迴|x光|x-ray|學校檢查/i,attachments:['img_xray','post_xray','xray_archive','xray_rumor']},
+  {id:'ruins',label:'廢墟照片',re:/廢墟|軍艦島|端島|山上|階梯/,attachments:['img_ruins','post_ruins','ruins_original','hashima_reference','ruins_rumor']},
+  {id:'banana',label:'香蕉傳言',re:/香蕉|骨密度|補鈣|50倍/,attachments:['img_banana','banana_rumor','banana_check']},
+  {id:'sky',label:'天空之城新聞',re:/天空之城|鐵砧山|城堡|那篇新聞/,attachments:['img_sky','sky_rumor','sky_original','noise_sky']},
+  {id:'intro',label:'匿名貼文',re:/匿名貼文|那篇貼文|instagram|\big\b/i,attachments:['post_intro']}
+ ],
+ polarity(text,chat){
+  let raw=String(text||'').normalize('NFKC').trim();
+  // Remove only an explicit address. It must not turn S51-072 into a person's name.
+  raw=raw.replace(/^@?(?:子晴|冠廷|阿哲|柏翰|小宇|怡安|語涵|家豪|李宇辰|宇辰|志明|072)[，,：:\s]+/,'');
+  const t=raw.replace(/[\s，。！？!?,.～~]/g,'').toLowerCase();
+  if(/^(?:我(?:覺得|認為))?(?:不是|不對|不一樣|不太一樣|不同意|沒有|不會|不信|no|nope)(?:啊|吧|喔|哦|啦|耶|欸)?$/.test(t))return 'no';
+  if(/^(?:我(?:覺得|認為))?(?:是|是的|對|對啊|沒錯|同意|一樣|有|會|yes|yep|yeah)(?:啊|吧|喔|哦|啦|耶|欸)?$/.test(t))return 'yes';
+  if(/^(?:好|好喔|好的|了解|收到|嗯|嗯嗯|ok|okay|知道了)$/.test(t))return 'ack';
+  return null;
+ },
+ prior(chat,messageId){
+  const player=messageAt(messageId),limit=player?.seq??Infinity;
+  return S.messages.filter(m=>m.chatId===chat&&m.seq<limit&&m.sender!=='player'&&m.sender!=='system').sort((a,b)=>b.seq-a.seq);
+ },
+ topicFor(text,attachment=''){
+  const value=String(text||'');
+  const ref=String(attachment).slice(String(attachment).indexOf(':')+1);
+  return this.topics.find(t=>t.attachments.includes(ref)||t.re.test(value))||null;
+ },
+ isClueQuestion(text){
+  return /(?:是什麼|是甚麼|什麼意思|是誰|誰啊|哪個|哪一個|哪一則|哪一段|什麼東西|是啥|看不懂|沒看懂|剛剛|剛才|前面|之前|那個|這個|那張|這張|那份|那篇|重貼|再貼|再傳|連結|來源|出處|網址|怎麼查|要查|自己查)/i.test(text)||
+   /^(?:s\s*51\s*[-‐‑‒–—－]?\s*0?72|名冊|公告|健康中心|鬼照|鬼影|舊車|廢墟|香蕉|天空之城)[?？。!\s]*$/i.test(text);
+ },
+ chooseSpeaker(chat,direct,last){
+  if(chat!=='group803')return chatSpeaker(chat,'context');
+  if(direct){
+   const speaker=direct==='zhimingName'?'zhiming':direct;
+   if(direct==='anonymous'||direct==='friend_demo')return null;
+   if(direct==='zhimingName'&&!(S.flags.identityRevealed&&messageAt('reveal:9')))return null;
+   if(!S.messages.some(m=>m.chatId===chat&&m.sender===speaker))return null;
+   return speaker;
+  }
+  return chatSpeaker(chat,'context',last?.sender);
+ },
+ resolve(text,chat,messageId){
+  const base=originalContextDetect(text,chat);
+  if(['GAME_CHAT','GAME_HELP','CONCERN_SAFETY'].includes(base))return null;
+  const prior=this.prior(chat,messageId),last=prior[0],direct=ConversationEngine.addressedRole(text,chat);
+  const explicit=this.topicFor(text),polarity=this.polarity(text,chat);
+  const memory=(S.meta.dialogueContext||{})[chat];
+  const recentTopic=this.topicFor(last?.text,last?.attachment)||
+   prior.slice(1,6).map(m=>this.topicFor(m.text,m.attachment)).find(Boolean)||
+   (memory?.stage===S.stageId?this.topics.find(t=>t.id===memory.topic):null)||null;
+  let speaker=this.chooseSpeaker(chat,direct,last);
+  if(!speaker)return null;
+  if(polarity){
+   let reply='',topic=recentTopic;
+   const comparing=/是不是(?:同一|一樣)|同一回事|同一件事|一不一樣|對照|有什麼不同/.test(last?.text||'');
+   if(comparing){
+    reply=polarity==='no'?'你覺得不是同一回事嗎？把你注意到的原文留在調查簿，再和他剛剛的說法對照。':
+     polarity==='yes'?'你覺得是同一回事呀。先找出支持這個想法的原文，再到調查簿整理看看。':
+     '好，我們就先對照前面那份資料。看到的原文和自己的推測，分開記在調查簿。';
+   }else if(last?.attachment?.startsWith('message:')||topic){
+    const subject=topic?.label||'剛剛那個說法';
+    reply=polarity==='no'?'你覺得「'+subject+'」那個說法不對，對嗎？先保留這個判斷，再用前面的資料核對。':
+     polarity==='yes'?'你覺得剛剛的說法有道理呀。先把支持它的原文找出來，我們再對照。':
+     '好，先看前面那則'+subject+'；查到的內容可以記在調查簿。';
+   }else{
+    reply=polarity==='no'?'你覺得不是嗎？好，先保留你的看法；我們找得到什麼證據，再一起對照。':
+     polarity==='yes'?'你覺得是呀。先別急著定論，把支持這個看法的線索記下來。':
+     '收到，我也先看前面的訊息；不知道下一步時，就看看調查簿。';
+   }
+   return {intent:'CONTEXT_REPLY',speaker,text:reply,topic:topic?.id||'',sourceId:last?.id||'',attachment:''};
+  }
+  // S51-072 is a document identifier, never the chat account "072".
+  const code=/s\s*51\s*[-‐‑‒–—－]?\s*0?72/i.test(text);
+  if(base==='ASK_IDENTITY'&&!code)return null;
+  if(!code&&!this.isClueQuestion(text))return null;
+  let topic=explicit||recentTopic;
+  if(!topic)return null;
+  if(chat==='group803'&&!direct){
+   const peer=prior.find(m=>['ziqing','azhe','bohan','guanting','xiaoyu','yian','yuhan'].includes(m.sender));
+   speaker=chatSpeaker(chat,'clue-guide',peer?.sender);
+  }
+  // Only material already delivered in THIS chat can be re-posted.
+  const match=prior.find(m=>this.topicFor(m.text,m.attachment)?.id===topic.id);
+  if(!match){
+   if(!explicit)return null;
+   return {intent:'ASK_RECENT_CLUE',speaker,text:'我還沒在這個對話看到能說明這件事的來源。先看一下之前的訊息，或到調查簿確認目前的線索。',topic:topic.id,sourceId:'',attachment:''};
+  }
+  // Prefer an authored source over a previous conversational hint.
+  const originals=prior.filter(m=>!m.id.startsWith('conversation:')&&this.topicFor(m.text,m.attachment)?.id===topic.id);
+  const source=originals.find(m=>m.attachment)||originals[0]||match;
+  let attachment='';
+  if(source.attachment){
+   const [type,id]=source.attachment.split(':');
+   if(type==='link'&&canAccessPage(id)||type==='post'&&canSeePost(id)||type==='img'&&ASSET_META[id])attachment=source.attachment;
+  }
+  if(!attachment)attachment='message:'+source.id;
+  let reply;
+  if(topic.id==='roster'&&speaker==='zhiming'){
+   reply='S51-072 就是我剛才講的那串編號。資料我前面提過了，你們可以自己先查原文。';
+  }else if(topic.id==='roster'){
+   reply=randomChatChoice(chat,'context-roster',[
+    'S51-072 是前面提到的名冊編號，和 LINE 暱稱「072」先分開看。看一下之前的訊息；我們要自己先查原始資料。',
+    '你問的是剛剛那串編號吧。先翻前面的訊息，再搜尋完整的 S51-072；不要只因為都有「072」就把它們當成同一件事。'
+   ]);
+  }else{
+   reply=randomChatChoice(chat,'context-'+topic.id,[
+    '你問的是前面那則'+topic.label+'吧。我再放一次；看一下之前的訊息，我們要自己先查。',
+    '剛剛有提到'+topic.label+'。先打開原來那則核對，查到什麼再放到調查簿，不用只等別人給答案。'
+   ]);
+  }
+  return {intent:'ASK_RECENT_CLUE',speaker,text:reply,attachment,sourceId:source.id,topic:topic.id};
+ },
+ onMessage(text,chat,id){
+  const result=this.resolve(text,chat,id);if(!result)return null;
+  S.meta.lastIntent=result.intent;
+  const contexts=S.meta.dialogueContext||(S.meta.dialogueContext={});
+  contexts[chat]={topic:result.topic,sourceId:result.sourceId,stage:S.stageId};
+  const loops=S.meta.chatLoop||(S.meta.chatLoop={});
+  let loop=loops[chat];
+  if(!loop||loop.stage!==S.stageId)loop=loops[chat]={last:'',count:0,shownAt:0,stage:S.stageId};
+  // Contextually valid agreement/disagreement is not "irrelevant chatting".
+  if(result.intent==='CONTEXT_REPLY'){loop.count=0;loop.shownAt=0;}
+  else {
+   const key='topic:'+result.topic;
+   loop.count=loop.last===key?loop.count+1:1;loop.last=key;
+   if(loop.count>=3&&loop.count-loop.shownAt>=3){
+    loop.shownAt=loop.count;
+    ui.notebookNudge={chatId:chat,message:'這個線索可以自己先查。打開 CASE 072 調查簿，看「眼前的線索」與還缺的步驟。'};
+   }
+  }
+  enqueueDialogueReply(id,chat,result.speaker,result.text,result.attachment||'');
+  save();startPending();return result.intent;
+ }
+};
+const originalContextDetect=ConversationEngine.detect.bind(ConversationEngine);
+function jumpToChatMessage(id){
+ const r=currentRoute(),target=messageAt(id);
+ if(r.app!=='line'||r.view!=='chat'||!target||target.chatId!==r.chatId)return;
+ const sc=document.getElementById('chat-scroll');
+ const node=[...document.querySelectorAll('[data-message-id]')].find(n=>n.dataset.messageId===id);
+ if(!sc||!node)return;
+ ui.chatStuckToBottom=false;
+ if(ui.chatReadTimer){clearTimeout(ui.chatReadTimer);ui.chatReadTimer=null;}
+ sc.scrollTop+=node.getBoundingClientRect().top-sc.getBoundingClientRect().top-20;
+ S.scrollAnchors[r.chatId]=sc.scrollTop;save();
+ document.querySelectorAll('.context-highlight').forEach(n=>n.classList.remove('context-highlight'));
+ node.classList.add('context-highlight');
+ setTimeout(()=>node.classList.remove('context-highlight'),2400);
+}
+
 const originalConversationOnMessage=ConversationEngine.onMessage.bind(ConversationEngine);
 ConversationEngine.onMessage=function(text,chat,id){
+ const contextual=ContextDialogue.onMessage(text,chat,id);if(contextual)return contextual;
  if(taskEvidenceMemory(text,chat,id))return 'ASK_SOURCE';
  return originalConversationOnMessage(text,chat,id);
 };
-
-
-/* v5.3.1: one source-capture transaction, scroll-safe navigation, local dialogue context. */
-const IG_PATHS={
- heart:'<path d="M20.7 4.6a5.5 5.5 0 0 0-7.8 0L12 5.5l-.9-.9a5.5 5.5 0 0 0-7.8 7.8L12 21l8.7-8.6a5.5 5.5 0 0 0 0-7.8Z"/>',
- comment:'<path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8A8.5 8.5 0 0 1 8.7 3.9a8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5Z"/>',
- send:'<path d="m22 2-7 20-4-9-9-4 20-7Z"/><path d="M22 2 11 13"/>',
- bookmark:'<path d="M6 3h12a1 1 0 0 1 1 1v17l-7-5-7 5V4a1 1 0 0 1 1-1Z"/>',
- home:'<path d="m3 10 9-8 9 8v11h-6v-7H9v7H3V10Z"/>',
- search:'<circle cx="10.6" cy="10.6" r="7.5"/><path d="m16 16 5.3 5.3"/>',
- profile:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
- more:'<circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/>',
- back:'<path d="m14 5-7 7 7 7"/>',
- check:'<path d="m5 12 4 4L19 6"/>'
-};
-function igIcon(name,filled=false){return `<svg class="ig-svg" viewBox="0 0 24 24" fill="${filled?'currentColor':'none'}" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${IG_PATHS[name]||IG_PATHS.more}</svg>`;}
-function igControl(action,id,name,label,pressed=null){return `<button type="button" class="ig-control ig-${name}${!action?' ig-noop':''}" ${action?`data-a="${action}" data-v="${attr(id)}"`:''} aria-label="${attr(label)}" title="${attr(label)}" ${pressed===null?'':`aria-pressed="${pressed}"`}>${igIcon(name,pressed===true&&['heart','bookmark','home'].includes(name))}</button>`;}
-function igActionBar(id,liked,bookmarked){return `<div class="post-actions" role="group" aria-label="貼文操作">${igControl('iglike',id,'heart',liked?'取消讚':'按讚',liked)}${igControl('comments',id,'comment','留言',!!ui.comments?.[id])}${igControl('ig-share',id,'send','分享貼文')}${igControl('igbook',id,'bookmark',bookmarked?'取消收藏貼文':'收藏貼文',bookmarked)}</div>`;}
-function renderIG(){
- let html=v530RenderIG();
- // Keep the same routes and deliberately inactive search/notification controls.
- html=html.replace(/<div class="bottom-bar">[\s\S]*?<\/div>(?=<\/div>$)/,`<nav class="ig-nav" aria-label="Instagram">${igControl('igfeed','','home','首頁',currentRoute().view!=='post')}${igControl('','','search','搜尋（目前無功能）')}${igControl('','','heart','通知（目前無功能）')}${igControl('igprofile','','profile','個人資訊')}</nav>`);
- if(currentRoute().view!=='post'){
-  const start=html.indexOf('<div class="header">'),end=html.indexOf('<div class="insta-profile">');
-  if(start>=0&&end>start)html=html.slice(0,start)+`<div class="ig-topbar"><span class="ig-brand">Instagram</span><div class="ig-topbar-right">${igControl('','','heart','通知（目前無功能）')}${igControl('','','send','訊息（目前無功能）')}</div></div>`+html.slice(end);
- }
- return html;
-}
-function pageFullySaved(id){const p=PAGES[id];return !!p&&(S.meta.bookmarks||[]).includes(id)&&(p.evidence||[]).every(([eid])=>hasEv(eid));}
-function sourceOrigin(app=currentRoute().app){
- let r=S.navigation.browserReturn?.[app],seen=new Set([app]);
- while(r&&['chrome','google'].includes(r.app)){if(seen.has(r.app))return null;seen.add(r.app);r=S.navigation.browserReturn?.[r.app];}
- return r&&['notebook','line','ig','notes','ai','photos','home'].includes(r.app)?r:null;
-}
-function sourceReturnLabel(){const r=sourceOrigin();if(r?.app==='notebook')return r.view==='task'?'返回 '+r.taskId+' 原題':'返回調查簿原位置';if(r?.app==='line')return '返回 LINE 對話';if(r?.app==='ig')return '返回 Instagram 貼文';return '返回上一個畫面';}
-function renderSourceSave(id){
- const saved=pageFullySaved(id),count=PAGES[id]?.evidence?.length||0;
- return `<section class="source-save-panel" aria-label="保存來源"><button type="button" class="primary source-save-button${saved?' is-saved':''}" data-a="save-page" data-v="${attr(id)}" ${saved?'disabled':''}>${igIcon(saved?'check':'bookmark')}<span>${saved?'已保存到調查簿':count?'一次保存本頁與 '+count+' 項來源':'保存本頁到調查簿'}</span></button><p class="source-save-status" role="status">${saved?'網頁與來源片段均已保留。回調查簿完成判斷即可。':'只需按一次；保存資料不等於已經作答。'}</p>${sourceOrigin()?`<button class="source-return-link" data-a="return-source">${igIcon('back')}${esc(sourceReturnLabel())}</button>`:''}${sourceOrigin()?.app!=='notebook'?`<button class="source-return-link" data-a="launch" data-v="notebook">開啟 CASE 072 調查簿</button>`:''}</section>`;
-}
-function savePageOnce(id){
- const p=PAGES[id],app=currentRoute().app,b=S.navigation.browsers[app],entry=b?.entries?.[b.index];
- if(!p||!canAccessPage(id)||!S.visitedPageIds.includes(id)||entry?.pageId!==id)return false;
- if(pageFullySaved(id)){toast('本頁與來源已經保存，不需重複操作。');return true;}
- S.meta.bookmarks=dedupe([...(S.meta.bookmarks||[]),id]);
- let added=0;
- for(const [eid,title,description] of p.evidence||[]){if(!hasEv(eid)){
-  S.collectedEvidence[eid]={id:eid,sourcePageId:id,blockId:eid,assetId:p.asset||null,observedText:description,collectedAtSeq:S.nextSeq++,provenanceType:p.external?'source_summary':'fictional'};added++;
- }}
- learningMetric('source_saved',{page:id,evidence:added});
- save();toast(added?'已一次保存本頁與 '+added+' 項來源。':'網頁已保存到調查簿。',sourceOrigin()?.app==='notebook'?sourceOrigin():{app:'notebook'});render();return true;
-}
-function normalizePageSaves(){
- S.meta.bookmarks=dedupe(S.meta.bookmarks||[]);
- // Migrate partial v5.3.0 captures only for a page the student already saved or collected.
- for(const p of Object.values(PAGES)){
-  const evidence=p.evidence||[];if(!S.visitedPageIds.includes(p.id))continue;
-  const bookmark=S.meta.bookmarks.includes(p.id),complete=evidence.length&&evidence.every(([id])=>hasEv(id));
-  if(complete&&!bookmark)S.meta.bookmarks.push(p.id);
-  if(bookmark)for(const [id,title,description] of evidence)if(!hasEv(id))S.collectedEvidence[id]={id,sourcePageId:p.id,blockId:id,observedText:description,assetId:p.asset||null,collectedAtSeq:S.nextSeq++,provenanceType:'source_save_migration'};
- }
-}
-// Capture the OLD DOM's key, not the route that has just been written to state.
-function viewportMemoryKey(){
- const r=currentRoute();let key=[r.app,r.view||'',r.taskId||r.postId||r.noteId||r.assetId||r.chatId||''].join(':');
- if(r.app==='notebook'&&r.view!=='task')key+=':'+S.chapterId;
- if(['chrome','google'].includes(r.app)){const b=getBrowser(r.app),e=b.entries[b.index];key+=':'+b.index+':'+(e?.pageId||e?.query||e?.view||'');}
- return key;
-}
-function rememberViewport(){
- const root=document.getElementById('root');if(!root||root.dataset.memoryRun!==S.runId||root.dataset.memoryTransient==='1')return;
- const key=root.dataset.memoryKey,el=root.querySelector('.app-surface .scroll');
- if(!key||!el||key.startsWith('line:'))return;
- const map=S.navigation.pagePositions||(S.navigation.pagePositions={});map[key]=el.scrollTop;
- const keys=Object.keys(map);if(keys.length>160)for(const k of keys.slice(0,keys.length-160))delete map[k];
-}
-function render(){
- rememberViewport();
- const key=viewportMemoryKey(),run=S.runId,root=document.getElementById('root'),oldKey=root?.dataset.memoryKey;
- const y=S.navigation.pagePositions?.[key]??0;
- v530Render();
- if(!root)return;root.dataset.memoryKey=key;root.dataset.memoryRun=run;root.dataset.memoryTransient=ui.busySearch?'1':'0';
- const el=root.querySelector('.app-surface .scroll');if(!el||currentRoute().app==='line')return;
- let expected=null,cancelled=false;
- const set=()=>{if(!el.isConnected||S.runId!==run||viewportMemoryKey()!==key||cancelled)return;
-  if(expected!==null&&Math.abs(el.scrollTop-expected)>2){cancelled=true;return;}
-  el.scrollTop=y;expected=el.scrollTop;
- };
- set();
- // A second layout pass accounts for the teacher banner and already-decoded embedded images.
- requestAnimationFrame(set);
- if(oldKey!==key)el.querySelectorAll('img').forEach(img=>{if(!img.complete)img.addEventListener('load',set,{once:true});});
-}
-function navigate(route){
- const last=currentRoute();rememberViewport();
- if(last.app==='line'&&last.view==='chat'&&(route.app!=='line'||route.view!=='chat'||route.chatId!==last.chatId))stopPending();
- if(last.app!=='home'&&last.app!==route.app&&last.app!=='intro'&&last.app!=='lock'){
-  S.navigation.appStack.push(structuredClone(last));if(S.navigation.appStack.length>15)S.navigation.appStack.shift();
- }
- S.navigation.currentRoute=structuredClone(route);save();render();afterNav(route);
-}
-function home(){rememberViewport();return v530Home();}
-function launch(app){rememberViewport();return v530Launch(app);}
-function openBrowserPage(id,app='chrome'){rememberViewport();return v530OpenBrowserPage(id,app);}
-function pushBrowser(app,entry){rememberViewport();return v530PushBrowser(app,entry);}
-function browserBack(app){rememberViewport();return v530BrowserBack(app);}
-function returnToSourceOrigin(){const origin=sourceOrigin();if(!origin)return launch('notebook');rememberViewport();navigate(structuredClone(origin));}
-
-const RECENT_TOPIC_RULES=[
- {id:'chain',re:/四站|四個網站|那些網站|真相觀察站|怪談wiki|城市焦點|來源鏈|論壇|原帖/i,find:/網站|原帖|論壇|新聞/,attachments:['link:T','link:W','link:N','link:F1','link:F0']},
- {id:'record',re:/s[\s-]*51[\s-]*0?72|s51072|五十一年度|名冊|公文|防癆|編號/i,find:/s[\s-]*51[\s-]*0?72|名冊|公文|校史|完整頁/i,attachments:['link:history_order','link:history_roster','img:img_roster_crop','link:F0','link:T']},
- {id:'notice',re:/公告|健康中心|篩檢|複檢|補檢/,find:/公告|健康中心|篩檢/,attachments:['link:school_notice']},
- {id:'sky',re:/天空之城|鐵砧|城堡|大甲新聞/,find:/天空之城|鐵砧|原作品/,attachments:['link:sky_rumor','link:sky_original']},
- {id:'banana',re:/香蕉|骨密度|補鈣|50倍/,find:/香蕉|骨密度|補鈣|50倍/,attachments:['link:banana_rumor','link:banana_check']},
- {id:'ghost',re:/鬼照|鬼影|人影|地下室|窗邊/,find:/鬼影|人影|鬼圖|照片/,attachments:['img:img_ghost','post:post_ghost','link:ghost_original']},
- {id:'xray',re:/巡迴車|舊車|車子|學校檢查|x\s*光/i,find:/巡迴車|舊車|這台車|x光/i,attachments:['post:post_xray','img:img_xray','link:xray_archive']},
- {id:'ruins',re:/廢墟|軍艦島|端島|山上/,find:/廢墟|軍艦島|山上/,attachments:['img:img_ruins','post:post_ruins','link:ruins_original']}
-];
-function deliveredNPCs(chat,playerId){const player=messageAt(playerId),limit=player?.seq??Infinity;return S.messages.filter(m=>m.chatId===chat&&m.sender!=='player'&&m.sender!=='system'&&m.seq<limit).sort((a,b)=>b.seq-a.seq);}
-function accessibleSharedAttachment(attachment){
- if(!attachment)return false;const [kind,id]=attachment.split(':');
- return kind==='link'?canAccessPage(id):kind==='post'?canSeePost(id):kind==='img'?!!ASSET_META[id]:false;
-}
-function contextSpeaker(chat,anchor,text){
- if(chat!=='group803')return chatSpeaker(chat,'context');
- const direct=ConversationEngine.addressedRole(text,chat);
- if(direct){if(['anonymous','zhimingName','friend_demo'].includes(direct))return null;if(!S.messages.some(m=>m.chatId===chat&&m.sender===direct))return null;return direct;}
- return anchor?.sender&&PEOPLE[anchor.sender]?anchor.sender:chatSpeaker(chat,'context');
-}
-function polarityValue(text,chat){
- let t=norm(text).replace(/^[\s@]*(?:子晴|冠廷|阿哲|柏翰|家豪|語涵|怡安|小宇|李宇辰|宇辰|072)[\s,，：:!！]*/, '').replace(/[\s!！?？。.,，~～]/g,'');
- if(/^(?:我覺得|我想|應該|感覺|好像)?(?:不是|不對|並不是|沒有|不會|不能|不是吧|no|nope)(?:啊|吧|欸|喔|哦|耶)?$/.test(t))return 'no';
- if(/^(?:我覺得|我想|應該|感覺|好像)?(?:是|是的|對|沒錯|會|有|可以|yes|yep)(?:啊|吧|欸|喔|哦|耶)?$/.test(t))return 'yes';
- if(/^(?:我)?(?:不知道|不確定|還不確定|不晓得)$/.test(t))return 'unsure';
- return null;
-}
-function dialogueLoopStep(chat,key){
- const map=S.meta.contextLoops||(S.meta.contextLoops={});let c=map[chat];
- const progress=[S.stageId,S.solvedTaskIds.length,Object.keys(S.collectedEvidence).length,S.visitedPageIds.length,S.meta.chainReply,S.meta.recordReply].join(':');
- if(!c||c.progress!==progress||c.key!==key)c=map[chat]={key,count:0,progress};
- c.count++;
- if(c.count>=3)ui.notebookNudge={chatId:chat,message:'我們先自己查。打開 CASE 072 調查簿，看「眼前的線索」與待完成任務。'};
- return c.count;
-}
-function replyUsingContext(text,chat,playerId){
- const baseIntent=ConversationEngine.detect(text,chat),npc=deliveredNPCs(chat,playerId);
- // Identity/safety, requests for corrections, and gaming retain their existing state guards.
- if(['ASK_IDENTITY','CONCERN_SAFETY','GAME_CHAT','GAME_HELP','REQUEST_CORRECTION'].includes(baseIntent))return null;
- const direct=ConversationEngine.addressedRole(text,chat);
- if(chat==='group803'&&direct&&(['anonymous','zhimingName','friend_demo'].includes(direct)||!npc.some(m=>m.sender===direct)))return null;
- const polarity=polarityValue(text,chat);
- if(polarity){
-  let anchor=npc[0];if(!anchor)return null;
-  // No scan into another room, unsent script, or a future reveal.
-  const speaker=contextSpeaker(chat,anchor,text);if(!speaker)return null;
-  const currentMemory=S.meta.contextFocus?.[chat];
-  if(anchor.id.startsWith('conversation:')&&currentMemory?.stage===S.stageId&&currentMemory.anchorId){const stored=messageAt(currentMemory.anchorId);if(stored?.chatId===chat)anchor=stored;}
-  const count=dialogueLoopStep(chat,'polarity:'+anchor.id);
-  const isQuestion=/是不是|對不對|有沒有|會不會|能不能|要不要|[?？]/.test(anchor.text);
-  let reply;
-  if(count>=3)reply='我有看到你的判斷。先看一下之前的訊息，我們要自己先查；調查簿裡有下一步。';
-  else if(polarity==='no')reply=isQuestion?'你覺得不是嗎？那我們先對照剛才那份資料，看看差在哪裡。':'你覺得不是啊。先保留這個判斷，再看看前面的資料。';
-  else if(polarity==='yes')reply='你覺得是喔？那先找出支持這個判斷的那一段，不要只靠感覺。';
-  else reply='好，先保留不確定。我們先看原始資料，不用急著猜結論。';
-  const attachment=count>=3?'message:'+anchor.id:'';
-  return {intent:'CONTEXT_REPLY',speaker,reply,attachment,anchorId:anchor.id};
- }
- const topic=RECENT_TOPIC_RULES.find(r=>r.re.test(norm(text)));
- const reference=/剛才|剛剛|前面|之前|這個是什麼|那是什麼|什麼意思|再說一次/.test(text);
- const wantsReminder=reference||['ASK_SOURCE','ASK_NOTICE','UNKNOWN'].includes(baseIntent)||/是什麼|啥|什麼意思|哪裡|在哪/.test(text);
- if(!wantsReminder||(!topic&&!reference))return null;
- const candidates=topic?npc.filter(m=>topic.find.test(m.text)||(topic.attachments||[]).includes(m.attachment)):npc;
- const anchor=candidates.find(m=>!m.id.startsWith('conversation:'))||candidates[0];
- if(!anchor)return null;
- const speaker=contextSpeaker(chat,anchor,text);if(!speaker)return null;
- const count=dialogueLoopStep(chat,'topic:'+(topic?.id||anchor.id));
- const shared=candidates.find(m=>accessibleSharedAttachment(m.attachment)&&(!topic||topic.attachments.includes(m.attachment)));
- let reply=topic?.id==='record'&&/s[\s-]*51[\s-]*0?72/i.test(text)?'S51-072 是剛才訊息裡提到的編號。看一下之前的訊息，我們要自己先查原始資料。':shared?'剛才有貼過這份資料，我再放一次。我們要自己先查，再到調查簿整理。':'看一下之前的訊息。我們要自己先查，再到調查簿整理現在的線索。';
- if(count>=3)reply='前面的訊息還在。我們先自己查，打開調查簿看「眼前的線索」，就知道接下來要核對哪一項。';
- return {intent:'RECENT_TOPIC',speaker,reply,attachment:shared?.attachment||'message:'+anchor.id,anchorId:anchor.id};
-}
-const v530ConversationOnMessage=ConversationEngine.onMessage.bind(ConversationEngine);
-ConversationEngine.onMessage=function(text,chat,id){
- if(taskEvidenceMemory(text,chat,id))return 'ASK_SOURCE';
- const response=replyUsingContext(text,chat,id);
- if(!response)return v530ConversationOnMessage(text,chat,id);
- S.meta.lastIntent=response.intent;
- (S.meta.contextFocus||(S.meta.contextFocus={}))[chat]={stage:S.stageId,anchorId:response.anchorId};
- enqueueDialogueReply(id,chat,response.speaker,response.reply,response.attachment);
- save();startPending();return response.intent;
-};
-function recallMessage(id){
- const m=messageAt(id),r=currentRoute();if(!m||r.app!=='line'||r.chatId!==m.chatId)return;
- const sc=document.getElementById('chat-scroll'),node=[...sc?.querySelectorAll('[data-message-id]')||[]].find(el=>el.dataset.messageId===id);if(!sc||!node)return;
- clearTimeout(ui.chatReadTimer);ui.chatReadTimer=null;ui.chatStuckToBottom=false;
- const delta=node.getBoundingClientRect().top-sc.getBoundingClientRect().top;
- sc.scrollTop=Math.max(0,sc.scrollTop+delta-28);S.scrollAnchors[m.chatId]=sc.scrollTop;
- sc.querySelectorAll('.is-recalled').forEach(el=>el.classList.remove('is-recalled'));node.classList.add('is-recalled');
- let jump=document.querySelector('.unread-jump');if(!jump){jump=document.createElement('button');jump.type='button';jump.className='unread-jump';jump.dataset.a='chat-bottom';sc.after(jump);}jump.textContent='↓ 回到最新訊息';
- setTimeout(()=>{if(node.isConnected)node.classList.remove('is-recalled');},4500);save();
-}
-function handleClick(e){
- const el=e.target.closest('[data-a]');if(!el||el.disabled)return;rememberViewport();
- const a=el.dataset.a,v=el.dataset.v||'';
- if(['save-page','collect','return-source','return-notebook','recall-message','browser-bookmark'].includes(a)){
-  e.preventDefault();
-  if(a==='save-page'||a==='collect')savePageOnce(a==='collect'?el.dataset.id:v);
-  else if(a==='browser-bookmark'){const b=S.navigation.browsers[currentRoute().app],p=b?.entries?.[b.index];if(p?.view==='page')savePageOnce(p.pageId);else toast('請先開啟要保存的來源頁。');}
-  else if(a==='recall-message')recallMessage(v);else returnToSourceOrigin();
-  return;
- }
- return v530HandleClick(e);
-}
-function boot(){
- normalizePageSaves();v530Boot();S.contentVersion='5.3.1';save();
- document.getElementById('root').addEventListener('scroll',e=>{if(e.target.matches('.app-surface .scroll'))rememberViewport();},true);
- window.addEventListener('pagehide',()=>{rememberViewport();save();});
-}
 
 const appRoot=document.getElementById('root');
 appRoot.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.dataset.a==='drag-pick'){e.preventDefault();e.target.click()}});
@@ -2323,6 +2675,61 @@ appRoot.addEventListener('dragover',e=>{const z=e.target.closest('[data-drop-tas
 appRoot.addEventListener('dragleave',e=>{const z=e.target.closest('[data-drop-task]');if(z)z.classList.remove('drag-over')});
 appRoot.addEventListener('drop',e=>{const z=e.target.closest('[data-drop-task]');if(!z||z.dataset.dropTask!==dragTask)return;e.preventDefault();const task=z.dataset.dropTask,field=z.dataset.dropField,key=z.dataset.dropSub,d=taskDraft(task);if(key){d[field]=d[field]||{};d[field][key]=dragValue}else d[field]=dragValue;dragValue=null;dragTask=null;save();render()});
 appRoot.addEventListener('click',handleClick);appRoot.addEventListener('change',handleChange);appRoot.addEventListener('input',handleInput);appRoot.addEventListener('submit',handleSubmit);appRoot.addEventListener('keydown',handleKey);appRoot.addEventListener('compositionstart',()=>ui.composing=true);appRoot.addEventListener('compositionend',()=>ui.composing=false);
+/* Layout-only controller. Never writes game state or touches story/timer decisions. */
+const HomeLayout532={
+ frame:0, observer:null, observed:null, initialized:false,
+ init(){
+  if(this.initialized)return;this.initialized=true;
+  const update=()=>this.request();
+  window.addEventListener('resize',update,{passive:true});
+  window.addEventListener('orientationchange',update,{passive:true});
+  window.visualViewport?.addEventListener('resize',update,{passive:true});
+  document.fonts?.ready.then(update);this.request();
+ },
+ request(){
+  document.documentElement.classList.toggle('case-home-fit',currentRoute().app==='home');
+  if(this.frame)return;this.frame=requestAnimationFrame(()=>{this.frame=0;this.apply()});
+ },
+ apply(){
+  const home=document.querySelector('.home-fit');
+  if(!home){this.observer?.disconnect();this.observed=null;return;}
+  const vv=window.visualViewport;
+  const height=Math.round(vv&&Math.abs(vv.scale-1)<.02?Math.min(vv.height,window.innerHeight):window.innerHeight);
+  document.documentElement.style.setProperty('--case-visible-height',height+'px');
+  if(this.observed!==home){
+   this.observer?.disconnect();this.observed=home;
+   if(typeof ResizeObserver!=='undefined'){
+    this.observer=new ResizeObserver(()=>this.request());this.observer.observe(home);
+    const bar=home.querySelector('.teacher-preview-bar');if(bar)this.observer.observe(bar);
+   }
+  }
+  const cs=getComputedStyle(home),bar=home.querySelector('.teacher-preview-bar');
+  const bh=bar?bar.getBoundingClientRect().height+10:0;
+  const h=home.clientHeight-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom)-bh;
+  const w=home.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight);
+  const wide=w>=600&&w>h*1.45;
+  const clamp=(a,x,b)=>Math.max(a,Math.min(x,b));
+  const d=clamp(0,(h-455)/260,1);
+  const gap=h<470?5:Math.round(6+4*d);
+  const side=Math.round(clamp(12,w*.047,22));
+  const icon=Math.round(clamp(42,Math.min((Math.min(w,620)-side*2)/4-17,45+13*d),58));
+  let top=wide?56:Math.round(62+20*d);
+  let hero=wide?190:Math.round(132+50*d);
+  let clue=wide?82:Math.round(66+22*d);
+  const app=icon+22,dock=icon+30,py=h<470?3:Math.round(4+4*d);
+  const needed=()=>wide?top+Math.max(hero,clue+app+gap)+dock+gap*2+py+7:top+hero+clue+app+dock+gap*4+py+7;
+  let over=needed()-h;
+  if(over>0){let cut=Math.min(over,hero-112);hero-=cut;over-=cut;}
+  if(over>0){let cut=Math.min(over,clue-58);clue-=cut;over-=cut;}
+  if(over>0){let cut=Math.min(over,top-52);top-=cut;over-=cut;}
+  home.dataset.homeLayout=wide?'wide':'portrait';
+  home.dataset.homeDensity=over>1?'accessibility':h<560?'compact':'regular';
+  const values={'--home-icon':icon,'--home-top':top,'--home-hero':hero,'--home-clue':clue,'--home-app':app,'--home-dock':dock,'--home-gap':gap,'--home-x':side,'--home-y':py,'--home-hero-title':Math.round(clamp(24,hero*.19,34))};
+  for(const [key,value] of Object.entries(values))home.style.setProperty(key,value+'px');
+ }
+};
+
+HomeLayout532.init();
 boot();
 
 </script></body></html>
