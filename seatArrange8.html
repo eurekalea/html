@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>班級分組座位系統</title>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <style>
+    :root {
+      --primary: #4a90e2;
+      --primary-dark: #357abd;
+      --ink: #2c3e50;
+      --muted: #8a97a6;
+      --line: #e3e9f0;
+      --desk-color: #3d4b5c;
+      --radius: 12px;
+      --shadow: 0 2px 10px rgba(30, 60, 100, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: "Microsoft JhengHei", "Noto Sans TC", sans-serif;
+      background: linear-gradient(135deg, #eef3f9, #e2eaf5);
+      color: var(--ink);
+      margin: 0;
+      padding: 16px;
+      display: flex;
+      height: 100vh;
+      gap: 14px;
+      overflow: hidden;
+    }
+
+    /* ===== 左側功能區 ===== */
+    .sidebar {
+      width: 156px;
+      background: #fff;
+      padding: 14px 12px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      flex-shrink: 0;
+      overflow-y: auto;
+    }
+
+    .brand {
+      font-size: 15px;
+      font-weight: bold;
+      text-align: center;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #eef2f6;
+    }
+
+    .panel-section { display: flex; flex-direction: column; gap: 6px; }
+
+    .section-title {
+      font-size: 11px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      color: var(--muted);
+    }
+
+    .btn-group { display: flex; flex-direction: column; gap: 6px; }
+
+    button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      width: 100%;
+      padding: 8px 6px;
+      border: none;
+      background: var(--primary);
+      color: #fff;
+      border-radius: 7px;
+      cursor: pointer;
+      font-size: 12px;
+      font-family: inherit;
+      transition: background .2s, transform .1s, box-shadow .2s;
+    }
+    button:hover { background: var(--primary-dark); box-shadow: 0 2px 6px rgba(74,144,226,.35); }
+    button:active { transform: translateY(1px); }
+
+    button.secondary { background: #6c757d; }
+    button.secondary:hover { background: #5a6268; box-shadow: 0 2px 6px rgba(0,0,0,.2); }
+    button.outline { background: #fff; color: var(--primary); border: 1.5px solid var(--primary); }
+    button.outline:hover { background: #eaf3fd; box-shadow: none; }
+    button.accent { background: #27ae60; }
+    button.accent:hover { background: #1f9250; box-shadow: 0 2px 6px rgba(39,174,96,.35); }
+
+    .class-input-area input {
+      width: 100%;
+      padding: 7px 8px;
+      border: 1px solid #d5dbe1;
+      border-radius: 7px;
+      font-family: inherit;
+      font-size: 12px;
+    }
+    .class-input-area input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(74,144,226,.15); }
+
+    /* ===== 中間顯示區 ===== */
+    .main-container {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      background: rgba(255,255,255,.6);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 16px;
+      background: #fff;
+      border-bottom: 1px solid var(--line);
+    }
+    #viewLabel { font-size: 13px; color: var(--muted); }
+    #toggleBtn { width: auto; padding: 8px 16px; font-size: 13px; border-radius: 20px; }
+
+    .canvas-scroll { flex: 1; overflow: auto; padding: 20px; }
+
+    #exportArea {
+      background: #fff;
+      padding: 26px 40px 34px;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(30, 60, 100, 0.1);
+      min-width: 800px;
+      width: fit-content;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #classTitle {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 16px;
+      background: linear-gradient(45deg, #005bea, #00c6fb);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      border: 1.5px solid #005bea;
+      padding: 4px 22px;
+      border-radius: 30px;
+      min-width: 150px;
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    .teacher-desk {
+      width: 100%;
+      height: 46px;
+      background: linear-gradient(180deg, #eef1f5, #d9dfe7);
+      border: 2px solid #b4bdc9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: #4a5563;
+      border-radius: 8px;
+      letter-spacing: 3px;
+    }
+    .teacher-desk-spacer { width: 100%; height: 46px; visibility: hidden; }
+
+    .seat-area { display: flex; gap: 80px; }
+
+    .table-block { display: flex; flex-direction: column; gap: 28px; align-items: stretch; }
+    .desk-row { display: flex; align-items: stretch; }
+
+    .group { width: 110px; display: flex; flex-direction: column; }
+
+    .group h4 {
+      text-align: center;
+      margin: 0 0 8px 0;
+      height: 24px;
+      line-height: 24px;
+      border-radius: 12px;
+      background: #eaf1fb;
+      color: #3b6aa8;
+      font-size: 13px;
+    }
+
+    .seat-column { display: flex; flex-direction: column; gap: 8px; }
+
+    .seat {
+      height: 40px;
+      background: #fafcff;
+      border: 2px dashed #cfd9e6;
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: background .2s, border-color .2s;
+    }
+    .seat:hover { background: #f0f6ff; border-color: #a9c6ec; }
+    .seat:has(.number) { border-style: solid; border-color: #a9c6ec; background: #f1f7ff; }
+
+    .desk {
+      width: 12px;
+      background: var(--desk-color);
+      margin: 32px 10px 0;
+      border-radius: 6px;
+    }
+
+    /* 教師視角：座位區旋轉180度，文字再轉回正向 */
+    #exportArea.teacher-view .seat-area { transform: rotate(180deg); }
+    #exportArea.teacher-view .number,
+    #exportArea.teacher-view .group h4,
+    #exportArea.teacher-view .teacher-desk { transform: rotate(180deg); }
+
+    /* ===== 座號卡 ===== */
+    .number {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      white-space: nowrap;
+      overflow: hidden;
+      padding: 0 4px;
+      border-radius: 6px;
+      cursor: grab;
+      font-weight: bold;
+      font-size: 15px;
+      color: #1f3b63;
+      user-select: none;
+    }
+    .number:active { cursor: grabbing; }
+    .seat .number { background: transparent; border: none; }
+
+    .unassigned-list .number {
+      width: auto;
+      min-width: 40px;
+      height: 32px;
+      padding: 0 8px;
+      font-size: 13px;
+      background: #fff;
+      border: 1px solid #b9cbe3;
+      box-shadow: 0 1px 3px rgba(30,60,100,.12);
+      transition: transform .1s, box-shadow .2s;
+    }
+    .unassigned-list .number:hover { transform: translateY(-1px); box-shadow: 0 3px 6px rgba(30,60,100,.18); }
+
+    /* ===== 右側操作區 ===== */
+    .right-panel {
+      width: 200px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      flex-shrink: 0;
+    }
+
+    .input-box, .unassigned-container {
+      background: #fff;
+      padding: 14px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .input-box { display: flex; flex-direction: column; gap: 8px; }
+    .unassigned-container { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+    .input-box h4, .unassigned-container h4 { margin: 0; font-size: 14px; }
+    .unassigned-container h4 { margin-bottom: 8px; }
+    .hint { font-size: 11px; color: var(--muted); line-height: 1.5; }
+
+    textarea {
+      width: 100%;
+      resize: vertical;
+      padding: 8px;
+      border: 1px solid #d5dbe1;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 13px;
+    }
+    textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(74,144,226,.15); }
+
+    .unassigned-list {
+      flex: 1;
+      overflow-y: auto;
+      border: 1px dashed #d5dbe1;
+      padding: 8px;
+      border-radius: 8px;
+      background: #f8fafc;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-content: flex-start;
+    }
+
+    @media (max-width: 1024px) {
+      body { flex-direction: column; overflow: auto; height: auto; }
+      .sidebar, .right-panel { width: 100%; }
+      .main-container { min-height: 500px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sidebar">
+    <div class="brand">🪑 座位安排</div>
+
+    <div class="panel-section">
+      <div class="section-title">排位</div>
+      <div class="btn-group">
+        <button onclick="autoAssign()">🪄 一鍵亂數排完</button>
+        <button class="secondary" onclick="clearSeats()">🗑️ 清空所有座位</button>
+      </div>
+    </div>
+
+    <div class="panel-section">
+      <div class="section-title">儲存 / 還原</div>
+      <div class="btn-group">
+        <button class="accent" onclick="exportCSV()">📊 匯出座位 (CSV)</button>
+        <button class="outline" onclick="document.getElementById('csvFile').click()">📂 匯入座位 (CSV)</button>
+        <input id="csvFile" type="file" accept=".csv,.txt,text/csv" style="display:none" onchange="importSeatCSV(event)" />
+      </div>
+    </div>
+
+    <div class="panel-section">
+      <div class="section-title">下載圖片</div>
+      <div class="btn-group">
+        <button onclick="exportJPG(false)">📷 學生視角</button>
+        <button onclick="exportJPG(true)">🎓 教師視角</button>
+      </div>
+    </div>
+
+    <div class="panel-section class-input-area">
+      <div class="section-title">班級名稱</div>
+      <input id="classInput" type="text" value="三年2班" oninput="updateClassTitle()" />
+    </div>
+  </div>
+
+  <div class="main-container">
+    <div class="toolbar">
+      <span id="viewLabel">目前：學生視角（講台在上方）</span>
+      <button id="toggleBtn" onclick="toggleView()">🔄 切換為教師視角</button>
+    </div>
+
+    <div class="canvas-scroll">
+      <div id="exportArea">
+        <div id="classTitle">三年2班</div>
+
+        <div class="seat-area" id="seatArea">
+          <div class="table-block">
+            <div class="teacher-desk">講台 / 老師桌</div>
+            <div class="desk-row">
+              <div class="group" id="g1"></div>
+              <div class="desk"></div>
+              <div class="group" id="g3"></div>
+            </div>
+            <div class="desk-row">
+              <div class="group" id="g2"></div>
+              <div class="desk"></div>
+              <div class="group" id="g4"></div>
+            </div>
+          </div>
+
+          <div class="table-block">
+            <div class="teacher-desk-spacer"></div>
+            <div class="desk-row">
+              <div class="group" id="g5"></div>
+              <div class="desk"></div>
+              <div class="group" id="g7"></div>
+            </div>
+            <div class="desk-row">
+              <div class="group" id="g6"></div>
+              <div class="desk"></div>
+              <div class="group" id="g8"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="right-panel">
+    <div class="input-box">
+      <h4>1. 輸入座號＋姓名</h4>
+      <span class="hint">一行一筆：座號 Tab/空白/逗號 姓名，姓名可省略</span>
+      <textarea id="inputNumbers" rows="8" placeholder="01&#9;鄭**&#10;02&#9;廖**&#10;03&#9;王**"></textarea>
+      <button onclick="generateNumbers()">⬇️ 產生座號卡</button>
+    </div>
+
+    <div class="unassigned-container">
+      <h4>2. 未安排座位</h4>
+      <div class="unassigned-list" id="unassigned" ondragover="allowDrop(event)" ondrop="drop(event)"></div>
+    </div>
+  </div>
+
+  <script>
+    const seatMap = { g1: 4, g2: 4, g3: 4, g4: 4, g5: 4, g6: 3, g7: 4, g8: 3 };
+
+    document.addEventListener("DOMContentLoaded", () => {
+      Object.keys(seatMap).forEach(id => buildGroup(id, seatMap[id]));
+      document.getElementById("inputNumbers").value = Array.from({length:30}, (_, i) => String(i + 1).padStart(2, "0")).join("\n");
+      generateNumbers();
+      updateClassTitle();
+    });
+
+    let teacherMode = false;
+    function toggleView() {
+      teacherMode = !teacherMode;
+      document.getElementById("exportArea").classList.toggle("teacher-view", teacherMode);
+      document.getElementById("viewLabel").textContent = teacherMode
+        ? "目前：教師視角（講台在下方）" : "目前：學生視角（講台在上方）";
+      document.getElementById("toggleBtn").textContent = teacherMode
+        ? "🔄 切換為學生視角" : "🔄 切換為教師視角";
+    }
+
+    function updateClassTitle() {
+      const val = document.getElementById("classInput").value.trim();
+      document.getElementById("classTitle").textContent = val || "班級名稱";
+    }
+
+    function buildGroup(id, seatCount) {
+      const g = document.getElementById(id);
+      const title = document.createElement("h4");
+      title.textContent = "第" + id.replace("g", "") + "組";
+      g.appendChild(title);
+
+      const col = document.createElement("div");
+      col.className = "seat-column";
+      
+      for (let i = 0; i < seatCount; i++) {
+        const seat = document.createElement("div");
+        seat.className = "seat";
+        seat.ondragover = allowDrop;
+        seat.ondrop = drop;
+        col.appendChild(seat);
+      }
+      g.appendChild(col);
+    }
+
+    function allowDrop(ev) { ev.preventDefault(); }
+    function drag(ev) { ev.dataTransfer.setData("text", ev.target.id); }
+    function drop(ev) {
+      ev.preventDefault();
+      const dataId = ev.dataTransfer.getData("text");
+      const el = document.getElementById(dataId);
+      let target = ev.target;
+      if (target.classList.contains("number")) { target = target.parentElement; }
+      if (target.id === "unassigned") {
+        target.appendChild(el);
+        return;
+      }
+      if (target.classList.contains("seat") && target.children.length === 0) {
+        target.appendChild(el);
+      }
+    }
+
+    // 解析單行：座號 + 分隔(Tab/逗號/空白) + 姓名
+    function parseLine(line) {
+      const m = line.trim().match(/^([^\s,，;；\t]+)[\s,，;；\t]*(.*)$/);
+      return m ? { no: m[1], name: m[2].trim() } : null;
+    }
+
+    function makeChip(r, i) {
+      const d = document.createElement("div");
+      d.className = "number";
+      d.id = "num_" + i;
+      d.dataset.no = r.no;
+      d.dataset.name = r.name;
+      d.textContent = r.name ? r.no + " " + r.name : r.no;
+      d.draggable = true;
+      d.ondragstart = drag;
+      return d;
+    }
+
+    function generateNumbers() {
+      const raw = document.getElementById("inputNumbers").value;
+      const records = raw.split(/\r?\n/).map(parseLine).filter(r => r);
+      clearSeats();
+      const area = document.getElementById("unassigned");
+      area.innerHTML = "";
+      records.forEach((r, i) => area.appendChild(makeChip(r, i)));
+    }
+
+    // ---- CSV 匯入（還原座位安排）----
+    function parseCSV(text, delim) {
+      const rows = []; let row = [], cur = "", inQ = false;
+      for (let i = 0; i < text.length; i++) {
+        const c = text[i];
+        if (inQ) {
+          if (c === '"') {
+            if (text[i + 1] === '"') { cur += '"'; i++; } else inQ = false;
+          } else cur += c;
+        } else if (c === '"') inQ = true;
+        else if (c === delim) { row.push(cur); cur = ""; }
+        else if (c === "\n" || c === "\r") {
+          if (c === "\r" && text[i + 1] === "\n") i++;
+          row.push(cur); cur = ""; rows.push(row); row = [];
+        } else cur += c;
+      }
+      if (cur !== "" || row.length) { row.push(cur); rows.push(row); }
+      return rows;
+    }
+
+    function importSeatCSV(ev) {
+      const file = ev.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        const buf = reader.result;
+        let text;
+        try { text = new TextDecoder("utf-8", { fatal: true }).decode(buf); }
+        catch (e) { text = new TextDecoder("big5").decode(buf); }
+        text = text.replace(/^\uFEFF/, "");
+        const first = text.split(/\r?\n/)[0] || "";
+        const delim = first.split("\t").length > first.split(",").length ? "\t" : ",";
+        const rows = parseCSV(text, delim);
+
+        let cls = null, unassignedCells = [];
+        const seatRows = {};
+        rows.forEach(r => {
+          const k = (r[0] || "").trim();
+          const m = k.match(/^第\s*(\d+)\s*組$/);
+          if (k === "班級") cls = (r[1] || "").trim();
+          else if (m) seatRows[+m[1]] = r.slice(1);
+          else if (k === "未安排") unassignedCells = r.slice(1);
+        });
+        if (!Object.keys(seatRows).length) {
+          alert("這不是本系統匯出的座位表 CSV，無法還原。");
+          return;
+        }
+
+        // 收集所有學生與其座位位置
+        const records = [];
+        for (let g = 1; g <= 8; g++) {
+          (seatRows[g] || []).forEach((cell, idx) => {
+            const p = parseLine(cell);
+            if (p) records.push({ ...p, g: idx < seatMap["g" + g] ? g : null, idx });
+          });
+        }
+        unassignedCells.forEach(cell => {
+          const p = parseLine(cell);
+          if (p) records.push({ ...p, g: null });
+        });
+
+        // 重建座號卡並放回座位
+        document.querySelectorAll(".number").forEach(n => n.remove());
+        const area = document.getElementById("unassigned");
+        records.forEach((r, i) => {
+          const chip = makeChip(r, i);
+          const seat = r.g ? document.querySelectorAll("#g" + r.g + " .seat")[r.idx] : null;
+          (seat && !seat.children.length ? seat : area).appendChild(chip);
+        });
+
+        document.getElementById("inputNumbers").value = records
+          .slice().sort((a, b) => a.no.localeCompare(b.no, "zh-Hant", { numeric: true }))
+          .map(r => r.no + "\t" + r.name).join("\n");
+        if (cls) {
+          document.getElementById("classInput").value = cls;
+          updateClassTitle();
+        }
+      };
+      reader.readAsArrayBuffer(file);
+      ev.target.value = "";
+    }
+
+    function clearSeats() {
+      const area = document.getElementById("unassigned");
+      document.querySelectorAll(".group .number").forEach(numDiv => {
+        area.appendChild(numDiv);
+      });
+    }
+
+    function autoAssign() {
+      let nums = Array.from(document.querySelectorAll("#unassigned .number"));
+      if (!nums.length) {
+        alert("待命區沒有學生！請先產生座號，或將座位清空。");
+        return;
+      }
+      nums.sort(() => Math.random() - 0.5);
+
+      let numIndex = 0;
+
+      function getEmptySeats(groupId) {
+        const seats = Array.from(document.querySelectorAll("#g" + groupId + " .seat"));
+        return seats.filter(s => s.children.length === 0);
+      }
+      
+      function getOccupiedCount(groupId) {
+        const seats = Array.from(document.querySelectorAll("#g" + groupId + " .seat"));
+        return seats.filter(s => s.children.length > 0).length;
+      }
+
+      // 階段一：1-7組先補滿3人
+      for (let i = 1; i <= 7; i++) {
+        let currentCount = getOccupiedCount(i);
+        let emptySeats = getEmptySeats(i);
+        while (currentCount < 3 && emptySeats.length > 0 && numIndex < nums.length) {
+          emptySeats[0].appendChild(nums[numIndex++]);
+          emptySeats.shift();
+          currentCount++;
+        }
+      }
+
+      // 階段二：第8組補滿3人
+      if (numIndex < nums.length) {
+        let i = 8;
+        let currentCount = getOccupiedCount(i);
+        let emptySeats = getEmptySeats(i);
+        while (currentCount < 3 && emptySeats.length > 0 && numIndex < nums.length) {
+          emptySeats[0].appendChild(nums[numIndex++]);
+          emptySeats.shift();
+          currentCount++;
+        }
+      }
+
+      // 階段三：填滿剩餘空位
+      if (numIndex < nums.length) {
+        let allRemainingSeats = [];
+        for (let i = 1; i <= 8; i++) {
+          allRemainingSeats = allRemainingSeats.concat(getEmptySeats(i));
+        }
+        for (let seat of allRemainingSeats) {
+          if (numIndex >= nums.length) break;
+          seat.appendChild(nums[numIndex++]);
+        }
+      }
+    }
+
+    function exportJPG(teacherView) {
+      const area = document.getElementById("exportArea");
+      const originalBg = area.style.background;
+      area.style.background = "#ffffff";
+      html2canvas(area, {
+        scale: 2,
+        onclone: doc => {
+          doc.getElementById("exportArea").classList.toggle("teacher-view", !!teacherView);
+        }
+      }).then(canvas => {
+        const a = document.createElement("a");
+        a.href = canvas.toDataURL("image/jpeg", 0.9);
+        a.download = document.getElementById("classTitle").textContent +
+          (teacherView ? "_座位表_教師視角.jpg" : "_座位表.jpg");
+        a.click();
+        area.style.background = originalBg;
+      }).catch(err => {
+        area.style.background = originalBg;
+        alert("截圖失敗，請確認瀏覽器支援。");
+      });
+    }
+
+    function exportCSV() {
+      const esc = v => /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v;
+      const label = el => el.dataset.name ? el.dataset.no + " " + el.dataset.name : el.dataset.no;
+      const lines = [];
+      lines.push(["班級", document.getElementById("classTitle").textContent].map(esc).join(","));
+      lines.push("組別,座位1,座位2,座位3,座位4");
+      for (let i = 1; i <= 8; i++) {
+        const seats = Array.from(document.querySelectorAll("#g" + i + " .seat"))
+          .map(s => s.children.length ? label(s.children[0]) : "");
+        lines.push(["第" + i + "組", ...seats].map(esc).join(","));
+      }
+      const un = Array.from(document.querySelectorAll("#unassigned .number")).map(label);
+      lines.push(["未安排", ...un].map(esc).join(","));
+      const blob = new Blob(["\uFEFF" + lines.join("\n")], { type: "text/csv;charset=utf-8;" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = document.getElementById("classTitle").textContent + "_座位表.csv";
+      a.click();
+    }
+  </script>
+</body>
+</html>
