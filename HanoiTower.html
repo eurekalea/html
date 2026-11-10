@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>河內塔：用遞迴看演算法設計</title>
+<style>
+:root{
+  --bg:#eef1f5;--surface:#ffffff;--ink:#1b2430;--muted:#5b6776;--line:#d5dbe3;
+  --accent:#2f5bea;--accent-ink:#ffffff;--peg:#8a96a8;--soft:#e4e9fb;
+  --d1:#e5484d;--d2:#f08c2b;--d3:#f2c230;--d4:#2fa36b;--d5:#7a5af5;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){--bg:#12161c;--surface:#1b222b;--ink:#e8edf3;--muted:#9aa6b5;--line:#2c3641;--accent:#6c8cff;--accent-ink:#0f1420;--peg:#5d6a7b;--soft:#243055}
+}
+:root[data-theme="dark"]{--bg:#12161c;--surface:#1b222b;--ink:#e8edf3;--muted:#9aa6b5;--line:#2c3641;--accent:#6c8cff;--accent-ink:#0f1420;--peg:#5d6a7b;--soft:#243055}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 -apple-system,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif}
+main{max-width:640px;margin:0 auto;padding:20px 16px 40px}
+h1{font-size:22px;line-height:1.3;margin:0 0 4px}
+.sub{margin:0 0 16px;color:var(--muted);font-size:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:12px}
+.picker{display:flex;gap:8px;margin-bottom:12px}
+.picker button{flex:1;min-height:44px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:10px;font:inherit;font-weight:600;cursor:pointer}
+.picker button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.idea{font-size:15px}
+.idea code{display:block;margin-top:6px;font:600 14px ui-monospace,Menlo,Consolas,monospace;overflow-x:auto;white-space:nowrap}
+.stage{position:relative;height:200px;overflow:hidden;padding:0}
+.base{position:absolute;left:3%;right:3%;bottom:20px;height:8px;border-radius:4px;background:var(--peg)}
+.peg{position:absolute;bottom:28px;width:8px;height:134px;margin-left:-4px;border-radius:4px 4px 0 0;background:var(--peg)}
+.plabel{position:absolute;bottom:0;height:20px;width:30px;margin-left:-15px;text-align:center;font-weight:700;font-size:13px;color:var(--muted)}
+.disk{position:absolute;height:20px;border-radius:10px;display:grid;place-items:center;font-weight:700;font-size:12px;color:#fff;will-change:left,bottom}
+.cap{font-size:16px;min-height:76px;display:flex;align-items:center}
+.bar{height:6px;border-radius:3px;background:var(--line);overflow:hidden;margin:2px 0 6px}
+.bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .25s}
+.count{font-size:13px;color:var(--muted);margin-bottom:12px}
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+.controls button{min-height:44px;padding:0 16px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-weight:600;cursor:pointer}
+.controls button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.controls button:disabled{opacity:.4;cursor:default}
+.controls button.pulse{outline:3px solid var(--soft);outline-offset:2px}
+.speed{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);flex:1;min-width:150px}
+.speed input{flex:1}
+button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+h2{font-size:16px;margin:0 0 8px}
+.frame{border-left:3px solid var(--line);padding:4px 0 6px 10px;margin-bottom:6px}
+.frame.top{border-left-color:var(--accent)}
+.frame code{font:600 14px ui-monospace,Menlo,Consolas,monospace}
+.chips{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+.chip{font-size:12px;padding:1px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+.chip.done{opacity:.55;text-decoration:line-through}
+.chip.cur{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+.empty{color:var(--muted);font-size:14px}
+:root{--p1:#4c7bf0;--p2:#f08c2b;--p3:#2fa36b}
+.tl{display:flex;gap:2px;margin:6px 0}
+.tl button{flex:1;min-width:0;height:34px;padding:0;border:0;border-radius:4px;font:600 10px ui-monospace,Menlo,Consolas,monospace;color:#fff;cursor:pointer;opacity:.3}
+.tl button.p1{background:var(--p1)}.tl button.p2{background:var(--p2)}.tl button.p3{background:var(--p3)}
+.tl button.on{opacity:1}
+.tl button.cur{outline:2px solid var(--ink);outline-offset:1px}
+.legend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12px;color:var(--muted)}
+.legend span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px;vertical-align:-1px;background:var(--c)}
+.revnote{font-size:15px;min-height:72px;margin:6px 0 10px}
+</style>
+</head>
+<body>
+<main>
+  <h1>河內塔：用遞迴看演算法設計</h1>
+  <p class="sub">從 1 個圓盤開始，每次多加一個。看大問題如何拆成同樣形狀的小問題。</p>
+
+  <div class="picker" id="picker" role="group" aria-label="圓盤數量"></div>
+  <div class="card idea" id="idea"></div>
+
+  <div class="card stage" id="stage" aria-label="河內塔動畫">
+    <div class="base"></div>
+    <div class="peg" style="left:16.667%"></div><div class="peg" style="left:50%"></div><div class="peg" style="left:83.333%"></div>
+    <div class="plabel" style="left:16.667%">A</div><div class="plabel" style="left:50%">B</div><div class="plabel" style="left:83.333%">C</div>
+  </div>
+
+  <div class="card cap" id="cap" aria-live="polite"></div>
+  <div class="bar"><i id="barfill"></i></div>
+  <div class="count" id="count"></div>
+
+  <div class="controls">
+    <button class="primary" id="play">播放</button>
+    <button id="back">上一步</button>
+    <button id="step">下一步</button>
+    <button id="reset">重來</button>
+    <label class="speed">速度 <input type="range" id="speed" min="0.5" max="3" step="0.25" value="1"></label>
+    <button id="more">加一個圓盤</button>
+  </div>
+
+  <div class="card">
+    <h2>從結果往前推</h2>
+    <div class="legend" id="legend"></div>
+    <div class="tl" id="tl" aria-label="每一步搬動的圓盤編號"></div>
+    <div class="revnote" id="revnote" aria-live="polite"></div>
+    <div class="controls" style="margin:0">
+      <button id="gend">到終點</button>
+      <button id="bmove">◀ 更早一步</button>
+      <button id="fmove">更晚一步 ▶</button>
+      <button id="rplay" class="primary">倒著播放</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>遞迴呼叫堆疊</h2>
+    <div id="stack"></div>
+  </div>
+</main>
+
+<script>
+(function(){
+  var L=['A','B','C'], H=24, BASE=28, LIFT=166;
+  var T=function(k){return Math.pow(2,k)-1;};
+  var stage=document.getElementById('stage'), picker=document.getElementById('picker');
+  var capEl=document.getElementById('cap'), stackEl=document.getElementById('stack'), ideaEl=document.getElementById('idea');
+  var playBtn=document.getElementById('play'), stepBtn=document.getElementById('step'), moreBtn=document.getElementById('more');
+  var barFill=document.getElementById('barfill'), countEl=document.getElementById('count'), speedEl=document.getElementById('speed');
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var n=1, events=[], pos=0, moves=0, pegs=[[],[],[]], disks=[], playing=false, busy=false, token=0, dir='f', moveIdx=[0];
+
+  var colors=['var(--d1)','var(--d2)','var(--d3)','var(--d4)','var(--d5)'];
+
+  function gen(total){
+    var ev=[], st=[], idx=0;
+    function snap(o){o.stack=st.map(function(x){return {n:x.n,f:x.f,t:x.t,v:x.v,ph:x.ph};});ev.push(o);}
+    function h(k,f,t,v){
+      var fr={n:k,f:f,t:t,v:v,ph:0};
+      st.push(fr);
+      snap({type:'call',cap:k===1
+        ?'呼叫 hanoi(1, '+L[f]+'→'+L[t]+')：只剩 1 個，這是終止條件，直接搬。'
+        :'呼叫 hanoi('+k+', '+L[f]+'→'+L[t]+')：拆成三步，先請下一層把上面 '+(k-1)+' 個搬到 '+L[v]+'。'});
+      if(k===1){fr.ph=2;mv(1,f,t);}
+      else{fr.ph=1;h(k-1,f,v,t);fr.ph=2;mv(k,f,t);fr.ph=3;h(k-1,v,t,f);}
+      st.pop();
+      snap({type:'ret',cap:st.length===0
+        ?'完成！'+total+' 個圓盤共 '+T(total)+' 步'+(total>1?'（= 2 × '+T(total-1)+' + 1）':'')+'。'
+        :'hanoi('+k+', '+L[f]+'→'+L[t]+') 完成，返回上一層。'});
+    }
+    function mv(d,f,t){idx++;snap({type:'move',d:d,f:f,t:t,cap:'第 '+idx+' 步：圓盤 '+d+' 從 '+L[f]+' 搬到 '+L[t]+'。'});}
+    h(total,0,2,1);
+    return ev;
+  }
+
+  function dims(){
+    var W=stage.clientWidth, sp=W/3, mx=sp*0.92, mn=sp*0.34;
+    return function(s){return mn+(mx-mn)*(s-1)/4;};
+  }
+  function cx(p){return stage.clientWidth*(2*p+1)/6;}
+  function place(d,p,i){
+    var el=disks[d], w=dims()(d);
+    el.style.width=w+'px';
+    el.style.left=(cx(p)-w/2)+'px';
+    el.style.bottom=(BASE+i*H)+'px';
+  }
+  function layoutAll(){
+    for(var p=0;p<3;p++)pegs[p].forEach(function(d,i){place(d,p,i);});
+  }
+  function build(){
+    token++;busy=false;playing=false;pos=0;moves=0;
+    disks.forEach(function(e){if(e&&e.parentNode)e.parentNode.removeChild(e);});
+    disks=[];pegs=[[],[],[]];
+    for(var s=n;s>=1;s--){
+      var el=document.createElement('div');
+      el.className='disk';el.textContent=s;
+      el.style.background=colors[s-1];
+      if(s===3)el.style.color='#1b2430';
+      el.style.transition='none';
+      stage.appendChild(el);disks[s]=el;
+      pegs[0].push(s);
+    }
+    layoutAll();
+    events=gen(n);moveIdx=[0];events.forEach(function(e,i){if(e.type==='move')moveIdx.push(i);});buildTL();
+    Array.prototype.forEach.call(picker.children,function(b,i){b.setAttribute('aria-pressed',String(i+1===n));});
+    ideaEl.innerHTML=ideaHTML();
+    capEl.textContent='按「播放」自動演示，或用「下一步」一格一格看。';
+    renderStack(null,true);
+    progress();ui();
+  }
+  function ideaHTML(){
+    if(n===1)return '<b>1 個</b>：只有一個圓盤，直接搬，1 步。這就是遞迴的終止條件。<code>T(1) = 1</code>';
+    return '<b>'+n+' 個</b>：先搬走上面 '+(n-1)+' 個，再搬最大的那 1 個，最後把那 '+(n-1)+' 個搬回來。其中「搬 '+(n-1)+' 個」是同一個問題，只是少一個圓盤。<code>T('+n+') = 2 × T('+(n-1)+') + 1 = 2 × '+T(n-1)+' + 1 = '+T(n)+'</code>';
+  }
+  function renderStack(stk,fresh){
+    if(fresh){stackEl.innerHTML='<div class="empty">尚未呼叫。開始後，每一層 hanoi 都會出現在這裡。</div>';return;}
+    if(!stk.length){stackEl.innerHTML='<div class="empty">堆疊已清空，所有呼叫都返回了。</div>';return;}
+    stackEl.innerHTML=stk.map(function(fr,i){
+      var chips=fr.n===1?[[2,'終止：直接搬 '+L[fr.f]+'→'+L[fr.t]]]
+        :[[1,'① 上面 '+(fr.n-1)+' 個 '+L[fr.f]+'→'+L[fr.v]],[2,'② 圓盤 '+fr.n+' '+L[fr.f]+'→'+L[fr.t]],[3,'③ 那 '+(fr.n-1)+' 個 '+L[fr.v]+'→'+L[fr.t]]];
+      var html=chips.map(function(c){
+        var cls=c[0]<fr.ph?'done':(c[0]===fr.ph?'cur':'');
+        return '<span class="chip '+cls+'">'+c[1]+'</span>';
+      }).join('');
+      return '<div class="frame'+(i===stk.length-1?' top':'')+'" style="margin-left:'+Math.min(i*8,32)+'px"><code>hanoi('+fr.n+', '+L[fr.f]+'→'+L[fr.t]+', 輔助 '+L[fr.v]+')</code><div class="chips">'+html+'</div></div>';
+    }).join('');
+  }
+  function progress(){
+    updTL();
+    barFill.style.width=(moves/T(n)*100)+'%';
+    countEl.textContent='已搬 '+moves+' / '+T(n)+' 步　｜　已執行 '+pos+' / '+events.length+' 個事件';
+  }
+  function ui(){
+    var done=pos>=events.length;
+    var fw=playing&&dir==='f', bw=playing&&dir==='b';
+    playBtn.textContent=fw?'暫停':(done?'再看一次':(pos>0?'繼續':'播放'));
+    playBtn.disabled=bw;
+    backBtn.disabled=pos===0||playing;
+    rplay.textContent=bw?'暫停':'倒著播放';rplay.disabled=fw;
+    gend.disabled=playing;bmove.disabled=moves===0||playing;fmove.disabled=moves>=T(n)||playing;
+    stepBtn.disabled=done||playing;
+    moreBtn.textContent=n<5?'加一個圓盤（'+(n+1)+' 個）':'已是 5 個';
+    moreBtn.disabled=n>=5;
+    moreBtn.className=(done&&n<5)?'pulse':'';
+  }
+  function sleep(ms){return new Promise(function(r){setTimeout(r,ms);});}
+  function seg(){return reduce?60:280/Number(speedEl.value);}
+
+  async function moveDisk(d,f,t,my){
+    var el=disks[d], ms=seg(), w=dims()(d);
+    pegs[f].pop();
+    el.style.transition='bottom '+ms+'ms ease';
+    el.style.bottom=LIFT+'px';
+    await sleep(ms+20);if(my!==token)return;
+    el.style.transition='left '+ms+'ms ease';
+    el.style.left=(cx(t)-w/2)+'px';
+    await sleep(ms+20);if(my!==token)return;
+    var i=pegs[t].length;
+    el.style.transition='bottom '+ms+'ms ease';
+    el.style.bottom=(BASE+i*H)+'px';
+    pegs[t].push(d);
+    await sleep(ms+60);
+  }
+  async function stepOnce(){
+    if(busy||pos>=events.length)return;
+    busy=true;var my=token, e=events[pos];
+    renderStack(e.stack,false);
+    capEl.textContent=e.cap;
+    if(e.type==='move'){await moveDisk(e.d,e.f,e.t,my);if(my!==token)return;moves++;}
+    else{await sleep((e.type==='call'?650:380)/Number(speedEl.value));if(my!==token)return;}
+    pos++;busy=false;progress();ui();
+  }
+  async function loop(){
+    if(pos>=events.length){build();}
+    dir='f';playing=true;ui();
+    var my=token;
+    while(playing&&my===token&&pos<events.length){await stepOnce();}
+    if(my===token){playing=false;ui();}
+  }
+
+  var backBtn=document.getElementById('back'), rplay=document.getElementById('rplay'), gend=document.getElementById('gend'), bmove=document.getElementById('bmove'), fmove=document.getElementById('fmove'), tlEl=document.getElementById('tl'), legendEl=document.getElementById('legend'), revnote=document.getElementById('revnote');
+
+  function phaseOf(m){if(n===1)return 2;var h=T(n-1);return m<=h?1:(m===h+1?2:3);}
+  function buildTL(){
+    tlEl.innerHTML='';
+    for(var m=1;m<=T(n);m++){
+      (function(m){
+        var b=document.createElement('button'), e=events[moveIdx[m]];
+        b.className='p'+phaseOf(m);b.textContent=e.d;
+        b.setAttribute('aria-label','第 '+m+' 步，倒數第 '+(T(n)-m+1)+' 步，圓盤 '+e.d);
+        b.title='倒數第 '+(T(n)-m+1)+' 步';
+        b.addEventListener('click',function(){jumpToMove(m);});
+        tlEl.appendChild(b);
+      })(m);
+    }
+    var h=T(n-1);
+    legendEl.innerHTML=n===1?'<span style="--c:var(--p2)">唯一一步：圓盤 1 從 A 到 C</span>'
+      :'<span style="--c:var(--p1)">① 前 '+h+' 步：上面 '+(n-1)+' 個 A→B</span><span style="--c:var(--p2)">② 1 步：圓盤 '+n+' A→C</span><span style="--c:var(--p3)">③ 後 '+h+' 步：那 '+(n-1)+' 個 B→C</span>';
+  }
+  function updTL(){
+    var kids=tlEl.children;
+    for(var i=0;i<kids.length;i++){var m=i+1;kids[i].className='p'+phaseOf(m)+(m<=moves?' on':'')+(m===moves?' cur':'');}
+    revnote.textContent=revText();
+  }
+  function revText(){
+    var tot=T(n);
+    if(moves===0)return '還沒有任何一步。按「到終點」，或點上面的方格，從結果開始往前推。';
+    var m=moves,k=tot-m+1,e=events[moveIdx[m]],ph=phaseOf(m);
+    var head='目前看到第 '+m+' 步，也就是倒數第 '+k+' 步（圓盤 '+e.d+'：'+L[e.f]+'→'+L[e.t]+'）。';
+    if(n===1)return head+'只有 1 步，沒有更早的步驟可推。';
+    if(ph===3)return head+'屬於 ③：最大的圓盤已經在 C，剩下的是「把 '+(n-1)+' 個從 B 搬到 C」這個子問題。';
+    if(ph===2)return head+'整個過程只有這 1 步會動到最大的圓盤。再往前推，它之前一定是「把 '+(n-1)+' 個搬到 B」。';
+    return head+'屬於 ①：最大的圓盤還沒動，上面 '+(n-1)+' 個正在往 B 移動。';
+  }
+  function setBoard(mc){
+    pegs=[[],[],[]];
+    for(var s=n;s>=1;s--)pegs[0].push(s);
+    for(var i=1;i<=mc;i++){var e=events[moveIdx[i]];pegs[e.t].push(pegs[e.f].pop());}
+    disks.forEach(function(el){if(el)el.style.transition='none';});
+    layoutAll();void stage.offsetWidth;
+  }
+  function halt(){token++;busy=false;playing=false;}
+  async function jumpToMove(m){
+    halt();setBoard(m-1);pos=moveIdx[m];moves=m-1;progress();ui();
+    await stepOnce();
+  }
+  function goEnd(){
+    halt();setBoard(T(n));pos=events.length;moves=T(n);
+    var last=events[events.length-1];
+    renderStack(last.stack,false);capEl.textContent=last.cap;progress();ui();
+  }
+  async function stepMove(){
+    if(busy)return;
+    while(pos<events.length&&events[pos].type!=='move')pos++;
+    if(pos>=events.length){goEnd();return;}
+    await stepOnce();
+  }
+  async function undoMove(){
+    if(busy||moves===0)return;
+    while(pos>0&&events[pos-1].type!=='move')pos--;
+    var my=token,k=T(n)-moves+1;
+    busy=true;pos--;
+    var e=events[pos];
+    renderStack(e.stack,false);
+    capEl.textContent='倒數第 '+k+' 步：圓盤 '+e.d+' 本來是從 '+L[e.f]+' 搬到 '+L[e.t]+'，現在退回 '+L[e.f]+'。';
+    await moveDisk(e.d,e.t,e.f,my);if(my!==token)return;
+    moves--;busy=false;progress();ui();
+  }
+  async function undoEvent(){
+    if(busy||pos===0||playing)return;
+    busy=true;var my=token;pos--;
+    var e=events[pos];
+    if(e.type==='move'){
+      capEl.textContent='↩ 回上一步：撤銷「'+e.cap+'」';
+      renderStack(e.stack,false);
+      await moveDisk(e.d,e.t,e.f,my);if(my!==token)return;
+      moves--;
+    }
+    busy=false;
+    if(pos>0){renderStack(events[pos-1].stack,false);if(e.type!=='move')capEl.textContent='↩ 已回到：'+events[pos-1].cap;}
+    else{renderStack(null,true);capEl.textContent='回到起點。';}
+    progress();ui();
+  }
+  async function reversePlay(){
+    if(playing&&dir==='b'){playing=false;ui();return;}
+    if(busy||playing)return;
+    if(moves===0)goEnd();
+    dir='b';playing=true;ui();
+    var my=token;
+    while(playing&&my===token&&moves>0){await undoMove();if(my!==token)return;await sleep(160/Number(speedEl.value));}
+    if(my===token){playing=false;dir='f';ui();}
+  }
+
+  for(var k=1;k<=5;k++){
+    (function(k){
+      var b=document.createElement('button');b.textContent=k+' 個';
+      b.addEventListener('click',function(){n=k;build();});
+      picker.appendChild(b);
+    })(k);
+  }
+  playBtn.addEventListener('click',function(){
+    if(playing){playing=false;ui();}else{loop();}
+  });
+  stepBtn.addEventListener('click',function(){stepOnce();});
+  document.getElementById('reset').addEventListener('click',build);
+  backBtn.addEventListener('click',undoEvent);
+  rplay.addEventListener('click',reversePlay);
+  gend.addEventListener('click',goEnd);
+  bmove.addEventListener('click',undoMove);
+  fmove.addEventListener('click',stepMove);
+  moreBtn.addEventListener('click',function(){if(n<5){n++;build();}});
+  window.addEventListener('resize',function(){
+    disks.forEach(function(e){if(e)e.style.transition='none';});
+    layoutAll();
+  });
+  build();
+})();
+</script>
+</body>
+</html>
